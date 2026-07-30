@@ -22,6 +22,11 @@ begin
 end;
 $$;
 
+-- Dropped first so this migration can be re-run after a partial failure. A
+-- migration that only works on a virgin database is a migration that strands
+-- you the first time something goes wrong halfway through.
+drop trigger if exists on_auth_user_created on auth.users;
+
 create trigger on_auth_user_created
   after insert on auth.users
   for each row execute function public.handle_new_user();
@@ -128,8 +133,15 @@ returns table (
 )
 language sql
 stable
-security definer
-set search_path = ''
+-- Not security definer, and the search path is not empty. Both are deliberate.
+--
+-- An empty search path is the usual hardening for a definer function, but it
+-- also hides the `<=>` operator that pgvector installs, so the function fails
+-- to create at all. This one does not need definer rights: it is only callable
+-- by the service role, which bypasses row level security anyway. Naming the two
+-- schemas explicitly keeps resolution independent of whatever the caller has
+-- set, and covers pgvector living in either place.
+set search_path = public, extensions
 as $$
   select
     c.id,
