@@ -1,0 +1,12 @@
+# Normalize line endings so a Windows checkout and the Linux CI runner agree.
+# Without this, every file touched on Windows shows up as fully rewritten.
+* text=auto eol=lf
+
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.pdf binary
+*.woff binary
+*.woff2 binary
