@@ -36,6 +36,19 @@ export const PLAN_TAGLINES: Record<PlanId, string> = {
 export const FEATURED_PLAN_ID: PlanId = 'pro'
 
 /**
+ * States a plan's bot allowance.
+ *
+ * Lives here rather than at each call site because the same sentence appears in
+ * the dashboard, on a disabled button, and in the error returned when creation
+ * is refused — three places that must agree on both the number and the wording.
+ */
+export function botAllowanceMessage(plan: Plan): string {
+  return plan.limits.bots === 1
+    ? `The ${plan.name} plan includes one bot.`
+    : `The ${plan.name} plan includes ${plan.limits.bots} bots.`
+}
+
+/**
  * The bullet list shown on a pricing card.
  *
  * Order matters: capacity first, because that is what a buyer compares, then

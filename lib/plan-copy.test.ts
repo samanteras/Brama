@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
 import {
+  botAllowanceMessage,
   FEATURED_PLAN_ID,
   formatLimit,
   formatPrice,
@@ -58,6 +59,27 @@ describe('FEATURED_PLAN_ID', () => {
   it('is a paid plan', () => {
     // Featuring the free tier would defeat the purpose of featuring one.
     expect(PLANS[FEATURED_PLAN_ID].monthlyPriceCents).toBeGreaterThan(0)
+  })
+})
+
+describe('botAllowanceMessage', () => {
+  it('says "one bot" rather than "1 bots" for a single-bot plan', () => {
+    expect(botAllowanceMessage(PLANS.free)).toBe('The Free plan includes one bot.')
+  })
+
+  it('pluralizes for a multi-bot plan', () => {
+    expect(botAllowanceMessage(PLANS.pro)).toBe('The Pro plan includes 3 bots.')
+  })
+
+  it('tracks the real limit rather than hardcoding it', () => {
+    const inflated: Plan = { ...PLANS.pro, limits: { ...PLANS.pro.limits, bots: 12 } }
+    expect(botAllowanceMessage(inflated)).toContain('12 bots')
+  })
+
+  it('names every plan correctly', () => {
+    for (const plan of PLAN_LIST) {
+      expect(botAllowanceMessage(plan)).toContain(plan.name)
+    }
   })
 })
 
