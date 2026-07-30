@@ -1,0 +1,39 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+# A newer push makes an in-flight run irrelevant.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          # Matches the local development version, so CI cannot pass on a
+          # runtime nobody actually runs.
+          node-version: 24
+          cache: npm
+
+      - run: npm ci
+
+      - run: npm run lint
+
+      - run: npm run typecheck
+
+      # Unit tests only. Every model call is mocked here by design: live calls
+      # would make CI flaky, slow and billable, and a test nobody trusts is
+      # worse than no test. Integration tests need a Supabase project and are
+      # opt-in; the RAG eval runs against a live model, by hand.
+      - run: npm test
+
+      - run: npm run build
