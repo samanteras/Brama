@@ -24,12 +24,14 @@ jobs:
           node-version: 24
           cache: npm
 
-      # Optional dependencies are skipped deliberately. They are the WASM
-      # fallbacks for native tooling (Tailwind's oxide, sharp), which a Linux
-      # x64 runner never needs — and npm on Windows does not record their
-      # transitive graph in the lock file, so a plain `npm ci` fails here on a
-      # lock that is perfectly valid for development.
-      - run: npm ci --omit=optional
+      # Pinned to the version the lock file was generated with. Different npm
+      # versions resolve the optional-dependency graph differently, which makes
+      # `npm ci` reject a lock that is perfectly valid for development.
+      - run: npm install --global npm@11.6.2
+
+      - run: npm --version
+
+      - run: npm ci
 
       - run: npm run lint
 
