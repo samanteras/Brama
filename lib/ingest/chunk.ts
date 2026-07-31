@@ -29,10 +29,24 @@ export type ChunkOptions = {
   maxChars?: number
 }
 
+/**
+ * Sized for the documents this product actually ingests.
+ *
+ * A renovation price list is a sequence of short, distinct sections — pricing,
+ * materials, warranty, payment stages. At 1200 characters a whole such document
+ * collapsed into a single chunk, and a question about the warranty was then
+ * compared against the entire document rather than against the warranty
+ * section. Measured similarity for that question dropped to 0.22, below
+ * questions the document could not answer at all.
+ *
+ * Smaller chunks keep sections separate, which is what makes the similarity
+ * score mean something. Going much smaller would start splitting a price away
+ * from the condition attached to it.
+ */
 export const DEFAULT_CHUNK_OPTIONS = {
-  targetChars: 1200,
-  overlapChars: 150,
-  maxChars: 2000,
+  targetChars: 700,
+  overlapChars: 120,
+  maxChars: 1400,
 } as const
 
 /** Sentence-ish boundary: punctuation followed by whitespace. */

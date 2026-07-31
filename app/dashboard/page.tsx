@@ -48,7 +48,16 @@ export default async function DashboardPage() {
         </div>
 
         {botCount > 0 ? (
-          <CreateBotDialog canCreate={canCreate} limitMessage={limitMessage} />
+          <div className="flex flex-col items-end gap-1.5">
+            <CreateBotDialog canCreate={canCreate} limitMessage={limitMessage} />
+            {/* Spelled out rather than hidden in a tooltip: a disabled button
+                with no visible reason reads as a broken one. */}
+            {!canCreate ? (
+              <p className="text-sm text-muted-foreground">
+                {limitMessage} Delete one to make room.
+              </p>
+            ) : null}
+          </div>
         ) : null}
       </div>
 

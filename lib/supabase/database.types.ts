@@ -307,6 +307,24 @@ export type Database = {
         }
         Relationships: []
       }
+      rate_limits: {
+        Row: {
+          hits: number
+          key: string
+          window_started_at: string
+        }
+        Insert: {
+          hits?: number
+          key: string
+          window_started_at?: string
+        }
+        Update: {
+          hits?: number
+          key?: string
+          window_started_at?: string
+        }
+        Relationships: []
+      }
       stripe_events: {
         Row: {
           id: string
@@ -356,6 +374,13 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      check_rate_limit: {
+        Args: { p_key: string; p_max: number; p_window_seconds: number }
+        Returns: {
+          allowed: boolean
+          hits: number
+        }[]
+      }
       consume_message_quota: {
         Args: { p_limit: number; p_owner_id: string; p_period: string }
         Returns: {
@@ -371,6 +396,10 @@ export type Database = {
           id: string
           similarity: number
         }[]
+      }
+      prune_rate_limits: {
+        Args: { p_older_than_seconds?: number }
+        Returns: number
       }
       refund_message_quota: {
         Args: { p_owner_id: string; p_period: string }

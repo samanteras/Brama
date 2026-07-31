@@ -62,7 +62,10 @@ export async function createBot(_previous: BotFormState, formData: FormData): Pr
   // a deliberate human action, the overshoot is one row, and it is trivially
   // reversible. Guarding it would mean pushing plan limits into the database.
   if (!isWithinLimit(count ?? 0, plan.limits.bots)) {
-    return { error: `${botAllowanceMessage(plan)} Upgrade to add more.` }
+    // Offers the action available right now first. Pointing only at an upgrade
+    // is unhelpful to someone who simply wants to replace a bot they no longer
+    // need.
+    return { error: `${botAllowanceMessage(plan)} Delete one to make room, or upgrade.` }
   }
 
   const { data, error } = await supabase

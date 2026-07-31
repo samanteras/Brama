@@ -47,3 +47,6 @@ next-env.d.ts
 
 # Supabase CLI local state (project ref, pooler url, service versions).
 supabase/.temp/
+
+# Output of the retrieval similarity probe (diagnostic, regenerated on demand).
+similarity-probe.txt
