@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Skyline Renovations — turnkey renovation in Warsaw</title>
+    <meta
+      name="description"
+      content="Turnkey flat renovation. Fixed stages, two year warranty, materials at cost."
+    />
+    <style>
+      :root {
+        --ink: #1a1a1a;
+        --muted: #6b6b6b;
+        --line: #e5e5e5;
+        --accent: #c2410c;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        font: 16px/1.6 system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+        color: var(--ink);
+      }
+      .wrap {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 0 24px;
+      }
+      header {
+        border-bottom: 1px solid var(--line);
+      }
+      .bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 72px;
+      }
+      .brand {
+        font-weight: 700;
+        font-size: 20px;
+        letter-spacing: -0.02em;
+      }
+      nav a {
+        color: var(--muted);
+        text-decoration: none;
+        margin-left: 24px;
+        font-size: 15px;
+      }
+      .hero {
+        padding: 72px 0 56px;
+      }
+      h1 {
+        font-size: clamp(32px, 5vw, 48px);
+        line-height: 1.1;
+        letter-spacing: -0.03em;
+        margin: 0 0 16px;
+      }
+      .lede {
+        font-size: 19px;
+        color: var(--muted);
+        max-width: 34em;
+        margin: 0 0 28px;
+      }
+      .cta {
+        display: inline-block;
+        background: var(--accent);
+        color: #fff;
+        text-decoration: none;
+        padding: 13px 24px;
+        border-radius: 8px;
+        font-weight: 600;
+      }
+      section {
+        padding: 48px 0;
+        border-top: 1px solid var(--line);
+      }
+      h2 {
+        font-size: 24px;
+        letter-spacing: -0.02em;
+        margin: 0 0 20px;
+      }
+      .grid {
+        display: grid;
+        gap: 28px;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      }
+      .price {
+        font-size: 28px;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+      }
+      .price span {
+        font-size: 15px;
+        font-weight: 400;
+        color: var(--muted);
+      }
+      .muted {
+        color: var(--muted);
+      }
+      footer {
+        border-top: 1px solid var(--line);
+        padding: 32px 0 96px;
+        color: var(--muted);
+        font-size: 14px;
+      }
+      .note {
+        background: #fff7ed;
+        border: 1px solid #fed7aa;
+        border-radius: 10px;
+        padding: 16px 20px;
+        font-size: 14px;
+        color: #7c2d12;
+        margin-top: 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="wrap bar">
+        <div class="brand">Skyline Renovations</div>
+        <nav>
+          <a href="#pricing">Pricing</a>
+          <a href="#how">How we work</a>
+          <a href="#contact">Contact</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <div class="wrap hero">
+        <h1>Turnkey flat renovation, finished on the date we agreed</h1>
+        <p class="lede">
+          Fixed stages, a written estimate before we start, and materials bought at cost with no
+          markup. Two year warranty on structural and installation work.
+        </p>
+        <a class="cta" href="#contact">Book a free survey</a>
+      </div>
+
+      <section id="pricing">
+        <div class="wrap">
+          <h2>Pricing</h2>
+          <div class="grid">
+            <div>
+              <p class="price">520 EUR <span>/ m²</span></p>
+              <p class="muted">
+                Rough work: demolition, waste removal, rewiring, plumbing rough-in, screed and wall
+                levelling.
+              </p>
+            </div>
+            <div>
+              <p class="price">340 EUR <span>/ m²</span></p>
+              <p class="muted">
+                Finishing: plastering, painting, flooring, tiling, doors and skirting.
+              </p>
+            </div>
+            <div>
+              <p class="price">Free</p>
+              <p class="muted">
+                Site survey and written estimate, anywhere within the city.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="how">
+        <div class="wrap">
+          <h2>How we work</h2>
+          <div class="grid">
+            <div>
+              <strong>Payment in three stages</strong>
+              <p class="muted">
+                30% on signing, 40% at the halfway inspection, 30% on handover — after you have
+                walked the site with the foreman.
+              </p>
+            </div>
+            <div>
+              <strong>Materials at cost</strong>
+              <p class="muted">
+                We give you the purchase list and you buy directly from the supplier. No markup
+                from us.
+              </p>
+            </div>
+            <div>
+              <strong>Eight to ten weeks</strong>
+              <p class="muted">
+                For a two room flat of about 54 m², from the start of demolition to handover.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="contact">
+        <div class="wrap">
+          <h2>Contact</h2>
+          <p class="muted">
+            Office hours Monday to Friday, 9:00–18:00. Outside those hours, ask the assistant in
+            the corner — it answers from the same price list.
+          </p>
+
+          <div class="note">
+            <strong>This page is a demo.</strong> It exists to show the Foreman widget running on a
+            third-party site, on a different domain from the app itself. The company is invented;
+            the prices match the document loaded into the bot.
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="wrap">© Skyline Renovations — demo site for Foreman</div>
+    </footer>
+
+    <!--
+      The entire integration. One line, before the closing body tag.
+      Replace the bot id with your own from the Foreman dashboard.
+    -->
+    <script
+      src="http://localhost:3000/widget.js"
+      data-foreman-bot="REPLACE_WITH_BOT_ID"
+      data-foreman-color="#c2410c"
+      data-foreman-label="Ask about prices"
+      async
+    ></script>
+  </body>
+</html>

@@ -7,6 +7,7 @@ import { LeadForm } from './lead-form'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { sendMessage, type ChatStreamEvent } from '@/lib/client/chat-stream'
+import { getVisitorId } from '@/lib/client/visitor'
 import { cn } from '@/lib/utils'
 
 /**
@@ -27,7 +28,11 @@ export type ChatWindowProps = {
   endpoint: string
   /** Where a captured contact is posted, or null in the dashboard tester. */
   leadEndpoint: string | null
-  visitorId?: string | null
+  /**
+   * Whether to attach a visitor id, so a returning visitor's conversations join
+   * up. Off in the dashboard, where the owner is already identified.
+   */
+  trackVisitor?: boolean
   showWatermark?: boolean
   className?: string
 }
@@ -51,7 +56,7 @@ export function ChatWindow({
   accentColor,
   endpoint,
   leadEndpoint,
-  visitorId,
+  trackVisitor = false,
   showWatermark = false,
   className,
 }: ChatWindowProps) {
@@ -109,7 +114,9 @@ export function ChatWindow({
         botId,
         question,
         conversationId,
-        visitorId,
+        // Read at send time: localStorage does not exist during server
+        // rendering, and this is the only moment the value is needed.
+        visitorId: trackVisitor ? getVisitorId() : null,
         onEvent: handle,
       })
     } catch {
