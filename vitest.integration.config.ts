@@ -1,3 +1,5 @@
+import { fileURLToPath } from 'node:url'
+
 import { loadEnv } from 'vite'
 import { defineConfig } from 'vitest/config'
 
@@ -14,6 +16,12 @@ import { defineConfig } from 'vitest/config'
 export default defineConfig(({ mode }) => ({
   resolve: {
     tsconfigPaths: true,
+    alias: {
+      // `server-only` throws on import outside a React Server Component. That
+      // guard is doing real work in the app; here it only blocks tests from
+      // importing the very modules they exist to exercise.
+      'server-only': fileURLToPath(new URL('./tests/stubs/server-only.ts', import.meta.url)),
+    },
   },
   test: {
     environment: 'node',

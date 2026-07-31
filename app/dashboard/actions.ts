@@ -145,6 +145,32 @@ export async function updateBot(_previous: BotFormState, formData: FormData): Pr
   return { saved: true }
 }
 
+export async function deleteDocument(formData: FormData) {
+  const documentId = String(formData.get('documentId') ?? '')
+  const botId = String(formData.get('botId') ?? '')
+  if (documentId === '') return
+
+  const { supabase } = await requireUser()
+
+  // Read the storage path before deleting the row, so the file can be removed
+  // too. The delete policy scopes this to documents of bots the caller owns.
+  const { data: document } = await supabase
+    .from('documents')
+    .select('storage_path')
+    .eq('id', documentId)
+    .maybeSingle()
+
+  const { error } = await supabase.from('documents').delete().eq('id', documentId)
+
+  // Only remove the file once the row is gone. The other order would risk a
+  // document that still exists but can never be re-indexed.
+  if (!error && document?.storage_path) {
+    await supabase.storage.from('documents').remove([document.storage_path])
+  }
+
+  revalidatePath(`/dashboard/bots/${botId}`)
+}
+
 export async function deleteBot(formData: FormData) {
   const botId = String(formData.get('botId') ?? '')
   if (botId === '') return
