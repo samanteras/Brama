@@ -52,13 +52,19 @@ export default async function BotPage(props: PageProps<'/dashboard/bots/[botId]'
         <h1 className="mt-3 text-2xl font-semibold tracking-tight">{bot.name}</h1>
       </div>
 
-      <div className="grid gap-8 lg:grid-cols-[1.4fr_1fr] lg:items-start">
-        <Card className="p-6">
+      {/*
+        Two columns only from xl. At lg the settings form was squeezed into a
+        column too narrow for its own labels — a form with room to breathe on
+        one column beats a cramped two-column layout. `minmax(0,…)` stops the
+        code block in the sidebar from forcing the grid wider than the page.
+      */}
+      <div className="grid gap-8 xl:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] xl:items-start">
+        <Card className="min-w-0 p-6">
           <h2 className="mb-6 font-semibold">Settings</h2>
           <BotSettingsForm bot={bot} canLockDomains={plan.features.customDomains} />
         </Card>
 
-        <div className="space-y-8">
+        <div className="min-w-0 space-y-8">
           <Card className="p-6">
             <h2 className="font-semibold">Add it to your site</h2>
             <p className="mt-1 mb-4 text-sm text-muted-foreground text-pretty">

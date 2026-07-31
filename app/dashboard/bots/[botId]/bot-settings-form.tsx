@@ -48,18 +48,16 @@ export function BotSettingsForm({ bot, canLockDomains }: { bot: Bot; canLockDoma
 
       <div className="space-y-2">
         <Label htmlFor="accentColor">Accent colour</Label>
-        <div className="flex items-center gap-3">
-          <Input
-            id="accentColor"
-            name="accentColor"
-            type="color"
-            defaultValue={bot.accent_color}
-            className="h-10 w-16 p-1"
-          />
-          <p className="text-sm text-muted-foreground">
-            Used for the chat button and the visitor&apos;s own messages.
-          </p>
-        </div>
+        <Input
+          id="accentColor"
+          name="accentColor"
+          type="color"
+          defaultValue={bot.accent_color}
+          className="h-10 w-16 p-1"
+        />
+        <p className="text-sm text-muted-foreground">
+          Used for the chat button and the visitor&apos;s own messages.
+        </p>
       </div>
 
       <div className="space-y-2">
