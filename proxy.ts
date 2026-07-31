@@ -77,8 +77,10 @@ export const config = {
      *   - Next internals and static assets
      *   - /embed and /api/public, which serve anonymous widget visitors who
      *     have no session to refresh and must never be redirected to sign-in
+     *   - /api/stripe, called by Stripe itself, which carries no session and
+     *     whose webhook must see the request body untouched
      *   - widget.js, loaded from third-party sites
      */
-    '/((?!_next/static|_next/image|favicon.ico|widget.js|embed|api/public|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico)$).*)',
+    '/((?!_next/static|_next/image|favicon.ico|widget.js|embed|api/public|api/stripe|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico)$).*)',
   ],
 }

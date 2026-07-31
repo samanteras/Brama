@@ -26,6 +26,15 @@ export default async function DashboardLayout({ children }: { children: React.Re
             <span className="font-semibold tracking-tight">Foreman</span>
           </Link>
 
+          <nav className="hidden items-center gap-5 text-sm text-muted-foreground sm:flex">
+            <Link href="/dashboard" className="transition-colors hover:text-foreground">
+              Bots
+            </Link>
+            <Link href="/dashboard/billing" className="transition-colors hover:text-foreground">
+              Billing
+            </Link>
+          </nav>
+
           <div className="ml-auto flex items-center gap-4">
             <span className="hidden text-sm text-muted-foreground sm:inline">{user.email}</span>
             <form action={signOut}>
