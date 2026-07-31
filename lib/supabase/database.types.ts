@@ -388,6 +388,14 @@ export type Database = {
           used: number
         }[]
       }
+      knowledge_gaps: {
+        Args: { p_bot_id: string; p_limit?: number }
+        Returns: {
+          asked_at: string
+          conversation_id: string
+          question: string
+        }[]
+      }
       match_chunks: {
         Args: { p_bot_id: string; p_embedding: string; p_match_count?: number }
         Returns: {

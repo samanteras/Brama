@@ -17,6 +17,9 @@ export function BotTabs({ botId }: { botId: string }) {
 
   const tabs = [
     { href: base, label: 'Knowledge' },
+    { href: `${base}/playground`, label: 'Playground' },
+    { href: `${base}/leads`, label: 'Leads' },
+    { href: `${base}/gaps`, label: 'Gaps' },
     { href: `${base}/settings`, label: 'Settings' },
   ]
 
