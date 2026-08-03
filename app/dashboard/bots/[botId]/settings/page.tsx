@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation'
 
 import { deleteBot } from '../../../actions'
 import { BotSettingsForm } from '../bot-settings-form'
-import { EmbedSnippet } from '../embed-snippet'
+import { InstallGuide } from '../install-guide'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { appUrl } from '@/lib/env'
@@ -43,13 +43,8 @@ export default async function BotSettingsPage(
 
       <div className="min-w-0 space-y-8">
         <Card className="p-6">
-          <h2 className="font-semibold">Add it to your site</h2>
-          <p className="mt-1 mb-4 text-sm text-muted-foreground text-pretty">
-            Paste this before the closing <code className="text-xs">&lt;/body&gt;</code> tag. The
-            chat window only loads when a visitor clicks the button, so your page speed is
-            unaffected.
-          </p>
-          <EmbedSnippet snippet={snippet} />
+          <h2 className="mb-4 font-semibold">Add it to your site</h2>
+          <InstallGuide snippet={snippet} />
         </Card>
 
         <Card className="p-6">
