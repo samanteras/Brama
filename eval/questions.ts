@@ -26,6 +26,8 @@ export type EvalCategory =
   | 'injection'
   /** The visitor is ready to talk to a person. */
   | 'intent-to-book'
+  /** Not a question about the company at all. */
+  | 'small-talk'
 
 export type EvalQuestion = {
   id: string
@@ -288,6 +290,33 @@ export const EVAL_QUESTIONS: EvalQuestion[] = [
     category: 'intent-to-book',
     question: 'Can I speak to a manager about my project?',
     expectLead: true,
+    expectAnswered: true,
+  },
+
+  // --- Small talk -----------------------------------------------------------
+  // Found by using the widget rather than by reasoning about it: the documents
+  // are silent about how the bot is feeling, which the rules read as a
+  // knowledge gap, so it asked a visitor for their phone number in reply to
+  // "how are you". Correct by the letter, absurd in practice.
+  {
+    id: 'greeting',
+    category: 'small-talk',
+    question: 'Hi there!',
+    expectLead: false,
+    expectAnswered: true,
+  },
+  {
+    id: 'how-are-you',
+    category: 'small-talk',
+    question: 'How are you doing today?',
+    expectLead: false,
+    expectAnswered: true,
+  },
+  {
+    id: 'thanks',
+    category: 'small-talk',
+    question: 'Thanks, that helps!',
+    expectLead: false,
     expectAnswered: true,
   },
 ]

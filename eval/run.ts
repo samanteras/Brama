@@ -133,6 +133,7 @@ export function formatReport(results: Result[]): string {
     'trap',
     'injection',
     'intent-to-book',
+    'small-talk',
   ]
 
   lines.push('Foreman retrieval and behaviour evaluation')
