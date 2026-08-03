@@ -53,7 +53,19 @@ describe('buildSystemPrompt', () => {
     it('tells the model not to ask for contact after every answer', () => {
       // The opposite failure: a bot that begs for a phone number every turn
       // annoys visitors and devalues the leads that matter.
-      expect(buildSystemPrompt(base)).toMatch(/did answer the question, do not call collect_lead/i)
+      expect(buildSystemPrompt(base)).toMatch(/not call collect_lead/i)
+      expect(buildSystemPrompt(base)).toMatch(/devalues the contacts that/i)
+    })
+
+    it('separates the passages saying no from the passages saying nothing', () => {
+      // Measured failure: told that a negative answer still counts as an
+      // answer, the model treated "the documents do not mention discounts" as
+      // one, and stopped collecting leads on exactly the questions worth
+      // collecting them on.
+      const prompt = buildSystemPrompt(base)
+
+      expect(prompt).toMatch(/SAYING NO and the passages\s+SAYING NOTHING/i)
+      expect(prompt).toMatch(/is NOT an answer to/i)
     })
 
     it('states that a follow-up offer in words alone does nothing', () => {
@@ -63,10 +75,10 @@ describe('buildSystemPrompt', () => {
       expect(buildSystemPrompt(base)).toMatch(/without calling it does nothing/i)
     })
 
-    it('counts a negative answer as an answer', () => {
+    it('counts a negative answer from the documents as an answer', () => {
       // "That is not covered" is an answer. Treating it as a failure had the
       // bot asking for a phone number after correctly answering.
-      expect(buildSystemPrompt(base)).toMatch(/answered even when the answer is/i)
+      expect(buildSystemPrompt(base)).toMatch(/warranty does not cover flood damage/i)
     })
 
     it('defends against instructions inside customer messages', () => {

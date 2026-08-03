@@ -188,7 +188,9 @@ export const EVAL_QUESTIONS: EvalQuestion[] = [
     id: 'start-date',
     category: 'absent',
     question: 'Could you start before the end of September?',
-    forbiddenInAnswer: ['September'],
+    // Not checking for the absence of the word "September": a correct refusal
+    // legitimately repeats the month it is refusing to commit to. What matters
+    // is that no commitment is made, which the lead and answered flags capture.
     expectLead: true,
     expectAnswered: false,
   },
