@@ -73,7 +73,10 @@ export const PLANS: Record<PlanId, Plan> = {
       bots: 1,
       documentsPerBot: 1,
       pagesPerDocument: 30,
-      answersPerMonth: 50,
+      // Deliberately small. The public deployment carries a real API bill, and
+      // a free account is the one thing anybody can create, so the free tier is
+      // sized to demonstrate the product rather than to run on it.
+      answersPerMonth: 5,
       visibleLeads: 3,
     },
     features: {

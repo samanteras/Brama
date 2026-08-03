@@ -3,8 +3,26 @@
 import { redirect } from 'next/navigation'
 import { z } from 'zod'
 
+import { callerIp, checkRateLimit } from '@/lib/security/rate-limit'
 import { safeRedirectPath } from '@/lib/security/redirect'
 import { createClient } from '@/lib/supabase/server'
+
+/**
+ * Caps on how often one address may try.
+ *
+ * Sign-up is the tighter of the two because a new account carries a free
+ * allowance of model calls, so bulk registration is bulk spending of somebody
+ * else's money. Five an hour is far beyond what a real person needs and far
+ * below what makes farming accounts worthwhile.
+ *
+ * Sign-in is capped separately against password guessing, generously enough
+ * that mistyping a password several times costs nothing.
+ */
+const SIGN_UP_MAX = 5
+const SIGN_UP_WINDOW_SECONDS = 3600
+
+const SIGN_IN_MAX = 20
+const SIGN_IN_WINDOW_SECONDS = 600
 
 export type AuthState = {
   error?: string
@@ -23,6 +41,13 @@ const credentialsSchema = z.object({
 })
 
 export async function signIn(_previous: AuthState, formData: FormData): Promise<AuthState> {
+  const ip = await callerIp()
+  const limit = await checkRateLimit(`signin:${ip}`, SIGN_IN_MAX, SIGN_IN_WINDOW_SECONDS)
+
+  if (!limit.allowed) {
+    return { error: 'Too many attempts. Please wait a few minutes and try again.' }
+  }
+
   const parsed = credentialsSchema.safeParse({
     email: formData.get('email'),
     password: formData.get('password'),
@@ -45,6 +70,17 @@ export async function signIn(_previous: AuthState, formData: FormData): Promise<
 }
 
 export async function signUp(_previous: AuthState, formData: FormData): Promise<AuthState> {
+  // Checked before anything else: every new account carries a free allowance of
+  // model calls, so registering in bulk is spending somebody else's money in
+  // bulk. Email confirmation is deliberately off for a smooth demo, which makes
+  // this the thing standing in its place.
+  const ip = await callerIp()
+  const limit = await checkRateLimit(`signup:${ip}`, SIGN_UP_MAX, SIGN_UP_WINDOW_SECONDS)
+
+  if (!limit.allowed) {
+    return { error: 'Too many accounts created from here. Please try again later.' }
+  }
+
   const parsed = credentialsSchema.safeParse({
     email: formData.get('email'),
     password: formData.get('password'),
