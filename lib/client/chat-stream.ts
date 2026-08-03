@@ -20,6 +20,8 @@ export type SendMessageInput = {
   question: string
   conversationId: string | null
   visitorId?: string | null
+  /** Host page the widget is embedded in; null in the dashboard tester. */
+  hostSite?: string | null
   signal?: AbortSignal
   onEvent: (event: ChatStreamEvent) => void
 }
@@ -30,13 +32,14 @@ export async function sendMessage({
   question,
   conversationId,
   visitorId,
+  hostSite,
   signal,
   onEvent,
 }: SendMessageInput): Promise<void> {
   const response = await fetch(endpoint, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ botId, question, conversationId, visitorId }),
+    body: JSON.stringify({ botId, question, conversationId, visitorId, hostSite }),
     signal,
   })
 

@@ -18,6 +18,7 @@ export function LeadForm({
   context,
   endpoint,
   accentColor,
+  hostSite = null,
   onSaved,
 }: {
   botId: string
@@ -32,6 +33,8 @@ export function LeadForm({
    */
   endpoint: string | null
   accentColor: string
+  /** Host page the widget sits on; see lib/security/embed-origin.ts. */
+  hostSite?: string | null
   onSaved: () => void
 }) {
   const [contact, setContact] = useState('')
@@ -56,7 +59,7 @@ export function LeadForm({
       const response = await fetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ botId, conversationId, contact, name, context }),
+        body: JSON.stringify({ botId, conversationId, contact, name, context, hostSite }),
       })
 
       if (!response.ok) throw new Error('save failed')

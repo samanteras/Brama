@@ -33,6 +33,14 @@ export type ChatWindowProps = {
    * up. Off in the dashboard, where the owner is already identified.
    */
   trackVisitor?: boolean
+  /**
+   * Hostname of the page the widget sits on, when running inside the iframe.
+   *
+   * Needed because requests from the frame carry our origin, not the
+   * customer's, so the Origin header cannot distinguish one host site from
+   * another.
+   */
+  hostSite?: string | null
   showWatermark?: boolean
   className?: string
 }
@@ -57,6 +65,7 @@ export function ChatWindow({
   endpoint,
   leadEndpoint,
   trackVisitor = false,
+  hostSite = null,
   showWatermark = false,
   className,
 }: ChatWindowProps) {
@@ -117,6 +126,7 @@ export function ChatWindow({
         // Read at send time: localStorage does not exist during server
         // rendering, and this is the only moment the value is needed.
         visitorId: trackVisitor ? getVisitorId() : null,
+        hostSite,
         onEvent: handle,
       })
     } catch {
@@ -156,6 +166,7 @@ export function ChatWindow({
             context={leadRequest}
             endpoint={leadEndpoint}
             accentColor={accentColor}
+            hostSite={hostSite}
             onSaved={() => setLeadSaved(true)}
           />
         ) : null}

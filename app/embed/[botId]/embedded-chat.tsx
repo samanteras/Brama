@@ -17,12 +17,15 @@ export function EmbeddedChat({
   greeting,
   accentColor,
   showWatermark,
+  hostSite,
 }: {
   botId: string
   botName: string
   greeting: string
   accentColor: string
   showWatermark: boolean
+  /** Hostname of the page the widget is embedded in, passed by the loader. */
+  hostSite: string | null
 }) {
   function close() {
     // The launcher script owns the iframe, so closing it is its decision. The
@@ -54,6 +57,7 @@ export function EmbeddedChat({
         accentColor={accentColor}
         endpoint="/api/public/chat"
         leadEndpoint="/api/public/leads"
+        hostSite={hostSite}
         trackVisitor
         showWatermark={showWatermark}
         className="flex-1"

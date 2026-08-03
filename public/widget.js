@@ -77,7 +77,20 @@
       // has cost the host page a button and nothing else.
       frame = document.createElement('iframe')
       frame.className = 'frame'
-      frame.src = origin + '/embed/' + encodeURIComponent(botId)
+
+      // The host page's own hostname travels with the frame.
+      //
+      // Requests from inside the frame carry OUR origin, not the customer's, so
+      // the Origin header cannot tell one site from another here. This says
+      // which page the widget is embedded in. It is a hint, not proof — anyone
+      // editing the snippet can put anything here — so the real guarantee is
+      // the frame-ancestors header the app sends, which the browser enforces.
+      frame.src =
+        origin +
+        '/embed/' +
+        encodeURIComponent(botId) +
+        '?host=' +
+        encodeURIComponent(window.location.hostname)
       frame.setAttribute('title', 'Chat')
       frame.setAttribute('allow', 'clipboard-write')
       shadow.appendChild(frame)

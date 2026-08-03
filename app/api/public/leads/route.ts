@@ -1,6 +1,8 @@
 import { NextResponse, type NextRequest } from 'next/server'
 import { z } from 'zod'
 
+import { appUrl } from '@/lib/env'
+import { effectiveOrigin } from '@/lib/security/embed-origin'
 import { checkOrigin } from '@/lib/security/origin'
 import { createAdminClient } from '@/lib/supabase/admin'
 
@@ -18,6 +20,7 @@ const bodySchema = z.object({
   conversationId: z.uuid().nullable().optional(),
   contact: z.string().trim().min(3).max(120),
   name: z.string().trim().max(120).optional(),
+  hostSite: z.string().max(255).nullable().optional(),
   context: z
     .object({
       reason: z.string().max(64).optional(),
@@ -65,7 +68,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Unavailable.' }, { status: 404, headers })
   }
 
-  if (!checkOrigin(origin, bot.allowed_domains).allowed) {
+  if (!checkOrigin(effectiveOrigin(origin, parsed.data.hostSite, appUrl()), bot.allowed_domains).allowed) {
     return NextResponse.json({ error: 'Unavailable on this site.' }, { status: 403, headers })
   }
 

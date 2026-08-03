@@ -9,15 +9,17 @@ import { createAdminClient } from '@/lib/supabase/admin'
  *
  * Loaded with the service role because the visitor is anonymous — there is no
  * session for a policy to evaluate. Only presentation fields are read here; the
- * actual authorization for answering happens per message in the public chat
- * route, which checks Origin, rate limit and quota.
+ * decision to answer is made per message in the public chat route.
  *
  * An iframe rather than injecting into the host page: it guarantees the
  * customer's CSS cannot break the chat and, more importantly, that our CSS
- * cannot break their site.
+ * cannot break their site. The cost is that requests from inside the frame
+ * carry our origin rather than theirs, which is why the host page's name is
+ * passed through explicitly below.
  */
 export default async function EmbedPage(props: PageProps<'/embed/[botId]'>) {
   const { botId } = await props.params
+  const { host } = await props.searchParams
 
   const admin = createAdminClient()
 
@@ -44,6 +46,7 @@ export default async function EmbedPage(props: PageProps<'/embed/[botId]'>) {
       greeting={bot.greeting}
       accentColor={bot.accent_color}
       showWatermark={plan.features.watermark}
+      hostSite={typeof host === 'string' ? host : null}
     />
   )
 }
