@@ -19,6 +19,13 @@ type Stage =
 
 const ACCEPTED = '.pdf,.txt,.md'
 
+/** Must match the bucket's allowed_mime_types, set in the storage migration. */
+const MIME_TYPES = {
+  pdf: 'application/pdf',
+  markdown: 'text/markdown',
+  text: 'text/plain',
+} as const
+
 /**
  * Uploads a document and drives its indexing from the browser.
  *
@@ -82,9 +89,20 @@ export function DocumentUploader({ botId }: { botId: string }) {
 
       const { error: uploadError } = await supabase.storage
         .from('documents')
-        .upload(storagePath, file)
+        .upload(storagePath, file, {
+          // Set explicitly rather than left to the browser. Browsers do not
+          // recognise .md and send it as application/octet-stream, which the
+          // bucket rejects — so a perfectly valid Markdown file failed to
+          // upload with a message about its size.
+          contentType: MIME_TYPES[sourceType],
+        })
 
-      if (uploadError) throw new Error('Could not upload the file. Check its size and try again.')
+      if (uploadError) {
+        // Surfaced rather than replaced with a guess. "Check its size" sent me
+        // looking at the wrong thing entirely when the real problem was a
+        // rejected content type.
+        throw new Error(`Could not upload the file: ${uploadError.message}`)
+      }
 
       setStage({ name: 'reading' })
 
