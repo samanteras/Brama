@@ -72,11 +72,8 @@ export function planHighlights(plan: Plan): string[] {
       : `Your ${limits.visibleLeads} most recent leads`,
   )
 
-  highlights.push(
-    features.customDomains
-      ? 'Widget locked to your own domains'
-      : 'Widget runs on any domain',
-  )
+  // Domain locking is not listed: every plan has it, so it differentiates
+  // nothing. It belongs in the product, not in the price comparison.
 
   if (features.watermark) {
     highlights.push('Shows a small Foreman badge')

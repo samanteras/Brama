@@ -3,10 +3,10 @@ import { describe, expect, it } from 'vitest'
 import { frameAncestorsFor } from './frame-ancestors'
 
 describe('frameAncestorsFor', () => {
-  it('allows any ancestor when no domains are configured', () => {
-    // Restricting domains is a paid feature; a new bot that refuses to appear
-    // anywhere would be a broken first experience.
-    expect(frameAncestorsFor([])).toBe('frame-ancestors *')
+  it('blocks every ancestor when no domains are configured', () => {
+    // Fails closed on purpose. Defaulting to * would mean a widget answering on
+    // every site that copied its snippet while the settings page looked normal.
+    expect(frameAncestorsFor([])).toBe("frame-ancestors 'none'")
   })
 
   it('lists a configured domain', () => {
@@ -52,10 +52,10 @@ describe('frameAncestorsFor', () => {
     expect(directive).not.toContain('  ')
   })
 
-  it('falls back to allowing any ancestor if every entry is unusable', () => {
-    // Better than emitting an empty directive, which would block the widget
-    // everywhere including the site that installed it.
-    expect(frameAncestorsFor(['', '*'])).toBe('frame-ancestors *')
+  it('blocks everything if every entry is unusable', () => {
+    // An unusable list is not an open one. The owner sees a widget that does
+    // not appear and fixes it; the alternative is one that appears everywhere.
+    expect(frameAncestorsFor(['', '*'])).toBe("frame-ancestors 'none'")
   })
 
   it('does not repeat a source', () => {

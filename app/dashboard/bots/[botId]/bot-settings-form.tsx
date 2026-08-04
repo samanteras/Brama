@@ -18,7 +18,7 @@ type Bot = {
   allowed_domains: string[]
 }
 
-export function BotSettingsForm({ bot, canLockDomains }: { bot: Bot; canLockDomains: boolean }) {
+export function BotSettingsForm({ bot }: { bot: Bot }) {
   const [state, formAction] = useActionState<BotFormState, FormData>(updateBot, {})
 
   return (
@@ -67,20 +67,14 @@ export function BotSettingsForm({ bot, canLockDomains }: { bot: Bot; canLockDoma
           name="allowedDomains"
           defaultValue={bot.allowed_domains.join('\n')}
           rows={3}
-          placeholder={'yourcompany.com\nwww.yourcompany.com'}
-          disabled={!canLockDomains}
+          placeholder={`yourcompany.com
+shop.yourcompany.com`}
+          required
         />
-        {canLockDomains ? (
-          <p className="text-sm text-muted-foreground">
-            One per line. The widget refuses to answer anywhere else. Leave empty to allow any
-            domain. Your <code className="text-xs">www</code> subdomain is always included.
-          </p>
-        ) : (
-          <p className="text-sm text-muted-foreground">
-            Locking the widget to your own domains is available on paid plans. Until then it answers
-            wherever the snippet is placed.
-          </p>
-        )}
+        <p className="text-sm text-muted-foreground">
+          One per line. The widget refuses to run anywhere else, so at least one is required. Your{' '}
+          <code className="text-xs">www</code> subdomain is always included.
+        </p>
       </div>
 
       {state.error ? (

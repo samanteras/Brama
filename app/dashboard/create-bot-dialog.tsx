@@ -57,16 +57,29 @@ export function CreateBotDialog({ canCreate, limitMessage, variant = 'default' }
             </DialogDescription>
           </DialogHeader>
 
-          <div className="space-y-2 py-6">
-            <Label htmlFor="name">Name</Label>
-            <Input
-              id="name"
-              name="name"
-              required
-              maxLength={60}
-              placeholder="Skyline Renovations"
-              autoFocus
-            />
+          <div className="space-y-5 py-6">
+            <div className="space-y-2">
+              <Label htmlFor="name">Name</Label>
+              <Input
+                id="name"
+                name="name"
+                required
+                maxLength={60}
+                placeholder="Skyline Renovations"
+                autoFocus
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="domain">Your website</Label>
+              <Input id="domain" name="domain" required placeholder="yourcompany.com" />
+              {/* Asked for up front because the widget will not run anywhere
+                  else. Leaving it for later means installing the snippet and
+                  seeing nothing happen, with no clue why. */}
+              <p className="text-sm text-muted-foreground">
+                The widget only works on this domain. You can add more later.
+              </p>
+            </div>
           </div>
 
           {state.error ? (

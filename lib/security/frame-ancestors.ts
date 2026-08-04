@@ -9,17 +9,19 @@ import { normalizeDomain } from './origin'
  * visitor's browser before a single request reaches us: the frame will not
  * render on a site that is not listed, whatever the snippet claims.
  *
- * A bot with no domains configured allows any ancestor. That matches the rest
- * of the product: restricting domains is a paid feature, and a new bot that
- * refuses to appear anywhere would be a broken first experience. The monthly
- * quota still bounds what an unrestricted bot can cost.
+ * A bot with no usable domains is framed nowhere at all. Defaulting to `*` here
+ * would mean a widget silently answering on every site that copied its snippet,
+ * while the owner's settings page looked perfectly normal — the kind of gap
+ * nobody notices until it has been open for months. The domain is required at
+ * creation, so an empty list means something went wrong rather than "not
+ * configured yet".
  */
 export function frameAncestorsFor(allowedDomains: readonly string[]): string {
   const domains = allowedDomains
     .map((domain) => normalizeDomain(domain))
     .filter((domain): domain is string => domain !== null)
 
-  if (domains.length === 0) return "frame-ancestors *"
+  if (domains.length === 0) return "frame-ancestors 'none'"
 
   const sources = domains.flatMap((domain) => {
     if (domain.startsWith('*.')) {

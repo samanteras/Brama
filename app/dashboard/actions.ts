@@ -46,6 +46,18 @@ export async function createBot(_previous: BotFormState, formData: FormData): Pr
   const parsed = nameSchema.safeParse(formData.get('name'))
   if (!parsed.success) return { error: parsed.error.issues[0].message }
 
+  // Required, not optional. The widget refuses to run on a domain that is not
+  // listed, so a bot created without one would simply never work — and asking
+  // here is far kinder than letting someone install the snippet, see nothing,
+  // and have no idea why.
+  const domain = normalizeDomain(String(formData.get('domain') ?? ''))
+
+  if (domain === null) {
+    return {
+      error: 'Enter the domain your website runs on, for example yourcompany.com.',
+    }
+  }
+
   const { supabase, user } = await requireUser()
 
   const [{ data: profile }, { count }] = await Promise.all([
@@ -70,7 +82,7 @@ export async function createBot(_previous: BotFormState, formData: FormData): Pr
 
   const { data, error } = await supabase
     .from('bots')
-    .insert({ owner_id: user.id, name: parsed.data })
+    .insert({ owner_id: user.id, name: parsed.data, allowed_domains: [domain] })
     .select('id')
     .single()
 
@@ -125,6 +137,15 @@ export async function updateBot(_previous: BotFormState, formData: FormData): Pr
 
   const domains = parseDomains(formData.get('allowedDomains'))
   if ('error' in domains) return { error: domains.error }
+
+  // Emptying the list would take the widget offline rather than open it up, and
+  // silently switching off someone's chat is not something a save button should
+  // do without saying so.
+  if (domains.domains.length === 0) {
+    return {
+      error: 'Keep at least one domain. Without one the widget cannot run anywhere.',
+    }
+  }
 
   const { supabase } = await requireUser()
 

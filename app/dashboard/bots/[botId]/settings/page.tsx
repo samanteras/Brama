@@ -7,7 +7,6 @@ import { InstallGuide } from '../install-guide'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { appUrl } from '@/lib/env'
-import { getPlan, toPlanId } from '@/lib/plans'
 import { createClient } from '@/lib/supabase/server'
 
 export const metadata: Metadata = {
@@ -20,25 +19,21 @@ export default async function BotSettingsPage(
   const { botId } = await props.params
   const supabase = await createClient()
 
-  const [{ data: bot }, { data: profile }] = await Promise.all([
-    supabase
-      .from('bots')
-      .select('id, name, greeting, accent_color, allowed_domains')
-      .eq('id', botId)
-      .maybeSingle(),
-    supabase.from('profiles').select('plan').maybeSingle(),
-  ])
+  const { data: bot } = await supabase
+    .from('bots')
+    .select('id, name, greeting, accent_color, allowed_domains')
+    .eq('id', botId)
+    .maybeSingle()
 
   if (!bot) notFound()
 
-  const plan = getPlan(toPlanId(profile?.plan))
   const snippet = `<script src="${appUrl()}/widget.js" data-foreman-bot="${bot.id}" async></script>`
 
   return (
     <div className="grid gap-8 xl:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] xl:items-start">
       <Card className="min-w-0 p-6">
         <h2 className="mb-6 font-semibold">Settings</h2>
-        <BotSettingsForm bot={bot} canLockDomains={plan.features.customDomains} />
+        <BotSettingsForm bot={bot} />
       </Card>
 
       <div className="min-w-0 space-y-8">

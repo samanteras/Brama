@@ -41,9 +41,14 @@ export type PlanLimits = {
 export type PlanFeatures = {
   /** Free widgets carry a "powered by" link. */
   watermark: boolean
-  /** Restricting the widget to the customer's own domains. */
-  customDomains: boolean
 }
+
+/*
+ * Domain locking used to live here as a paid feature. It was moved out and made
+ * mandatory for everyone: a widget that answers on any site that copied its
+ * snippet is a defect, not a cheaper tier, and selling protection against theft
+ * as an upgrade is the wrong thing to charge for.
+ */
 
 export type Plan = {
   id: PlanId
@@ -81,7 +86,6 @@ export const PLANS: Record<PlanId, Plan> = {
     },
     features: {
       watermark: true,
-      customDomains: false,
     },
   },
   pro: {
@@ -98,7 +102,6 @@ export const PLANS: Record<PlanId, Plan> = {
     },
     features: {
       watermark: false,
-      customDomains: true,
     },
   },
   business: {
@@ -115,7 +118,6 @@ export const PLANS: Record<PlanId, Plan> = {
     },
     features: {
       watermark: false,
-      customDomains: true,
     },
   },
 }

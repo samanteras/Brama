@@ -165,10 +165,11 @@ describe('planHighlights', () => {
     }
   })
 
-  it('mentions domain locking only on plans that offer it', () => {
+  it('does not list domain locking at all', () => {
+    // Every plan has it, so it differentiates nothing and belongs in the
+    // product rather than the price comparison.
     for (const plan of PLAN_LIST) {
-      const bullets = planHighlights(plan).join(' ')
-      expect(bullets.includes('locked to your own domains')).toBe(plan.features.customDomains)
+      expect(planHighlights(plan).join(' ').toLowerCase()).not.toContain('domain')
     }
   })
 })

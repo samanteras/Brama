@@ -91,14 +91,14 @@ describe('plan catalogue', () => {
     }
   })
 
-  it('reserves custom domains for paid plans', () => {
-    expect(PLANS.free.features.customDomains).toBe(false)
-
-    for (const plan of PLAN_LIST.filter((candidate) => candidate.monthlyPriceCents > 0)) {
-      expect(plan.features.customDomains).toBe(true)
+  it('does not sell domain locking as a feature', () => {
+    // It used to be a paid feature. Charging for protection against snippet
+    // theft is the wrong thing to put behind an upgrade, so every plan has it
+    // and it appears in no tier's feature set.
+    for (const plan of PLAN_LIST) {
+      expect(plan.features).not.toHaveProperty('customDomains')
     }
   })
-
   it('gives every paid plan a distinct Stripe price env var', () => {
     const paidPlans = PLAN_LIST.filter((plan) => plan.monthlyPriceCents > 0)
     const envVars = paidPlans.map((plan) => plan.stripePriceIdEnvVar)

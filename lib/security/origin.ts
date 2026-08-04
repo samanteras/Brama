@@ -15,10 +15,15 @@
 
 /** Why a request was allowed or rejected. Surfaced in logs and error copy. */
 export type OriginVerdict =
-  | { allowed: true; reason: 'no-restrictions' | 'domain-allowed' }
+  | { allowed: true; reason: 'domain-allowed' }
   | {
       allowed: false
-      reason: 'missing-origin' | 'unsupported-scheme' | 'malformed-origin' | 'domain-not-allowed'
+      reason:
+        | 'no-domains-configured'
+        | 'missing-origin'
+        | 'unsupported-scheme'
+        | 'malformed-origin'
+        | 'domain-not-allowed'
     }
 
 const WILDCARD_PREFIX = '*.'
@@ -127,10 +132,18 @@ export function hostnameMatches(hostname: string, allowedDomain: string): boolea
 /**
  * Checks a browser `Origin` header against a bot's allow-list.
  *
- * An empty allow-list means no domain restriction. That is the deliberate
- * default: restricting domains is a paid feature, and a brand new bot whose
- * widget refuses to answer anywhere would be a broken first experience. The
- * other two layers — rate limiting and the plan quota — still apply.
+ * An empty allow-list refuses everything. This started out the other way round
+ * — empty meaning unrestricted — on the reasoning that a new bot answering
+ * nowhere is a broken first experience. That was the wrong trade.
+ *
+ * The failure modes are not symmetric. Too strict, and the owner sees their
+ * widget not working and fixes it in a minute. Too loose, and they see it
+ * working perfectly while it answers on any site that copies the snippet, with
+ * nothing on screen to suggest otherwise. A protection you have to notice is
+ * absent is not a protection.
+ *
+ * The domain is therefore required when a bot is created, and nothing here has
+ * to guess what an empty list was meant to mean.
  *
  * @param origin The raw `Origin` header, or `null` when absent.
  * @param allowedDomains Entries as stored for the bot, already normalized.
@@ -144,7 +157,7 @@ export function checkOrigin(
     .filter((domain): domain is string => domain !== null)
 
   if (restrictions.length === 0) {
-    return { allowed: true, reason: 'no-restrictions' }
+    return { allowed: false, reason: 'no-domains-configured' }
   }
 
   // Absent header means a non-browser client: curl, a script, a server. Those

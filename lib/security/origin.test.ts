@@ -119,25 +119,30 @@ describe('hostnameMatches', () => {
 describe('checkOrigin', () => {
   const allowed = ['mysite.com']
 
-  describe('with no restrictions configured', () => {
-    it('allows any origin', () => {
-      // Restricting domains is a paid feature; a brand new bot must still answer.
+  describe('with no domains configured', () => {
+    it('refuses every origin', () => {
+      // Deliberately the opposite of the original design. Too strict is visible
+      // to the owner within a minute; too loose looks like everything working
+      // while the widget answers on any site that copied the snippet.
       expect(checkOrigin('https://anywhere.example', [])).toEqual({
-        allowed: true,
-        reason: 'no-restrictions',
+        allowed: false,
+        reason: 'no-domains-configured',
       })
     })
 
-    it('allows a request with no Origin header at all', () => {
-      expect(checkOrigin(null, [])).toEqual({ allowed: true, reason: 'no-restrictions' })
+    it('refuses a request with no Origin header either', () => {
+      expect(checkOrigin(null, [])).toEqual({
+        allowed: false,
+        reason: 'no-domains-configured',
+      })
     })
 
-    it('treats a list of unparseable entries as no restriction', () => {
-      // Entries are validated before they are stored, so this is a safety net
-      // rather than a supported path — pinned here so the behaviour is a choice.
+    it('treats a list of unparseable entries as no domains at all', () => {
+      // Entries are validated before storage, so this is a safety net. It must
+      // fail closed: an unusable list is not an open one.
       expect(checkOrigin('https://anywhere.example', ['', '   ', '*'])).toEqual({
-        allowed: true,
-        reason: 'no-restrictions',
+        allowed: false,
+        reason: 'no-domains-configured',
       })
     })
   })

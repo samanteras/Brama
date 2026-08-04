@@ -90,7 +90,7 @@
 ## Сцена 3. Бот отвечает — и отказывается (≈70 сек)
 
 **Экран:** Playground.
-
+> This is a playground where you can test the bot.
 **Вопрос 1** — `Сколько стоит черновая отделка за квадратный метр?`
 
 > Five twenty a metre — that's straight out of the document. And notice I asked
@@ -153,7 +153,8 @@
 где у их сайта HTML. Делал кто-то другой.*
 
 **Переключиться на редактор:**
-
+  
+I'm running it locally.
 > This is the customer's site. Different domain, nothing to do with our app.
 
 *Это сайт клиента. Другой домен, к нашему приложению отношения не имеет.*
