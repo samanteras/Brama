@@ -5,16 +5,14 @@ const nextConfig: NextConfig = {
     return [
       {
         // The embed page is meant to be framed by customers, so it must not
-        // carry the framing restrictions that protect the rest of the app.
+        // carry the blanket framing ban that protects the rest of the app.
         //
-        // `frame-ancestors *` looks permissive, and it is: any site can display
-        // the frame. It cannot get answers out of it, though — the chat and lead
-        // endpoints check Origin against the bot's allowed domains, so an
-        // unauthorised embed shows a chat window that politely refuses. Pinning
-        // this header per bot would need the allow-list at header time, before
-        // we know which bot is being requested.
+        // The real directive is set per bot in proxy.ts, from that bot's own
+        // allowed domains — a static header here cannot do it, because which
+        // bot is being requested is only known at request time. This entry
+        // exists so the catch-all X-Frame-Options rule below does not apply.
         source: '/embed/:path*',
-        headers: [{ key: 'Content-Security-Policy', value: 'frame-ancestors *' }],
+        headers: [{ key: 'X-Frame-Options', value: '' }],
       },
       {
         // Served to third-party sites, so it needs to be fetchable from

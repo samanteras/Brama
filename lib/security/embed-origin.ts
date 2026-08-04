@@ -14,9 +14,9 @@
  *
  * That value is a hint, not proof: whoever edits the snippet controls it. The
  * guarantee that a widget cannot run on an unapproved site is the
- * `frame-ancestors` header, enforced by the browser before any of this code
- * runs. This check makes casual copying fail cleanly, and the plan quota and
- * rate limit stand behind both.
+ * `frame-ancestors` header set per bot in proxy.ts, which the browser enforces
+ * before any of this code runs. This check makes casual copying fail cleanly,
+ * and the plan quota and rate limit stand behind both.
  */
 export function effectiveOrigin(
   requestOrigin: string | null | undefined,

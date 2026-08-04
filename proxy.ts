@@ -2,6 +2,8 @@ import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
 import { publicEnv } from '@/lib/env'
+import { frameAncestorsFor } from '@/lib/security/frame-ancestors'
+import { createAdminClient } from '@/lib/supabase/admin'
 
 /**
  * Refreshes the Supabase session on every request and keeps signed-out users
@@ -14,7 +16,16 @@ import { publicEnv } from '@/lib/env'
  * without this the rotated access token would never be persisted, and users
  * would be logged out at seemingly random moments.
  */
+/** `/embed/<botId>`, with nothing after the id. */
+const EMBED_PATH = /^\/embed\/([0-9a-fA-F-]{36})\/?$/
+
 export async function proxy(request: NextRequest) {
+  const embedMatch = request.nextUrl.pathname.match(EMBED_PATH)
+
+  if (embedMatch) {
+    return embedResponse(embedMatch[1])
+  }
+
   let response = NextResponse.next({ request })
 
   const supabase = createServerClient(
@@ -70,17 +81,56 @@ export async function proxy(request: NextRequest) {
   return response
 }
 
+/**
+ * Locks the embed page to the bot's own domains.
+ *
+ * This runs here rather than in the page because a React Server Component
+ * cannot set response headers, and the header has to be on the document itself
+ * for the browser to act on it.
+ *
+ * It is the only part of the widget's defence a copied snippet cannot defeat:
+ * every other check reads a value the caller supplies, while this one is
+ * enforced by the visitor's browser before a request is ever made.
+ */
+async function embedResponse(botId: string): Promise<NextResponse> {
+  const response = NextResponse.next()
+
+  try {
+    const admin = createAdminClient()
+
+    const { data: bot } = await admin
+      .from('bots')
+      .select('allowed_domains')
+      .eq('id', botId)
+      .maybeSingle()
+
+    if (bot) {
+      response.headers.set('Content-Security-Policy', frameAncestorsFor(bot.allowed_domains))
+    }
+  } catch (error) {
+    // Failing closed here would take the widget offline for every customer
+    // during a database blip. The page itself still refuses to answer, since
+    // the chat route repeats the domain check per message.
+    console.error('[proxy] could not read bot for frame-ancestors', error)
+  }
+
+  return response
+}
+
 export const config = {
   matcher: [
     /*
      * Everything except:
      *   - Next internals and static assets
-     *   - /embed and /api/public, which serve anonymous widget visitors who
-     *     have no session to refresh and must never be redirected to sign-in
+     *   - /api/public, which serves anonymous widget visitors who have no
+     *     session to refresh and must never be redirected to sign-in
      *   - /api/stripe, called by Stripe itself, which carries no session and
      *     whose webhook must see the request body untouched
      *   - widget.js, loaded from third-party sites
+     *
+     * /embed IS matched, but only to attach its frame-ancestors header; it
+     * never reaches the session logic below.
      */
-    '/((?!_next/static|_next/image|favicon.ico|widget.js|embed|api/public|api/stripe|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico)$).*)',
+    '/((?!_next/static|_next/image|favicon.ico|widget.js|api/public|api/stripe|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico)$).*)',
   ],
 }
