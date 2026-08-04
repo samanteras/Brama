@@ -2,14 +2,15 @@
 
 Хронометраж — около 5–6 минут.
 
-Инструкции и пояснения — на русском. **Реплики для озвучки — на английском**, под
-каждой курсивом перевод, чтобы читать осмысленно, а не по бумажке.
+Инструкции — на русском. **Реплики для озвучки — на английском**, под каждой
+курсивом перевод.
 
-Английские фразы намеренно короткие: длинные конструкции трудно читать вслух,
-и на записи это слышно.
+Стиль намеренно разговорный: короткие фразы, сокращения, никакого пафоса. Читать
+надо так, будто объясняешь коллеге, а не зачитываешь презентацию. Если фраза
+неудобно ложится на язык — меняй её, это нормально.
 
-Главное правило: **не перечислять функции**. Показывать один сквозной путь и
-объяснять, почему сделано именно так. Экран показывает «что», голос — «зачем».
+Главное правило: **не перечислять функции**. Один сквозной путь, и по дороге
+объяснять, почему сделано именно так.
 
 ---
 
@@ -19,7 +20,7 @@
 - [ ] Оставить одного бота — `Skyline Renovations` с загруженной базой
 - [ ] **Очистить старые лиды**, иначе новый потеряется среди них
 - [ ] Открыть вкладки: лендинг, дашборд, демо-сайт, `demo-site/index.html` в редакторе
-- [ ] Проверить остаток квоты — по сценарию нужно около шести ответов
+- [ ] Проверить остаток квоты — нужно около шести ответов
 - [ ] Скрыть закладки и уведомления, масштаб 100%
 
 ---
@@ -28,29 +29,29 @@
 
 **Экран:** лендинг, медленная прокрутка сверху вниз.
 
-> Foreman turns the documents a renovation company already has into a chatbot
-> for their website.
+> So this is Foreman. It takes the documents a renovation company already has,
+> and turns them into a chatbot for their site.
 >
-> The niche is deliberate. Someone reads your prices at eleven at night on a
-> Saturday. They have one question. Nobody answers. By morning they are talking
-> to a competitor.
+> I picked that niche on purpose. Think about it — someone's looking at your
+> prices at eleven at night on a Saturday. They've got one question. Nobody
+> answers. Next morning they're talking to someone else.
 >
-> That is not a support cost. That is a lost job — and a renovation contract is
-> worth tens of thousands.
+> That's not a support problem, that's a job you just lost. And these jobs
+> aren't small.
 
-*Foreman превращает документы, которые у ремонтной компании уже есть, в чат-бота
-для их сайта. Ниша выбрана намеренно. Человек читает ваши цены в одиннадцать
-вечера в субботу. У него один вопрос. Ответить некому. К утру он уже говорит с
-конкурентом. Это не расходы на поддержку — это потерянный заказ, а контракт на
-ремонт стоит десятки тысяч.*
+*Итак, это Foreman. Берёт документы, которые у ремонтной компании уже есть, и
+делает из них чат-бота для сайта. Нишу я выбрал специально. Смотрите — человек
+смотрит ваши цены в одиннадцать вечера в субботу. У него один вопрос. Никто не
+отвечает. На следующее утро он говорит уже с другими. Это не проблема поддержки,
+это потерянный заказ. А заказы тут немаленькие.*
 
 Задержаться на тарифах:
 
-> Every number on this page comes from the same place in the code that enforces
-> the limits. They cannot drift apart.
+> By the way, every number on this page comes from the same file the server
+> checks limits against. So they can't say one thing and do another.
 
-*Каждая цифра на этой странице приходит из того же места в коде, по которому
-проверяются лимиты. Разойтись они не могут.*
+*Кстати, все цифры на этой странице — из того же файла, по которому сервер
+проверяет лимиты. Так что тут не может быть написано одно, а работать другое.*
 
 ---
 
@@ -58,31 +59,31 @@
 
 **Экран:** дашборд → создать бота → Knowledge → загрузить `knowledge-base.md`.
 
-> The customer uploads what they already have. Price list, terms, warranty.
-> Nothing new to write.
+> You upload what you've already got. Price list, terms, warranty. Nothing to
+> write from scratch.
 
-*Клиент загружает то, что у него уже есть: прайс, условия, гарантию. Ничего
-писать заново не нужно.*
+*Загружаете то, что уже есть. Прайс, условия, гарантию. Ничего писать заново не
+надо.*
 
-**Указать на счётчик прогресса:**
+**Указать на счётчик:**
 
-> Look at the counter — five of nine passages. That is not decoration.
+> See the counter — five of nine. That's not just a spinner with numbers on it.
 >
-> A hundred-and-fifty-page PDF does not fit in one serverless request, so
-> indexing runs in batches driven by the browser. You get an honest progress
-> figure, and if the tab closes, it resumes where it stopped.
+> A big PDF won't fit in one request, so the indexing runs in chunks, and the
+> browser drives it. Which means you get a real progress number, and if you close
+> the tab it picks up where it left off.
 
-*Обратите внимание на счётчик — пять из девяти фрагментов. Это не декорация.
-PDF на сто пятьдесят страниц не влезает в один серверлесс-запрос, поэтому
-индексация идёт партиями под управлением браузера. Отсюда честный прогресс, и
-если вкладку закрыли — продолжит с того же места.*
+*Видите счётчик — пять из девяти. Это не спиннер с цифрами. Большой PDF не влезет
+в один запрос, поэтому индексация идёт кусками, и управляет ей браузер. Отсюда
+настоящий прогресс, и если закрыть вкладку — продолжит с того места.*
 
 Попробовать загрузить тот же файл второй раз:
 
-> A duplicate is refused. Otherwise the bot would quote the same price list two
-> different ways.
+> Same file twice — it won't take it. Otherwise you'd have the bot quoting the
+> same prices from two copies.
 
-*Дубликат не проходит. Иначе бот цитировал бы один прайс двумя способами.*
+*Тот же файл второй раз — не примет. Иначе бот цитировал бы одни и те же цены из
+двух копий.*
 
 ---
 
@@ -92,42 +93,44 @@ PDF на сто пятьдесят страниц не влезает в оди�
 
 **Вопрос 1** — `Сколько стоит черновая отделка за квадратный метр?`
 
-> Five hundred and twenty euros — straight from the document. Note the question
-> is in Russian and the document is in English. It answers in whatever language
-> you write in.
+> Five twenty a metre — that's straight out of the document. And notice I asked
+> in Russian, the document's in English. It just answers in whatever you write
+> in.
 
-*520 евро — прямо из документа. Обратите внимание: вопрос на русском, документ
-на английском. Отвечает на языке вопроса.*
+*520 за метр — это прямо из документа. И заметьте, я спросил по-русски, а
+документ на английском. Он просто отвечает на том языке, на котором пишешь.*
 
 **Вопрос 2** — `What happens if the tiles come off six months later?`
 
-> The document never says "tiles". It has a section on the warranty. It found it
-> by meaning.
+> The document doesn't say "tiles" anywhere. It's got a bit about the warranty.
+> Found it by meaning.
 
-*В документе нет слова «плитка». Там раздел про гарантию. Нашёл по смыслу.*
+*В документе нигде нет слова «плитка». Есть кусок про гарантию. Нашёл по смыслу.*
 
 **Вопрос 3** — `Could you start before the end of September?` ← **ключевой момент**
 
-> This is not in the documents. And this is the part that matters.
->
-> Most document chatbots would invent a date. On a builder's website, that is a
-> promise nobody made.
->
-> This one refuses to guess — and asks for a phone number instead. The failure
-> becomes the lead.
+Пауза перед репликой.
 
-*Этого в документах нет. И вот это — самое главное. Большинство ботов придумали
-бы дату. На сайте строителей это обещание, которого никто не давал. Наш
-отказывается гадать — и вместо этого просит телефон. Провал превращается в
-заявку.*
+> Now — this isn't in the documents at all. And this bit is the whole point.
+>
+> Most of these bots would just make up a date. On a builder's website that's a
+> promise nobody actually made.
+>
+> This one won't guess. It says so, and asks for a phone number instead. So the
+> thing it couldn't answer turns into a lead.
+
+*Так — вот этого в документах нет вообще. И вот это — самое главное. Большинство
+таких ботов просто придумали бы дату. На сайте строителей это обещание, которого
+никто не давал. Этот гадать не станет. Он так и говорит и просит телефон. То
+есть то, на что он не смог ответить, превращается в заявку.*
 
 Заполнить форму, отправить.
 
-> In the tester the lead is not saved. The owner's own experiments should not
-> clutter the list they actually work from.
+> In the tester it doesn't actually save the lead. You don't want your own
+> poking around ending up in the list you work from.
 
-*В тестере лид не сохраняется. Собственные пробы владельца не должны засорять
-список, с которым он работает.*
+*В тестере лид не сохраняется. Не хочется, чтобы твои же тыканья попадали в
+список, с которым ты работаешь.*
 
 ---
 
@@ -135,43 +138,43 @@ PDF на сто пятьдесят страниц не влезает в оди�
 
 **Экран:** Settings → «Add it to your site».
 
-> Now it has to go on a website. The whole integration is one line.
+> Right, now it needs to go on a website. It's one line.
 
-*Теперь это надо поставить на сайт. Вся интеграция — одна строка.*
+*Так, теперь это надо поставить на сайт. Одна строка.*
 
 Скопировать снипет, показать список платформ:
 
-> And the product tells them where to paste it. WordPress, Tilda, Wix, Google
-> Tag Manager. A renovation company owner usually has no idea where their site's
-> HTML lives — somebody else built it.
+> And it tells you where to paste it — WordPress, Tilda, Wix, Tag Manager.
+> Because honestly, most people running a renovation company have no idea where
+> their site's HTML is. Someone else built it.
 
-*И продукт сам говорит, куда её вставить: WordPress, Tilda, Wix, Google Tag
-Manager. Владелец ремонтной компании обычно не знает, где живёт HTML его сайта —
-делал кто-то другой.*
+*И тут написано, куда её вставить — WordPress, Tilda, Wix, Tag Manager. Потому
+что, честно говоря, большинство владельцев ремонтных компаний понятия не имеют,
+где у их сайта HTML. Делал кто-то другой.*
 
 **Переключиться на редактор:**
 
-> This is the customer's website. Different domain, nothing to do with our app.
+> This is the customer's site. Different domain, nothing to do with our app.
 
 *Это сайт клиента. Другой домен, к нашему приложению отношения не имеет.*
 
 Вставить строку, сохранить, обновить страницу.
 
-> There is the button.
+> And there's the button.
 
-*Вот кнопка.*
+*И вот кнопка.*
 
 **F12 → Network, обновить страницу:**
 
-> And here is the detail I care about. Until someone clicks, the chat does not
-> load at all — a couple of kilobytes on the page.
+> Here's the bit I like. Until you click, the chat doesn't load at all. Couple of
+> kilobytes, that's it.
 >
-> The widget does not slow the customer's site down. That is the usual reason
-> these things get removed.
+> So it doesn't slow their site down — which is usually why people rip these
+> things out.
 
-*И вот деталь, которая мне важна. Пока не нажали, чат не грузится вообще — на
-странице пара килобайт. Виджет не замедляет сайт клиента. Именно из-за скорости
-такие штуки обычно и снимают.*
+*Вот что мне нравится. Пока не нажал, чат не грузится вообще. Пара килобайт, и
+всё. То есть сайт от него не тормозит — а обычно именно поэтому такие штуки и
+выкидывают.*
 
 Нажать — показать, что iframe подгрузился только теперь.
 
@@ -183,19 +186,19 @@ Manager. Владелец ремонтной компании обычно не 
 
 **Спросить** — `Do you give a discount if I pay everything up front?`
 
-> Nothing about discounts in the documents. It does not invent one.
+> Nothing about discounts in there. It's not going to invent one.
 
-*Про скидки в документах ничего нет. Он её не выдумывает.*
+*Про скидки там ничего нет. Он её выдумывать не станет.*
 
 Оставить телефон, отправить.
 
-> The widget only answers on domains the owner listed. And the main check is not
-> our code — it is the visitor's browser, refusing to render the chat on a site
-> that is not on the list. Copying the snippet gets you nothing.
+> And it only works on the domains you list. The main check isn't even our code
+> — it's the browser refusing to show the chat on a site that isn't on the list.
+> So copying the snippet doesn't get you anywhere.
 
-*Виджет отвечает только на доменах, которые указал владелец. И главная проверка —
-не наш код, а браузер посетителя, который откажется рисовать чат на сайте не из
-списка. Скопировать сниппет бессмысленно.*
+*И работает он только на тех доменах, которые указал. Главная проверка — даже не
+наш код, а браузер, который откажется показывать чат на сайте не из списка. Так
+что скопировать сниппет ничего не даст.*
 
 ---
 
@@ -203,30 +206,30 @@ Manager. Владелец ремонтной компании обычно не 
 
 **Экран:** дашборд → Leads.
 
-> There it is. And it is not a row with a phone number.
+> There it is. And it's not just a phone number in a table.
 
-*Вот она. И это не строка с телефоном.*
+*Вот она. И это не просто телефон в таблице.*
 
 Показать карточку целиком:
 
-> You can see what they wanted, and the exact question that stopped them. Whoever
-> calls back already knows how to open the conversation. The transcript is
-> there, but you rarely need it.
+> You can see what they wanted and exactly where they got stuck. So whoever calls
+> back already knows how to start. The transcript's there too, but you don't
+> usually need it.
 
-*Видно, что человек хотел, и на каком вопросе он застрял. Тот, кто перезвонит,
-уже знает, с чего начать. Переписка есть, но нужна редко.*
+*Видно, что человек хотел и на чём именно застрял. Тот, кто перезвонит, уже
+знает, с чего начать. Переписка тоже есть, но обычно не нужна.*
 
 **Вкладка Gaps:**
 
-> This is the most underrated page in the product. Every question it could not
-> answer lands here.
+> This page is my favourite, actually. Everything it couldn't answer ends up
+> here.
 >
-> It is a list of paragraphs missing from the price list. Add one, and next time
-> it is an answer instead of a phone call.
+> It's basically a list of what's missing from your price list. Add a paragraph,
+> and next time it's an answer instead of a phone call.
 
-*Это самая недооценённая страница продукта. Каждый вопрос, на который бот не смог
-ответить, попадает сюда. Это список абзацев, которых не хватает в прайсе.
-Добавили — и в следующий раз это ответ, а не звонок.*
+*Эта страница, если честно, моя любимая. Всё, на что он не смог ответить,
+попадает сюда. По сути это список того, чего не хватает в прайсе. Добавил абзац —
+и в следующий раз это ответ, а не звонок.*
 
 ---
 
@@ -234,58 +237,57 @@ Manager. Владелец ремонтной компании обычно не 
 
 **Экран:** Billing.
 
-> Plans are sized by volume — bots, documents, answers per month. Payment is
-> Stripe, in test mode.
+> Plans go by volume — bots, documents, answers a month. Payment's Stripe, test
+> mode.
 
-*Тарифы по объёму: боты, документы, ответы в месяц. Оплата — Stripe в тестовом
-режиме.*
+*Тарифы по объёму — боты, документы, ответы в месяц. Оплата через Stripe, тестовый
+режим.*
 
 Оплатить картой `4242 4242 4242 4242`.
 
-> The plan changes on the webhook from Stripe — when the money actually moved.
-> Reaching the payment page changes nothing on its own.
+> The plan only changes when Stripe tells us the money went through. Just landing
+> on the payment page doesn't do anything by itself.
 
-*Тариф меняется по вебхуку от Stripe — когда деньги действительно прошли. Сам
-переход на страницу оплаты ничего не меняет.*
+*Тариф меняется только когда Stripe скажет, что деньги прошли. Просто попасть на
+страницу оплаты само по себе ничего не меняет.*
 
 ---
 
 ## Финал (≈30 сек)
 
-> A few things you cannot see on screen.
+> Couple of things you can't see on screen.
 >
-> Three hundred and fifty tests, and a separate set of thirty questions that
-> scores answer quality as numbers — not one model grading another, but
-> mechanically: was the right passage retrieved, did the tool fire.
+> There's about three hundred and fifty tests, plus a separate set of thirty
+> questions that scores the answers as numbers. Not a model grading another model
+> — just, did it find the right passage, did it call the tool.
 >
-> It paid for itself twice. Once it caught a similarity threshold that worked
-> backwards and was discarding exactly the right passages. Once it caught the
-> bot writing "someone will follow up" without showing the form — so the lead
-> was lost behind an answer that looked perfect.
+> That paid off twice, actually. Once it caught a cutoff that worked backwards
+> and was throwing away the right passages. And once it caught the bot saying
+> "someone will get back to you" without actually showing the form — so the lead
+> just quietly disappeared behind an answer that looked fine.
 >
-> And what is deliberately not here: teams and roles, analytics, widget theming,
-> multiple languages. Those are not missing. They were declined.
+> And what's not here on purpose: teams, analytics, theming, multiple languages.
+> Those aren't missing. I said no to them.
 
-*Несколько вещей, которых не видно на экране. Триста пятьдесят тестов и отдельный
-набор из тридцати вопросов, который оценивает качество ответов числами — не
-модель судит модель, а механически: нашёлся ли нужный фрагмент, вызвался ли
-инструмент. Он окупился дважды. Один раз поймал порог отсечки, который работал
-наоборот и выбрасывал именно нужные фрагменты. Второй — бота, который писал «с
-вами свяжутся», но не показывал форму, и заявка терялась за внешне идеальным
-ответом. И чего здесь сознательно нет: команд и ролей, аналитики, настройки
-внешнего вида, мультиязычности. Это не забытое — это отклонённое.*
+*Пара вещей, которых на экране не видно. Тут около трёхсот пятидесяти тестов и
+отдельный набор из тридцати вопросов, который оценивает ответы числами. Не модель
+судит модель — а просто: нашёл ли нужный кусок, вызвал ли инструмент. Это, кстати,
+дважды окупилось. Один раз поймал отсечку, которая работала наоборот и
+выбрасывала как раз нужные куски. И один раз поймал бота, который писал «с вами
+свяжутся», но форму не показывал — и заявка тихо исчезала за ответом, который
+выглядел нормально. И чего тут нет специально: команд, аналитики, настройки
+внешнего вида, мультиязычности. Это не забыл. Это отказался.*
 
 ---
 
 ## Если что-то пойдёт не так в кадре
 
-- **Бот думает пару секунд** — не вырезайте, скажите вслух: *"that pause is the
-  search running before the model starts writing"*. Честнее монтажа.
-- **Виджет не появился** — домен не в списке разрешённых.
+- **Бот думает пару секунд** — не вырезайте, скажите: *"that pause is it
+  searching the documents before it starts writing"*. Живее, чем монтаж.
+- **Виджет не появился** — домена нет в списке разрешённых.
 - **Кончилась квота** — на бесплатном тарифе пять ответов в месяц.
 
 ## Чего в сценарии нет намеренно
 
-Обхода всех вкладок, показа настроек ради настроек, перечисления технологий.
-Проверяющий смотрит, решает ли продукт задачу и продуман ли он. Стек он и так
-увидит в репозитории.
+Обхода всех вкладок, показа настроек ради настроек, перечисления технологий. Стек
+и так виден в репозитории.
