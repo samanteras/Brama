@@ -1,15 +1,5 @@
 # Skyline Renovations — services, pricing and terms
 
-The document a customer would upload into Foreman. Written the way a real
-renovation company writes: specific where it can be, silent where it cannot.
-
-The silences are deliberate. Start dates, discounts and commercial premises are
-genuinely absent, because a bot that admits it does not know and takes a phone
-number is the behaviour this product is built to demonstrate. A document with
-an answer to everything would demonstrate nothing.
-
----
-
 ## About us
 
 Skyline Renovations carries out turnkey renovation of flats and houses. We have
