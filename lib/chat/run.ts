@@ -4,6 +4,7 @@ import type OpenAI from 'openai'
 
 import { CHAT_MODEL, CHAT_TEMPERATURE, openai } from '@/lib/ai/chat-model'
 import { buildSystemPrompt, trimHistory, type PromptMessage } from './prompt'
+import { NET_FOLLOW_UP, repliesWithoutAnswering } from './refusal'
 import { retrieve, type RetrievedChunk } from './retrieve'
 import { COLLECT_LEAD_TOOL, parseCollectLeadArguments, type CollectLeadArguments } from './tools'
 
@@ -25,7 +26,14 @@ import { COLLECT_LEAD_TOOL, parseCollectLeadArguments, type CollectLeadArguments
 
 export type ChatEvent =
   | { type: 'token'; value: string }
-  | { type: 'lead-request'; lead: CollectLeadArguments }
+  /**
+   * `source` says which path opened the form: the model calling the tool, or
+   * the refusal net catching a reply that declined without calling it. Nothing
+   * downstream branches on it — it exists so the eval can tell the two apart,
+   * because "the form appeared" and "the form appeared for the right reason"
+   * are different measurements and only one of them is worth acting on.
+   */
+  | { type: 'lead-request'; lead: CollectLeadArguments; source: 'model' | 'net' }
   | { type: 'done'; answered: boolean; citedChunkIds: string[] }
 
 export type RunChatInput = {
@@ -49,9 +57,11 @@ export async function* runChat(input: RunChatInput): AsyncGenerator<ChatEvent> {
   ]
 
   let toolCall: ToolCall | null = null
+  let reply = ''
 
   for await (const event of streamTurn(messages, { withTools: true })) {
     if (event.type === 'token') {
+      reply += event.value
       yield { type: 'token', value: event.value }
     } else {
       toolCall = event.call
@@ -59,12 +69,30 @@ export async function* runChat(input: RunChatInput): AsyncGenerator<ChatEvent> {
   }
 
   if (!toolCall) {
+    // The reply is already on the visitor's screen. If it turned out to be a
+    // refusal, the form still has to appear: see lib/chat/refusal.ts for why
+    // this is checked rather than asked for in the prompt.
+    if (await repliesWithoutAnswering(reply)) {
+      yield { type: 'token', value: NET_FOLLOW_UP }
+      yield {
+        type: 'lead-request',
+        source: 'net',
+        lead: {
+          reason: 'not_in_documents',
+          summary: `Asked something the documents do not cover: ${input.question}`,
+          unanswered_question: input.question,
+        },
+      }
+      yield { type: 'done', answered: false, citedChunkIds: citedIds(chunks) }
+      return
+    }
+
     yield { type: 'done', answered: true, citedChunkIds: citedIds(chunks) }
     return
   }
 
   const lead = parseCollectLeadArguments(toolCall.arguments)
-  yield { type: 'lead-request', lead }
+  yield { type: 'lead-request', lead, source: 'model' }
 
   // Feed the tool result back so the model can write the sentence the visitor
   // actually reads. Without this second turn it would have produced a tool call

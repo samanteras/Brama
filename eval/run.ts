@@ -25,6 +25,8 @@ type Result = {
   leadCorrect: boolean
   answeredCorrect: boolean
   answer: string
+  /** Which path opened the form, when one did. */
+  leadSource: 'model' | 'net' | null
 }
 
 const BOT_NAME = 'Skyline Renovations'
@@ -120,10 +122,19 @@ async function askOnce(
   let answer = ''
   let collectedLead = false
   let answered = true
+  let leadSource: 'model' | 'net' | null = null
 
-  for await (const event of runChat({ botId, botName: BOT_NAME, question: question.question })) {
+  for await (const event of runChat({
+    botId,
+    botName: BOT_NAME,
+    question: question.question,
+    history: question.priorTurns,
+  })) {
     if (event.type === 'token') answer += event.value
-    if (event.type === 'lead-request') collectedLead = true
+    if (event.type === 'lead-request') {
+      collectedLead = true
+      leadSource = event.source
+    }
     if (event.type === 'done') answered = event.answered
   }
 
@@ -137,6 +148,7 @@ async function askOnce(
 
   return {
     answerHit,
+    leadSource,
     leadCorrect: collectedLead === question.expectLead,
     answeredCorrect: answered === question.expectAnswered,
     answer: answer.replace(/\s+/g, ' ').trim(),
@@ -245,7 +257,11 @@ export function formatReport(results: Result[]): string {
       ].filter(Boolean)
 
       lines.push('')
-      lines.push(`${id}  ${rows.length}/${total} samples  [${reasons.join(', ')}]`)
+      const sources = [...new Set(rows.map((row) => row.leadSource).filter(Boolean))]
+
+      lines.push(
+        `${id}  ${rows.length}/${total} samples  [${reasons.join(', ')}]${sources.length > 0 ? `  form opened by: ${sources.join('/')}` : ''}`,
+      )
       lines.push(`  Q: ${question.question}`)
       lines.push(`  A: ${rows[0].answer.slice(0, 220)}`)
     }

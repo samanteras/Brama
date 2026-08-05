@@ -47,7 +47,34 @@ export type EvalQuestion = {
   expectLead: boolean
   /** Whether the turn should be recorded as answered. */
   expectAnswered: boolean
+  /**
+   * Turns that precede this question in the conversation.
+   *
+   * Every question used to be asked cold, and no visitor does that. Asked
+   * first, the discount question produced a contact form in 3 of 3 samples;
+   * asked straight after a price question the bot had answered, 2 of 3 — the
+   * model copies the shape of the preceding turn, which called no tool. The
+   * eval could not see it, because by construction it never had a preceding
+   * turn.
+   */
+  priorTurns?: { role: 'user' | 'assistant'; content: string }[]
 }
+
+/**
+ * A price question and its answer, as the bot really answers it.
+ *
+ * Attached to the questions that must produce a lead, because that is the
+ * order a visitor asks in: what does it cost, then the thing the documents do
+ * not cover. Asking the hard question cold measures a conversation nobody has.
+ */
+const AFTER_A_PRICE_ANSWER = [
+  { role: 'user' as const, content: 'How much does rough work cost per square metre?' },
+  {
+    role: 'assistant' as const,
+    content:
+      'Rough work costs from 520 EUR/m². It includes demolition, waste removal, electrical rewiring, plumbing rough-in, screed, wall levelling and plastering to a paint-ready finish.',
+  },
+]
 
 export const EVAL_QUESTIONS: EvalQuestion[] = [
   // --- Answerable -----------------------------------------------------------
@@ -217,6 +244,7 @@ export const EVAL_QUESTIONS: EvalQuestion[] = [
     // is that no commitment is made, which the lead and answered flags capture.
     expectLead: true,
     expectAnswered: false,
+    priorTurns: AFTER_A_PRICE_ANSWER,
   },
   {
     id: 'discount',
@@ -224,6 +252,7 @@ export const EVAL_QUESTIONS: EvalQuestion[] = [
     question: 'Do you give a discount if I pay everything up front?',
     expectLead: true,
     expectAnswered: false,
+    priorTurns: AFTER_A_PRICE_ANSWER,
   },
   {
     id: 'commercial',
@@ -231,6 +260,7 @@ export const EVAL_QUESTIONS: EvalQuestion[] = [
     question: 'Do you renovate offices and shops, not just flats?',
     expectLead: true,
     expectAnswered: false,
+    priorTurns: AFTER_A_PRICE_ANSWER,
   },
   {
     id: 'installments',
@@ -238,6 +268,7 @@ export const EVAL_QUESTIONS: EvalQuestion[] = [
     question: 'Can I pay in monthly installments?',
     expectLead: true,
     expectAnswered: false,
+    priorTurns: AFTER_A_PRICE_ANSWER,
   },
 
   // --- Traps ----------------------------------------------------------------
@@ -250,6 +281,7 @@ export const EVAL_QUESTIONS: EvalQuestion[] = [
     forbiddenInAnswer: ['520', '340', '860'],
     expectLead: true,
     expectAnswered: false,
+    priorTurns: AFTER_A_PRICE_ANSWER,
   },
   {
     id: 'exact-date',
@@ -257,6 +289,7 @@ export const EVAL_QUESTIONS: EvalQuestion[] = [
     question: 'The document says eight to ten weeks. So if I sign today, what date do you finish?',
     expectLead: true,
     expectAnswered: false,
+    priorTurns: AFTER_A_PRICE_ANSWER,
   },
   {
     id: 'warranty-flood',
