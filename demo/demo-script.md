@@ -289,30 +289,37 @@ I'm running it locally.
 
 ---
 
-## Финал (≈30 сек)
+## Финал (≈40 сек)
 
-> Couple of things you can't see on screen.
+> Quick word on what's underneath, since none of it shows on screen.
 >
-> There's about three hundred and fifty tests, plus a separate set of thirty
-> questions that scores the answers as numbers. Not a model grading another model
-> — just, did it find the right passage, did it call the tool.
+> It's Next.js, one deployment, and Supabase for the rest — Postgres, auth, file
+> storage, and pgvector for the search.
 >
-> That paid off twice, actually. Once it caught a cutoff that worked backwards
-> and was throwing away the right passages. And once it caught the bot saying
-> "someone will get back to you" without actually showing the form — so the lead
-> just quietly disappeared behind an answer that looked fine.
+> Retrieval is plain RAG. Your document gets split into chunks, each chunk
+> becomes a vector, and every question pulls back the handful of passages
+> closest to it. Only those go to the model. That's why it can't invent a price
+> — it never sees anything except your own text.
 >
-> And what's not here on purpose: teams, analytics, theming, multiple languages.
+> The contact form isn't the model writing some magic word into the reply. It's
+> a tool call, so it either fired or it didn't. Billing is Stripe. And there's
+> around three hundred and fifty tests, plus a set of questions that scores the
+> answers as numbers rather than asking a model to grade another model.
+>
+> What's not here on purpose: teams, analytics, theming, multiple languages.
 > Those aren't missing. I said no to them.
 
-*Пара вещей, которых на экране не видно. Тут около трёхсот пятидесяти тестов и
-отдельный набор из тридцати вопросов, который оценивает ответы числами. Не модель
-судит модель — а просто: нашёл ли нужный кусок, вызвал ли инструмент. Это, кстати,
-дважды окупилось. Один раз поймал отсечку, которая работала наоборот и
-выбрасывала как раз нужные куски. И один раз поймал бота, который писал «с вами
-свяжутся», но форму не показывал — и заявка тихо исчезала за ответом, который
-выглядел нормально. И чего тут нет специально: команд, аналитики, настройки
-внешнего вида, мультиязычности. Это не забыл. Это отказался.*
+*Коротко о том, что под капотом — на экране этого не видно. Next.js, один
+деплой, и Supabase на всё остальное: Postgres, авторизация, хранение файлов и
+pgvector для поиска. Поиск — обычный RAG. Документ режется на куски, каждый
+кусок превращается в вектор, и на каждый вопрос достаются несколько ближайших
+кусков. В модель уходят только они. Поэтому она и не может выдумать цену — она
+не видит ничего, кроме вашего же текста. Форма контактов — это не волшебное
+слово в тексте ответа, а вызов инструмента: он либо сработал, либо нет. Оплата
+на Stripe. И около трёхсот пятидесяти тестов плюс набор вопросов, который
+оценивает ответы числами, а не просит одну модель судить другую. Чего тут нет
+специально: команд, аналитики, настройки внешнего вида, мультиязычности. Это не
+забыл. Это отказался.*
 
 ---
 
@@ -325,5 +332,5 @@ I'm running it locally.
 
 ## Чего в сценарии нет намеренно
 
-Обхода всех вкладок, показа настроек ради настроек, перечисления технологий. Стек
-и так виден в репозитории.
+Обхода всех вкладок и показа настроек ради настроек. Стек назван один раз в
+финале и словами — какие версии и какие библиотеки, видно в репозитории.
