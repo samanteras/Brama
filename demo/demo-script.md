@@ -81,14 +81,11 @@
 
 **Экран:** дашборд → New bot → имя и домен → Create.
 
-> Creating a bot asks for two things: a name, and the domain your site runs on.
->
-> The domain is required because the widget won't run anywhere else. Asking now
-> is kinder than letting you install it and wonder why nothing appears.
+> Let's start by creating a bot. A name, and the domain your site runs on — the
+> widget won't work anywhere else.
 
-*При создании бота спрашиваются две вещи: название и домен вашего сайта. Домен
-обязателен, потому что больше нигде виджет работать не будет. Спросить сразу
-честнее, чем дать вам его установить и гадать, почему ничего не появилось.*
+*Начнём с создания бота. Название и домен вашего сайта — больше нигде виджет
+работать не будет.*
 
 **Вкладка Knowledge, загрузить `knowledge-base.md`:**
 
