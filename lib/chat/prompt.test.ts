@@ -81,6 +81,33 @@ describe('buildSystemPrompt', () => {
       expect(buildSystemPrompt(base)).toMatch(/warranty does not cover flood damage/i)
     })
 
+    it('counts a published starting price as a complete answer', () => {
+      // Found using the widget: asked what rough work costs, the bot answered
+      // "from 520 EUR/m2" and opened the contact form in the same breath. A
+      // "from" price is what the company chose to publish, so answering it is
+      // answering the question.
+      const prompt = buildSystemPrompt(base)
+
+      expect(prompt).toMatch(/starting figure or a range/i)
+      expect(prompt).toMatch(/is not a reason to ask for their number/i)
+    })
+
+    it('judges the gap by the question rather than by what was quoted', () => {
+      // Measured regression: told never to collect in a reply that stated a
+      // fact, the model answered "we take 30/40/30 in stages" to a question
+      // about monthly instalments and collected nothing. A neighbouring fact
+      // is not the answer.
+      expect(buildSystemPrompt(base)).toMatch(/not on the facts you happen/i)
+      expect(buildSystemPrompt(base)).toMatch(/is a related fact, not the answer/i)
+    })
+
+    it('does not count asking a price as asking to be contacted', () => {
+      // Rules 4 and 5 pull opposite ways on "how much does X cost", which reads
+      // both as a question and as a buying signal. Rule 4 has to yield, or the
+      // form appears after every price the documents do answer.
+      expect(buildSystemPrompt(base)).toMatch(/Asking what something costs is not that/i)
+    })
+
     it('does not treat small talk as a knowledge gap', () => {
       // Found by using the widget: asked "how are you", the bot decided the
       // documents were silent on the subject and asked for a phone number.

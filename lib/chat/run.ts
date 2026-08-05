@@ -2,7 +2,7 @@ import 'server-only'
 
 import type OpenAI from 'openai'
 
-import { CHAT_MODEL, openai } from '@/lib/ai/chat-model'
+import { CHAT_MODEL, CHAT_TEMPERATURE, openai } from '@/lib/ai/chat-model'
 import { buildSystemPrompt, trimHistory, type PromptMessage } from './prompt'
 import { retrieve, type RetrievedChunk } from './retrieve'
 import { COLLECT_LEAD_TOOL, parseCollectLeadArguments, type CollectLeadArguments } from './tools'
@@ -121,6 +121,7 @@ async function* streamTurn(
   const stream = await openai().chat.completions.create({
     model: CHAT_MODEL,
     messages,
+    temperature: CHAT_TEMPERATURE,
     stream: true,
     ...(withTools ? { tools: [COLLECT_LEAD_TOOL] } : {}),
   })

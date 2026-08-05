@@ -143,14 +143,13 @@
 
 *В документе нигде нет слова «плитка». Есть кусок про гарантию. Нашёл по смыслу.*
 
-**Вопрос 3** — `Could you start before the end of September?` ← **ключевой момент**
+**Вопрос 3** — `` ← **ключевой момент**
 
 Пауза перед репликой.
 
 > Now — this isn't in the documents at all. And this bit is the whole point.
 >
-> Most of these bots would just make up a date. On a builder's website that's a
-> promise nobody actually made.
+> Most of these bots would just make up a date.
 >
 > This one won't guess. It says so, and asks for a phone number instead. So the
 > thing it couldn't answer turns into a lead.

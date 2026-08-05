@@ -165,6 +165,28 @@ export const EVAL_QUESTIONS: EvalQuestion[] = [
     expectLead: false,
     expectAnswered: true,
   },
+  {
+    id: 'price-rough-muddled-name',
+    category: 'answerable',
+    // Verbatim from a real session, and it muddles two service names the price
+    // list keeps apart. The bot answered correctly and then asked for a phone
+    // number anyway, which is the failure this case exists to hold down.
+    question: 'How much does rough finishing cost per square meter?',
+    expectedInContext: ['520'],
+    expectLead: false,
+    expectAnswered: true,
+  },
+  {
+    id: 'price-turnkey',
+    category: 'answerable',
+    // A published "from" price is a complete answer. Treating it as too vague
+    // to count is what makes the bot ask for contacts after answering.
+    question: 'What does a full turnkey renovation cost per square metre?',
+    expectedInContext: ['860'],
+    expectedInAnswer: ['860'],
+    expectLead: false,
+    expectAnswered: true,
+  },
 
   // --- Multi-section --------------------------------------------------------
   {
