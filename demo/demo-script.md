@@ -16,10 +16,11 @@
 
 ## Подготовка перед записью
 
-- [ ] Залогиниться в дашборд заранее
-- [ ] Оставить одного бота — `Skyline Renovations` с загруженной базой
-- [ ] **Очистить старые лиды**, иначе новый потеряется среди них
-- [ ] Открыть вкладки: лендинг, дашборд, демо-сайт, `demo-site/index.html` в редакторе
+- [ ] Завести аккаунт заранее и **выйти из него** — по сценарию вход показывается,
+      а регистрация нет
+- [ ] Удалить всех ботов: по сценарию бот создаётся в кадре
+- [ ] Держать под рукой `demo/knowledge-base.md`
+- [ ] Открыть вкладки: лендинг, демо-сайт, `demo-site/index.html` в редакторе
 - [ ] Проверить остаток квоты — нужно около шести ответов
 - [ ] Скрыть закладки и уведомления, масштаб 100%
 
@@ -29,20 +30,20 @@
 
 **Экран:** лендинг, прокрутка сверху вниз, не спеша.
 
-> So this is Foreman. It takes the documents a renovation company already has,
+> So this is Foreman. It takes the documents a company already has,
 > and turns them into a chatbot for their site.
 >
-> This is the landing page — what the product is, how it works, and what it
-> costs.
+> This is the landing page on it you can find all of the information about the profuct, how it's work, and what the price of it. Three plans, by volume — bots, documents, answers per month.
 
-*Итак, это Foreman. Берёт документы, которые у ремонтной компании уже есть, и
+
+*Итак, это Foreman. Берёт документы, которые у компании уже есть, и
 делает из них чат-бота для сайта. Это лендинг — что за продукт, как он работает
 и сколько стоит.*
 
 Прокрутить до секции с карточкой лида:
 
 > The main thing it does is here. When the bot can't answer something, it
-> doesn't guess — it takes a phone number. I'll show that working in a minute.
+> doesn't guess — it asks for a phone number or mail and name of the customer, so company can reach and answer required information by themself. I'll show that working in a minute.
 
 *Главное, что он делает — вот здесь. Когда бот не может ответить, он не гадает,
 а берёт телефон. Сейчас покажу, как это работает.*
@@ -61,19 +62,18 @@
 
 ---
 
-## Сцена 2. Регистрация (≈20 сек)
+## Сцена 2. Вход в кабинет (≈15 сек)
 
-**Экран:** нажать «Start free» → форма регистрации → ввести почту и пароль.
+**Экран:** нажать «Sign in», войти под заранее подготовленным аккаунтом.
 
-> Signing up is email and password. No card.
+Регистрацию не показываем — она обычная, почта и пароль, и на записи это просто
+пауза на заполнение формы. Аккаунт логичнее подготовить заранее.
 
-*Регистрация — почта и пароль. Без карты.*
+> I've already signed up, so I'll just go straight in.
+>
+> And this is the dashboard. Nothing here yet.
 
-Попасть в дашборд.
-
-> And that's the dashboard. Empty, because there's nothing in it yet.
-
-*И вот дашборд. Пустой, потому что в нём пока ничего нет.*
+*Я уже зарегистрирован, поэтому просто зайду. Вот дашборд. Пока тут ничего нет.*
 
 ---
 
