@@ -25,45 +25,78 @@
 
 ---
 
-## Сцена 1. Проблема (≈40 сек)
+## Сцена 1. Лендинг (≈40 сек)
 
-**Экран:** лендинг, медленная прокрутка сверху вниз.
+**Экран:** лендинг, прокрутка сверху вниз, не спеша.
 
 > So this is Foreman. It takes the documents a renovation company already has,
 > and turns them into a chatbot for their site.
 >
-> I picked that niche on purpose. Think about it — someone's looking at your
-> prices at eleven at night on a Saturday. They've got one question. Nobody
-> answers. Next morning they're talking to someone else.
->
-> That's not a support problem, that's a job you just lost. And these jobs
-> aren't small.
+> This is the landing page — what the product is, how it works, and what it
+> costs.
 
 *Итак, это Foreman. Берёт документы, которые у ремонтной компании уже есть, и
-делает из них чат-бота для сайта. Нишу я выбрал специально. Смотрите — человек
-смотрит ваши цены в одиннадцать вечера в субботу. У него один вопрос. Никто не
-отвечает. На следующее утро он говорит уже с другими. Это не проблема поддержки,
-это потерянный заказ. А заказы тут немаленькие.*
+делает из них чат-бота для сайта. Это лендинг — что за продукт, как он работает
+и сколько стоит.*
 
-Задержаться на тарифах:
+Прокрутить до секции с карточкой лида:
 
-> By the way, every number on this page comes from the same file the server
-> checks limits against. So they can't say one thing and do another.
+> The main thing it does is here. When the bot can't answer something, it
+> doesn't guess — it takes a phone number. I'll show that working in a minute.
 
-*Кстати, все цифры на этой странице — из того же файла, по которому сервер
-проверяет лимиты. Так что тут не может быть написано одно, а работать другое.*
+*Главное, что он делает — вот здесь. Когда бот не может ответить, он не гадает,
+а берёт телефон. Сейчас покажу, как это работает.*
+
+**Остановиться на тарифах:**
+
+> Three plans, by volume — bots, documents, answers per month.
+>
+> And every number you see here comes from the same file the server checks the
+> limits against. So the page can't promise a thousand answers while the code
+> stops you at five hundred.
+
+*Три тарифа, по объёму — боты, документы, ответы в месяц. И каждая цифра, которую
+вы тут видите, берётся из того же файла, по которому сервер проверяет лимиты. То
+есть на странице не может быть обещана тысяча ответов, если код режет на пятистах.*
 
 ---
 
-## Сцена 2. Загрузка знаний (≈60 сек)
+## Сцена 2. Регистрация (≈20 сек)
 
-**Экран:** дашборд → создать бота → Knowledge → загрузить `knowledge-base.md`.
+**Экран:** нажать «Start free» → форма регистрации → ввести почту и пароль.
 
-> You upload what you've already got. Price list, terms, warranty. Nothing to
-> write from scratch.
+> Signing up is email and password. No card.
 
-*Загружаете то, что уже есть. Прайс, условия, гарантию. Ничего писать заново не
-надо.*
+*Регистрация — почта и пароль. Без карты.*
+
+Попасть в дашборд.
+
+> And that's the dashboard. Empty, because there's nothing in it yet.
+
+*И вот дашборд. Пустой, потому что в нём пока ничего нет.*
+
+---
+
+## Сцена 3. Загрузка знаний (≈60 сек)
+
+**Экран:** дашборд → New bot → имя и домен → Create.
+
+> Creating a bot asks for two things: a name, and the domain your site runs on.
+>
+> The domain is required because the widget won't run anywhere else. Asking now
+> is kinder than letting you install it and wonder why nothing appears.
+
+*При создании бота спрашиваются две вещи: название и домен вашего сайта. Домен
+обязателен, потому что больше нигде виджет работать не будет. Спросить сразу
+честнее, чем дать вам его установить и гадать, почему ничего не появилось.*
+
+**Вкладка Knowledge, загрузить `knowledge-base.md`:**
+
+> Then you upload what you've already got. Price list, terms, warranty. Nothing
+> to write from scratch.
+
+*Дальше загружаете то, что уже есть. Прайс, условия, гарантию. Ничего писать
+заново не надо.*
 
 **Указать на счётчик:**
 
@@ -87,10 +120,16 @@
 
 ---
 
-## Сцена 3. Бот отвечает — и отказывается (≈70 сек)
+## Сцена 4. Бот отвечает — и отказывается (≈70 сек)
 
-**Экран:** Playground.
-> This is a playground where you can test the bot.
+**Экран:** вкладка Playground.
+
+> This is the playground — the same chat visitors get, so you can check it
+> before anyone else sees it.
+
+*Это плейграунд — тот же самый чат, который увидят посетители, чтобы проверить
+его до того, как его увидит кто-то ещё.*
+
 **Вопрос 1** — `Сколько стоит черновая отделка за квадратный метр?`
 
 > Five twenty a metre — that's straight out of the document. And notice I asked
@@ -134,7 +173,7 @@
 
 ---
 
-## Сцена 4. Подключение виджета (≈70 сек)
+## Сцена 5. Подключение виджета (≈70 сек)
 
 **Экран:** Settings → «Add it to your site».
 
@@ -181,7 +220,7 @@ I'm running it locally.
 
 ---
 
-## Сцена 5. Посетитель оставляет заявку (≈45 сек)
+## Сцена 6. Посетитель оставляет заявку (≈45 сек)
 
 **Экран:** демо-сайт, вести себя как обычный посетитель.
 
@@ -203,7 +242,7 @@ I'm running it locally.
 
 ---
 
-## Сцена 6. Заявка и пробелы (≈45 сек)
+## Сцена 7. Заявка и пробелы (≈45 сек)
 
 **Экран:** дашборд → Leads.
 
@@ -234,7 +273,7 @@ I'm running it locally.
 
 ---
 
-## Сцена 7. Тарифы и оплата (≈35 сек)
+## Сцена 8. Тарифы и оплата (≈35 сек)
 
 **Экран:** Billing.
 
