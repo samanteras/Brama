@@ -1,3 +1,4 @@
+import { toPlainText } from '@/lib/chat/plain-text'
 import { createClient } from '@/lib/supabase/server'
 import { cn } from '@/lib/utils'
 
@@ -57,7 +58,7 @@ export async function Transcript({
               message.was_answered === false && 'ring-1 ring-destructive/40',
             )}
           >
-            {message.content}
+            {toPlainText(message.content)}
           </p>
         </div>
       ))}

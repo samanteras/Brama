@@ -6,6 +6,7 @@ import { Send } from 'lucide-react'
 import { LeadForm } from './lead-form'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { toPlainText } from '@/lib/chat/plain-text'
 import { sendMessage, type ChatStreamEvent } from '@/lib/client/chat-stream'
 import { getVisitorId } from '@/lib/client/visitor'
 import { cn } from '@/lib/utils'
@@ -155,7 +156,7 @@ export function ChatWindow({
 
         {messages.map((message) => (
           <Bubble key={message.id} role={message.role} accentColor={accentColor}>
-            {message.content === '' ? <TypingDots /> : message.content}
+            {message.content === '' ? <TypingDots /> : toPlainText(message.content)}
           </Bubble>
         ))}
 

@@ -108,6 +108,13 @@ describe('buildSystemPrompt', () => {
       expect(buildSystemPrompt(base)).toMatch(/Asking what something costs is not that/i)
     })
 
+    it('asks for plain text rather than Markdown', () => {
+      // Belt to toPlainText's braces: this only saves tokens spent on markup
+      // that is stripped anyway, since the model forgets and the stripper does
+      // not.
+      expect(buildSystemPrompt(base)).toMatch(/no Markdown/i)
+    })
+
     it('does not treat small talk as a knowledge gap', () => {
       // Found by using the widget: asked "how are you", the bot decided the
       // documents were silent on the subject and asked for a phone number.
