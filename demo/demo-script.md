@@ -30,23 +30,25 @@
 
 **Экран:** лендинг, прокрутка сверху вниз, не спеша.
 
-> So this is Foreman. It takes the documents a company already has,
-> and turns them into a chatbot for their site.
+> So this is Foreman. It's built for renovation and fit-out companies. It takes
+> the documents they already have — price list, terms, warranty — and turns them
+> into a chatbot for their site.
 >
-> This is the landing page on it you can find all of the information about the profuct, how it's work, and what the price of it. Three plans, by volume — bots, documents, answers per month.
+> This is the landing page. What the product is, how it works, what it costs.
 
-
-*Итак, это Foreman. Берёт документы, которые у компании уже есть, и
-делает из них чат-бота для сайта. Это лендинг — что за продукт, как он работает
-и сколько стоит.*
+*Итак, это Foreman. Сделан для ремонтных и отделочных компаний. Берёт документы,
+которые у них уже есть — прайс, условия, гарантию, — и делает из них чат-бота
+для сайта. Это лендинг: что за продукт, как он работает и сколько стоит.*
 
 Прокрутить до секции с карточкой лида:
 
 > The main thing it does is here. When the bot can't answer something, it
-> doesn't guess — it asks for a phone number or mail and name of the customer, so company can reach and answer required information by themself. I'll show that working in a minute.
+> doesn't guess — it takes a name and a phone number instead, so the company can
+> call back with the real answer. I'll show that working in a minute.
 
 *Главное, что он делает — вот здесь. Когда бот не может ответить, он не гадает,
-а берёт телефон. Сейчас покажу, как это работает.*
+а берёт имя и телефон, чтобы компания перезвонила и ответила сама. Сейчас
+покажу, как это работает.*
 
 **Остановиться на тарифах:**
 
@@ -296,13 +298,7 @@ I'm running it locally.
 > It's Next.js, one deployment, and Supabase for the rest — Postgres, auth, file
 > storage, and pgvector for the search.
 >
-> Retrieval is plain RAG. Your document gets split into chunks, each chunk
-> becomes a vector, and every question pulls back the handful of passages
-> closest to it. Only those go to the model. That's why it can't invent a price
-> — it never sees anything except your own text.
->
-> The contact form isn't the model writing some magic word into the reply. It's
-> a tool call, so it either fired or it didn't. Billing is Stripe. And there's
+> Retrieval is plain RAG. Billing is Stripe. And there's
 > around three hundred and fifty tests, plus a set of questions that scores the
 > answers as numbers rather than asking a model to grade another model.
 >
