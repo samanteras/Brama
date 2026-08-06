@@ -17,5 +17,5 @@ documents it was answering from — and duly asked for a phone number after
 correctly quoting a price. Notes about a document do not belong inside it. The
 customer's file is the one thing the model treats as ground truth.
 
-`demo-script.md` is the recording script: scene order, narration, and the
-checklist to run through before recording.
+`demo-site/` at the repository root is a plain static page standing in for a
+customer's website, which is where the widget is installed during the demo.
