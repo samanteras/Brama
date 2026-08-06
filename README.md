@@ -38,7 +38,9 @@ the page:
 
 1. **It refuses to guess.** No answer in the documents means it says so.
 2. **It takes a phone number instead**, through a structured tool call rather
-   than a marker in the reply text.
+   than a marker in the reply text — and if the model declines without making
+   that call, a check on the reply opens the form anyway. Leaving the one thing
+   the product sells to the model's judgement did not hold.
 3. **The lead arrives with context** — what the person wanted, and the exact
    question that stalled them — so whoever calls back does not have to read a
    transcript first.
@@ -157,7 +159,7 @@ recorded by id before handling, so a retry cannot apply an upgrade twice.
 
 ## Testing
 
-**327 unit tests**, no live model calls — mocks return fixed embeddings and a
+**368 unit tests**, no live model calls — mocks return fixed embeddings and a
 fixed tool call, so the whole lead mechanism is exercised without a token.
 
 **Integration tests** run against a real Supabase project. The valuable ones are
@@ -170,25 +172,48 @@ It grades mechanically — is the expected passage in the retrieved context, did
 the tool fire — rather than asking a model to judge another model's prose, which
 produces a number nobody can reproduce.
 
+Every question is asked three times, because one sample was not a measurement:
+two runs over identical code once returned 91% and 85% with almost disjoint
+failure sets. Three separates "fails every time" from "failed once", which is
+the distinction worth acting on. The questions that must produce a lead are
+asked *after* an answered turn, because that is the order a visitor asks in —
+and asking them cold hid a real bug for days.
+
 | Category | Retrieval | Answer | Lead |
 |---|---|---|---|
-| Answerable (14) | 100% | 100% | 93% |
-| Needs two sections (2) | 100% | — | — |
-| Not in the documents (4) | — | — | 75% |
+| Answerable (16) | 100% | 100% | 83% |
+| Needs two sections (2) | 100% | — | 100% |
+| Not in the documents (4) | — | — | 100% |
 | Traps (3) | 100% | 100% | 100% |
-| Prompt injection (3) | — | 100% | 67% |
+| Prompt injection (3) | — | 100% | 100% |
 | Ready to book (2) | — | — | 100% |
-| **Overall (28)** | **100%** | **100%** | **82%** |
+| Small talk (3) | — | — | 100% |
+| **Overall (33 × 3 samples)** | **100%** | **100%** | **92%** |
 
-It has already earned its keep twice. It caught a similarity threshold that was
-backwards — a paraphrased question the documents *answer* scored 0.22 while one
-they cannot answer scored 0.31, so the filter was discarding exactly the right
-passages. And it caught the model writing "someone can follow up" in prose
+The Lead column is how often the contact form did the right thing — appearing
+when it had to, staying away when it did not. A question the documents cannot
+answer becomes a lead in every sample. The 17% on answerable questions is the
+opposite mistake and the cheaper one: the model sometimes offers a form under
+an answer it gave perfectly well.
+
+It has already earned its keep three times. It caught a similarity threshold
+that was backwards — a paraphrased question the documents *answer* scored 0.22
+while one they cannot answer scored 0.31, so the filter was discarding exactly
+the right passages. It caught the model writing "someone can follow up" in prose
 without calling the tool, which meant no contact form appeared and the lead was
 lost silently, behind an answer that looked perfect.
 
-Both fixes are pinned by unit tests, because both were bought with a measured
-failure.
+And it settled an argument I was losing to myself. The bot kept asking for a
+phone number after correctly quoting a price, and two rounds of prompt rules
+made it worse in one direction each time. The cause was not the prompt: the demo
+knowledge base opened with a paragraph of my own notes explaining that the
+document's silences were deliberate and that taking a phone number was the
+behaviour to demonstrate. Retrieval fed that to the model as part of the
+company's own documents — the one source it is told to trust completely — and it
+did as it was told. Deleting the paragraph, with nothing else changed, moved
+answerable questions from 88% to 94% and two-section questions from 33% to 100%.
+
+Every fix is pinned, because every one was bought with a measured failure.
 
 Lead accuracy sits at 82% and is not being tuned further. The remaining errors
 are now in the safe direction — offering contact after a good answer — and
