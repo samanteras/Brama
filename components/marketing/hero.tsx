@@ -29,14 +29,16 @@ export function Hero() {
     <section className="border-b">
       <div className="mx-auto grid w-full max-w-6xl gap-12 px-4 py-16 sm:px-6 lg:grid-cols-[1.05fr_1fr] lg:items-center lg:gap-16 lg:py-24">
         <div>
-          <p className="text-sm font-medium text-primary">For renovation and fit-out companies</p>
+          <p className="text-sm font-medium text-primary">
+            For businesses whose answers already live in their documents
+          </p>
 
           <h1 className="mt-4 text-4xl font-semibold tracking-tight text-balance sm:text-5xl lg:text-6xl">
-            Your best enquiries arrive after hours. Foreman is still awake.
+            Your best enquiries arrive after hours. Brama is still awake.
           </h1>
 
           <p className="mt-6 max-w-xl text-lg text-muted-foreground text-pretty">
-            Upload the price list and terms you already have. Foreman answers customers in your own
+            Upload the price list and terms you already have. Brama answers customers in your own
             words, around the clock — and when it doesn&apos;t know, it takes their number instead of
             guessing.
           </p>

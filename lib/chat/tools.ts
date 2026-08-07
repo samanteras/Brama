@@ -17,19 +17,20 @@ export const COLLECT_LEAD_TOOL: OpenAI.Chat.Completions.ChatCompletionFunctionTo
   function: {
     name: 'collect_lead',
     description:
-      'Ask the visitor for their phone number so a person can follow up. Call this when the reference passages do not answer their question, or when they ask to speak to someone, get a quote, or book a survey.',
+      'Ask the visitor for their phone number so a person can follow up. Call this when the reference passages do not answer their question, or when they ask to speak to someone, get a quote, or book a visit.',
     parameters: {
       type: 'object',
       properties: {
         reason: {
           type: 'string',
           enum: ['not_in_documents', 'asked_for_contact', 'ready_to_book'],
-          description: 'Why a person needs to take over.',
+          description:
+            'Why a person needs to take over. Use not_in_documents whenever the passages lack the answer to what was asked — even if the visitor also sounds ready to go ahead. ready_to_book is only for when nothing was left unanswered and they simply want to proceed.',
         },
         summary: {
           type: 'string',
           description:
-            'One sentence on what this visitor wants, in the third person, for the person calling back. For example: wants a turnkey renovation of a 54 m2 two-room flat, hoping to start before September.',
+            'One sentence on what this visitor wants, in the third person, for the person calling back. For example: wants an exact quote for their own project, hoping to start before September.',
         },
         unanswered_question: {
           type: 'string',

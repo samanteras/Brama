@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
+import { APP_NAME } from "@/lib/brand";
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -14,8 +16,8 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "Foreman — the answer desk for renovation companies",
-    template: "%s · Foreman",
+    default: `${APP_NAME} — the answer desk for businesses that run on documents`,
+    template: `%s · ${APP_NAME}`,
   },
   description:
     "Turn the price list and terms you already have into a chatbot that answers customers day and night, and takes a phone number when it cannot answer.",

@@ -8,6 +8,7 @@
  * copy makes it unrepresentable rather than merely unlikely.
  */
 
+import { APP_NAME } from './brand'
 import type { Limit, Plan, PlanId } from './plans'
 
 /** Formats a whole-dollar price. All plans are priced in whole dollars. */
@@ -76,7 +77,7 @@ export function planHighlights(plan: Plan): string[] {
   // nothing. It belongs in the product, not in the price comparison.
 
   if (features.watermark) {
-    highlights.push('Shows a small Foreman badge')
+    highlights.push(`Shows a small ${APP_NAME} badge`)
   }
 
   return highlights

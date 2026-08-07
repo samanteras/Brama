@@ -1,4 +1,4 @@
-const STORAGE_KEY = 'foreman.visitor'
+const STORAGE_KEY = 'brama.visitor'
 
 /**
  * A stable id for grouping one visitor's conversations.

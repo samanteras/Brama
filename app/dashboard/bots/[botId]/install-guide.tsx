@@ -4,7 +4,7 @@ import { EmbedSnippet } from './embed-snippet'
  * Where to put the snippet.
  *
  * The snippet on its own assumes the reader knows where a site's HTML lives.
- * Renovation companies mostly do not — their site was built by somebody else,
+ * Small businesses mostly do not — their site was built by somebody else,
  * and the honest question is "which box do I paste this into". Naming the
  * platforms turns a developer instruction into something the owner can act on,
  * or forward to whoever can.

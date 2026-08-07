@@ -60,7 +60,7 @@ export async function createTestUser(label: string): Promise<TestUser> {
   const admin = adminClient()
   sequence += 1
 
-  const email = `foreman-test-${label}-${process.pid}-${sequence}-${Date.now()}@example.com`
+  const email = `brama-test-${label}-${process.pid}-${sequence}-${Date.now()}@example.com`
   const password = 'integration-test-password'
 
   const { data, error } = await admin.auth.admin.createUser({

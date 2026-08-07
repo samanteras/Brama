@@ -11,7 +11,7 @@ import { SiteFooter } from '@/components/marketing/site-footer'
 import { SiteHeader } from '@/components/marketing/site-header'
 
 export const metadata: Metadata = {
-  title: 'Foreman — answer renovation enquiries around the clock',
+  title: 'Brama — answer customer enquiries around the clock',
   description:
     'Turn the price list and terms you already have into a chatbot that answers customers day and night, and takes a phone number when it cannot answer.',
 }

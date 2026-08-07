@@ -13,6 +13,7 @@ import { writeFileSync } from 'node:fs'
 
 import { EVAL_QUESTIONS, type EvalCategory, type EvalQuestion } from './questions'
 import { embedBatch } from '@/lib/ai/embeddings'
+import { APP_NAME } from '@/lib/brand'
 import { runChat } from '@/lib/chat/run'
 import { retrieve } from '@/lib/chat/retrieve'
 import { chunkText } from '@/lib/ingest/chunk'
@@ -173,7 +174,7 @@ export function formatReport(results: Result[]): string {
 
   const questionCount = new Set(results.map((row) => row.question.id)).size
 
-  lines.push('Foreman retrieval and behaviour evaluation')
+  lines.push(`${APP_NAME} retrieval and behaviour evaluation`)
   lines.push('')
   lines.push(
     `${questionCount} questions, each asked ${SAMPLES_PER_QUESTION} times. Rates are over all ${results.length} samples.`,

@@ -39,7 +39,7 @@ export function BotSettingsForm({ bot }: { bot: Bot }) {
           defaultValue={bot.greeting}
           maxLength={300}
           rows={3}
-          placeholder="Hi — ask me anything about our prices, timelines or what a renovation includes."
+          placeholder="Hi — ask me anything about our prices, timelines or terms."
         />
         <p className="text-sm text-muted-foreground">
           What visitors see before they type. Leave empty to open with a blank chat.

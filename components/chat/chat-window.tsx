@@ -6,6 +6,7 @@ import { Send } from 'lucide-react'
 import { LeadForm } from './lead-form'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { APP_NAME } from '@/lib/brand'
 import { toPlainText } from '@/lib/chat/plain-text'
 import { sendMessage, type ChatStreamEvent } from '@/lib/client/chat-stream'
 import { getVisitorId } from '@/lib/client/visitor'
@@ -208,7 +209,7 @@ export function ChatWindow({
 
         {showWatermark ? (
           <p className="mt-2 text-center text-xs text-muted-foreground">
-            Powered by Foreman
+            Powered by {APP_NAME}
           </p>
         ) : null}
       </form>

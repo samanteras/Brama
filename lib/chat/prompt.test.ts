@@ -21,6 +21,16 @@ describe('buildSystemPrompt', () => {
     expect(buildSystemPrompt(base)).toContain('Skyline Renovations')
   })
 
+  it('assigns the company no industry', () => {
+    // The prompt once said "a renovation company" — true for the first vertical,
+    // a lie for every other customer once the product went horizontal. The bot
+    // learns what the company does from its documents, not from us. The bot
+    // name is customer data and may say anything; the check is on our own text.
+    const prompt = buildSystemPrompt({ ...base, botName: 'Acme' })
+
+    expect(prompt).not.toMatch(/renovation/i)
+  })
+
   it('includes the retrieved passages', () => {
     expect(buildSystemPrompt(base)).toContain('Rough work starts at 520 EUR.')
   })

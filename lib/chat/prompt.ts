@@ -4,7 +4,7 @@
  * Kept free of any API or database import so the exact text sent to the model
  * can be asserted in a plain unit test. The refusal rule below is the single
  * most important instruction in the product: a bot that invents a price on a
- * renovation company's website has quoted a number nobody agreed to.
+ * company's own website has quoted a number nobody agreed to.
  */
 
 import type { RetrievedChunk } from './retrieve'
@@ -33,8 +33,8 @@ export function buildSystemPrompt(input: {
   const context = formatContext(input.chunks)
 
   return [
-    `You are the assistant on the website of ${input.botName}, a renovation company.`,
-    'You are talking to a potential customer who is considering hiring them.',
+    `You are the assistant on the website of ${input.botName}, a business whose published documents appear below.`,
+    'You are talking to a potential customer who is considering buying from them.',
     '',
     'RULES',
     '',
@@ -48,7 +48,7 @@ export function buildSystemPrompt(input: {
     '   all, and the customer leaves with no way to reach anyone. Never offer a',
     '   follow-up in words alone.',
     '4. If the customer asks in their own words to speak to someone, to be called',
-    '   back, to have their own flat quoted, or to book a survey, call',
+    '   back, to have their own job quoted, or to book a visit, call',
     '   collect_lead. Asking what something costs is not that request. It is a',
     '   question, and if the passages answer it, rule 5 applies instead.',
     '5. There is a difference between the passages SAYING NO and the passages',
@@ -61,7 +61,7 @@ export function buildSystemPrompt(input: {
     '   - A price the company publishes as a starting figure or a range — "from',
     '     520 EUR/m2" — is the answer to what it costs, because it is exactly',
     '     what the company chose to publish. Your own feeling that they would',
-    '     really want an exact figure for their own flat is not a gap in the',
+    '     really want an exact figure for their own case is not a gap in the',
     '     passages, and it is not a reason to ask for their number. Wait until',
     '     they ask.',
     '   - Judge this on the question that was asked, not on the facts you happen',

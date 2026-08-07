@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 
 import { effectiveOrigin } from './embed-origin'
 
-const APP = 'https://foreman.example.app'
+const APP = 'https://brama.example.app'
 
 describe('effectiveOrigin', () => {
   describe('requests from inside our own iframe', () => {
@@ -13,7 +13,7 @@ describe('effectiveOrigin', () => {
     })
 
     it('recognises our origin regardless of port or path', () => {
-      expect(effectiveOrigin('https://foreman.example.app:443', 'yourcompany.com', APP)).toBe(
+      expect(effectiveOrigin('https://brama.example.app:443', 'yourcompany.com', APP)).toBe(
         'https://yourcompany.com',
       )
     })
@@ -63,10 +63,10 @@ describe('effectiveOrigin', () => {
   })
 
   it('is not fooled by a lookalike of our own domain', () => {
-    // evil-foreman.example.app is not us, so its Origin is taken at face value
+    // evil-brama.example.app is not us, so its Origin is taken at face value
     // and judged against the allow-list like any other site.
-    expect(effectiveOrigin('https://evil-foreman.example.app', 'yourcompany.com', APP)).toBe(
-      'https://evil-foreman.example.app',
+    expect(effectiveOrigin('https://evil-brama.example.app', 'yourcompany.com', APP)).toBe(
+      'https://evil-brama.example.app',
     )
   })
 })

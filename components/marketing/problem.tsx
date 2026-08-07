@@ -4,7 +4,7 @@ const LEAKS = [
   {
     icon: Clock,
     title: 'The evening enquiry',
-    body: 'People plan renovations after work, on the sofa, at half past ten. Your office is closed, the form promises a reply “within a working day”, and the next tab is already a competitor.',
+    body: 'People weigh up a big purchase after work, on the sofa, at half past ten. Your office is closed, the form promises a reply “within a working day”, and the next tab is already a competitor.',
   },
   {
     icon: MessageSquareDashed,
@@ -24,7 +24,7 @@ export function Problem() {
       <div className="mx-auto w-full max-w-6xl px-4 py-16 sm:px-6 lg:py-20">
         <div className="max-w-2xl">
           <h2 className="text-3xl font-semibold tracking-tight text-balance sm:text-4xl">
-            Where renovation enquiries quietly leak away
+            Where enquiries quietly leak away
           </h2>
           <p className="mt-4 text-lg text-muted-foreground text-pretty">
             Not from bad work or bad prices. From nobody being there at the moment somebody was

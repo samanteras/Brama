@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { appUrl } from '@/lib/env'
 import { createClient } from '@/lib/supabase/server'
+import { buildEmbedSnippet } from '@/lib/widget-contract'
 
 export const metadata: Metadata = {
   title: 'Bot settings',
@@ -27,7 +28,7 @@ export default async function BotSettingsPage(
 
   if (!bot) notFound()
 
-  const snippet = `<script src="${appUrl()}/widget.js" data-foreman-bot="${bot.id}" async></script>`
+  const snippet = buildEmbedSnippet(appUrl(), bot.id)
 
   return (
     <div className="grid gap-8 xl:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] xl:items-start">

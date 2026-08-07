@@ -3,6 +3,7 @@
 import { X } from 'lucide-react'
 
 import { ChatWindow } from '@/components/chat/chat-window'
+import { WIDGET_CLOSE_MESSAGE } from '@/lib/widget-contract'
 
 /**
  * Chat chrome for the iframe.
@@ -30,7 +31,7 @@ export function EmbeddedChat({
   function close() {
     // The launcher script owns the iframe, so closing it is its decision. The
     // frame cannot remove itself from a page it does not control.
-    window.parent.postMessage({ type: 'foreman:close' }, '*')
+    window.parent.postMessage({ type: WIDGET_CLOSE_MESSAGE }, '*')
   }
 
   return (

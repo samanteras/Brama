@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation'
 import { signOut } from '../(auth)/actions'
 import { Logo } from '@/components/marketing/logo'
 import { Button } from '@/components/ui/button'
+import { APP_NAME } from '@/lib/brand'
 import { createClient } from '@/lib/supabase/server'
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
@@ -23,7 +24,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
         <div className="mx-auto flex h-16 w-full max-w-6xl items-center gap-6 px-4 sm:px-6">
           <Link href="/dashboard" className="flex items-center gap-2">
             <Logo className="size-6 text-primary" />
-            <span className="font-semibold tracking-tight">Foreman</span>
+            <span className="font-semibold tracking-tight">{APP_NAME}</span>
           </Link>
 
           <nav className="hidden items-center gap-5 text-sm text-muted-foreground sm:flex">

@@ -2,6 +2,7 @@ import Link from 'next/link'
 
 import { Button } from '@/components/ui/button'
 import { Logo } from '@/components/marketing/logo'
+import { APP_NAME } from '@/lib/brand'
 
 export function SiteHeader() {
   return (
@@ -9,7 +10,7 @@ export function SiteHeader() {
       <div className="mx-auto flex h-16 w-full max-w-6xl items-center gap-6 px-4 sm:px-6">
         <Link href="/" className="flex items-center gap-2">
           <Logo className="size-6 text-primary" />
-          <span className="text-lg font-semibold tracking-tight">Foreman</span>
+          <span className="text-lg font-semibold tracking-tight">{APP_NAME}</span>
         </Link>
 
         <nav className="hidden flex-1 items-center gap-6 text-sm text-muted-foreground sm:flex">

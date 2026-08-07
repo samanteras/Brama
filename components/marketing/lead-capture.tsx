@@ -24,17 +24,17 @@ export function LeadCapture() {
           <div className="mt-6 space-y-4 text-lg text-muted-foreground text-pretty">
             <p>
               Ask most document chatbots something outside their documents and they invent an
-              answer. On a renovation site that is a quoted price nobody agreed to.
+              answer. On your own website that is a price nobody agreed to.
             </p>
             <p>
-              Foreman does the opposite. When the answer isn&apos;t in your files, it says so, says a
-              surveyor should look, and asks for a number. The gap in your price list becomes a
+              Brama does the opposite. When the answer isn&apos;t in your files, it says so, says a
+              person should confirm, and asks for a number. The gap in your documents becomes a
               callback instead of an apology.
             </p>
           </div>
 
           <p className="mt-8 border-l-2 border-primary pl-4 text-lg font-medium text-foreground text-pretty">
-            One captured job pays for a year of Foreman.
+            One captured job pays for a year of Brama.
           </p>
         </div>
 

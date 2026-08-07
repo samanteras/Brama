@@ -1,39 +1,43 @@
-# Foreman
+# Brama
 
-**An answer desk for renovation companies.** Upload the price list and terms you
-already have, and get a chatbot that answers customers around the clock — and
-takes their phone number when it cannot answer, instead of guessing.
+**An answer desk for businesses that run on documents.** Upload the price list
+and terms you already have, and get a chatbot that answers customers around the
+clock — and takes their phone number when it cannot answer, instead of guessing.
 
-- **App:** https://foreman-nu-ten.vercel.app
+- **App:** https://foreman-nu-ten.vercel.app *(URL predates the rename; moves
+  with the Vercel project)*
 - **The widget running on a customer's site:** https://foreman-demo.vercel.app
 
 ---
 
-## Why this niche
+## Who it is for, honestly
 
-The brief asked for an embeddable chatbot builder. A builder for everybody is a
-demo of nothing, so this one is built for renovation and fit-out companies, and
-the product decisions follow from that choice.
+Brama is horizontal — any business can buy it — but its honest boundary is the
+shape of the knowledge, not the industry. It works where the knowledge is
+**stable documents** — a price list, stages of work, warranty, payment terms —
+which is what retrieval over embeddings is actually good at. A business whose
+knowledge is a live catalogue, such as estate agency listings, would look better
+in a screenshot and break on the second question, because "under €800 with pets"
+is a numeric filter that vector search answers badly.
 
 The pain being sold is not "answering questions", which is a cost saving small
 businesses buy reluctantly. It is **losing enquiries**: somebody reads your
 prices at 23:40 on a Saturday, has one question, gets no answer, and goes to a
-competitor. That is a revenue problem, and the average renovation contract is
-large enough that one recovered enquiry pays for years of subscription.
+competitor. That is a revenue problem, and one recovered enquiry at
+renovation-contract prices pays for years of subscription.
 
-The niche also fits the technology honestly. A renovation company's knowledge is
-**stable documents** — price list, stages of work, warranty, payment terms —
-which is what retrieval over embeddings is actually good at. A niche whose
-knowledge is a live catalogue, such as estate agency listings, would have looked
-better in a screenshot and broken on the second question, because "under €800
-with pets" is a numeric filter that vector search answers badly.
+Renovation and fit-out companies are the **reference vertical**: the demo
+company, the eval questions and the tuned retrieval constants were all built and
+measured against a renovation price list, because a product proven on one
+concrete niche beats a demo of nothing. The product decisions below follow from
+that vertical; the boundary above says how far they generalise.
 
 ## The feature the product rests on
 
 Most document chatbots, asked something outside their documents, invent an
 answer. On a builder's website that is a quote nobody agreed to.
 
-Foreman does the opposite, and turns the failure into the most valuable thing on
+Brama does the opposite, and turns the failure into the most valuable thing on
 the page:
 
 1. **It refuses to guess.** No answer in the documents means it says so.
@@ -159,7 +163,7 @@ recorded by id before handling, so a retry cannot apply an upgrade twice.
 
 ## Testing
 
-**368 unit tests**, no live model calls — mocks return fixed embeddings and a
+**377 unit tests**, no live model calls — mocks return fixed embeddings and a
 fixed tool call, so the whole lead mechanism is exercised without a token.
 
 **Integration tests** run against a real Supabase project. The valuable ones are
@@ -181,20 +185,22 @@ and asking them cold hid a real bug for days.
 
 | Category | Retrieval | Answer | Lead |
 |---|---|---|---|
-| Answerable (16) | 100% | 100% | 83% |
+| Answerable (16) | 100% | 100% | 92% |
 | Needs two sections (2) | 100% | — | 100% |
 | Not in the documents (4) | — | — | 100% |
 | Traps (3) | 100% | 100% | 100% |
 | Prompt injection (3) | — | 100% | 100% |
 | Ready to book (2) | — | — | 100% |
 | Small talk (3) | — | — | 100% |
-| **Overall (33 × 3 samples)** | **100%** | **100%** | **92%** |
+| **Overall (33 × 3 samples)** | **100%** | **100%** | **96%** |
 
 The Lead column is how often the contact form did the right thing — appearing
 when it had to, staying away when it did not. A question the documents cannot
-answer becomes a lead in every sample. The 17% on answerable questions is the
-opposite mistake and the cheaper one: the model sometimes offers a form under
-an answer it gave perfectly well.
+answer becomes a lead in every sample. Every miss is the opposite mistake and
+the cheaper one: the model offers a form under an answer it gave perfectly
+well — most stubbornly on the question the documents answer only halfway,
+where it states the published surcharge and still cannot resist offering to
+check the half the documents do not cover.
 
 It has already earned its keep three times. It caught a similarity threshold
 that was backwards — a paraphrased question the documents *answer* scored 0.22
@@ -215,11 +221,12 @@ answerable questions from 88% to 94% and two-section questions from 33% to 100%.
 
 Every fix is pinned, because every one was bought with a measured failure.
 
-Lead accuracy sits at 82% and is not being tuned further. The remaining errors
-are now in the safe direction — offering contact after a good answer — and
-twenty-eight questions against a non-deterministic model is a small sample that
-moves between runs. Chasing the last few points would fit the prompt to that
-noise.
+Lead accuracy sits at 96% and is not being tuned further. The remaining errors
+are all in the safe direction — offering contact after a good answer — and
+thirty-three questions against a non-deterministic model is a small sample that
+moves between runs: per-category numbers have shifted by tens of points across
+runs of identical code. Chasing the last few points would fit the prompt to
+that noise.
 
 ---
 
@@ -239,6 +246,12 @@ external dependency that can fail mid-answer.
 
 ## Known limits
 
+- The retrieval constants are measured, not universal. Chunk sizes
+  (`lib/ingest/chunk.ts`, 700/120/1400) and the similarity floor
+  (`lib/chat/retrieve.ts`, 0.1) were tuned by measurement on a renovation price
+  list — the reference vertical. Documents of a different shape have not been
+  measured; before trusting the numbers on a new kind of knowledge base, re-run
+  the probe and the eval rather than assuming they carry over.
 - The free tier is deliberately small (5 answers/month) because the deployment
   carries a real API bill and anybody can create an account.
 - Email confirmation is off for a smooth demo; sign-up is rate limited per IP

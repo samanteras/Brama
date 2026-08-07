@@ -3,7 +3,7 @@
 A fake renovation company's website, used to prove the widget works where it
 actually has to work: **on a different origin from the app**.
 
-Testing the widget inside the Foreman app itself would prove nothing. Every
+Testing the widget inside the Brama app itself would prove nothing. Every
 interesting failure — the Origin check, CORS, the iframe, cookies that are not
 there — only appears across origins.
 

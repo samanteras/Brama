@@ -2,7 +2,7 @@ const STEPS = [
   {
     title: 'Upload what you already have',
     body: 'The price list, the terms, the stages of work, the warranty page. PDF, plain text, or pasted straight in. Nothing new to write.',
-    detail: 'If a PDF turns out to be a scan, Foreman says so instead of quietly indexing nothing.',
+    detail: 'If a PDF turns out to be a scan, Brama says so instead of quietly indexing nothing.',
   },
   {
     title: 'Ask it what your customers ask',

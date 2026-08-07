@@ -1,5 +1,5 @@
 /**
- * Foreman widget loader.
+ * Brama widget loader.
  *
  * Deliberately plain JavaScript with no dependencies and no build step. This
  * file runs on somebody else's website, so it is held to two rules:
@@ -18,22 +18,22 @@
   var script = document.currentScript
   if (!script) return
 
-  var botId = script.getAttribute('data-foreman-bot')
+  var botId = script.getAttribute('data-brama-bot')
   if (!botId) {
-    console.error('[Foreman] Missing data-foreman-bot on the script tag.')
+    console.error('[Brama] Missing data-brama-bot on the script tag.')
     return
   }
 
   var origin = new URL(script.src, window.location.href).origin
-  var accent = script.getAttribute('data-foreman-color') || '#1f2937'
-  var label = script.getAttribute('data-foreman-label') || 'Questions? Ask us'
+  var accent = script.getAttribute('data-brama-color') || '#1f2937'
+  var label = script.getAttribute('data-brama-label') || 'Questions? Ask us'
 
   // Guards against the snippet being pasted twice, which would otherwise stack
   // two buttons on top of each other.
-  if (document.getElementById('foreman-widget-root')) return
+  if (document.getElementById('brama-widget-root')) return
 
   var host = document.createElement('div')
-  host.id = 'foreman-widget-root'
+  host.id = 'brama-widget-root'
   var shadow = host.attachShadow({ mode: 'open' })
 
   var style = document.createElement('style')
@@ -111,7 +111,7 @@
     // Only the frame we created may close it. Without this origin check any
     // script on the page could drive the widget.
     if (event.origin !== origin) return
-    if (event.data && event.data.type === 'foreman:close') closeChat()
+    if (event.data && event.data.type === 'brama:close') closeChat()
   })
 
   shadow.appendChild(style)
