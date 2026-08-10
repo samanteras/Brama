@@ -1,5 +1,7 @@
 import { Clock, MessageSquareDashed, PhoneOff } from 'lucide-react'
 
+import { Reveal, Stagger, StaggerItem } from '@/components/marketing/motion'
+
 const LEAKS = [
   {
     icon: Clock,
@@ -20,29 +22,31 @@ const LEAKS = [
 
 export function Problem() {
   return (
-    <section className="border-b bg-muted/30">
-      <div className="mx-auto w-full max-w-6xl px-4 py-16 sm:px-6 lg:py-20">
-        <div className="max-w-2xl">
-          <h2 className="text-3xl font-semibold tracking-tight text-balance sm:text-4xl">
+    <section className="border-b">
+      <div className="mx-auto w-full max-w-6xl px-4 py-24 sm:px-6 lg:py-32">
+        <Reveal className="max-w-3xl">
+          <h2 className="text-4xl font-semibold tracking-tight text-balance sm:text-5xl">
             Where enquiries quietly leak away
           </h2>
-          <p className="mt-4 text-lg text-muted-foreground text-pretty">
+          <p className="mt-6 text-lg text-muted-foreground text-pretty sm:text-xl">
             Not from bad work or bad prices. From nobody being there at the moment somebody was
             ready to ask.
           </p>
-        </div>
+        </Reveal>
 
-        <div className="mt-12 grid gap-8 sm:grid-cols-3">
+        <Stagger className="mt-16 grid gap-10 sm:grid-cols-3" delay={0.15}>
           {LEAKS.map((leak) => (
-            <div key={leak.title}>
-              <leak.icon className="size-6 text-primary" aria-hidden />
-              <h3 className="mt-4 font-semibold">{leak.title}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-muted-foreground text-pretty">
+            <StaggerItem key={leak.title}>
+              <span className="inline-flex size-12 items-center justify-center rounded-xl border border-primary/20 bg-primary/10">
+                <leak.icon className="size-6 text-primary" aria-hidden />
+              </span>
+              <h3 className="mt-5 text-lg font-semibold">{leak.title}</h3>
+              <p className="mt-3 leading-relaxed text-muted-foreground text-pretty">
                 {leak.body}
               </p>
-            </div>
+            </StaggerItem>
           ))}
-        </div>
+        </Stagger>
       </div>
     </section>
   )

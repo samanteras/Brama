@@ -4,9 +4,14 @@ import { Button } from '@/components/ui/button'
 import { Logo } from '@/components/marketing/logo'
 import { APP_NAME } from '@/lib/brand'
 
+/**
+ * One dark translucent bar over every scene, light and dark alike — the same
+ * trick as Apple's navigation. Swapping the bar's colour per section would
+ * mean watching it flicker at every boundary while scrolling.
+ */
 export function SiteHeader() {
   return (
-    <header className="sticky top-0 z-40 border-b bg-background/80 backdrop-blur">
+    <header className="dark sticky top-0 z-40 border-b border-white/10 bg-background/70 text-foreground backdrop-blur-xl">
       <div className="mx-auto flex h-16 w-full max-w-6xl items-center gap-6 px-4 sm:px-6">
         <Link href="/" className="flex items-center gap-2">
           <Logo className="size-6 text-primary" />

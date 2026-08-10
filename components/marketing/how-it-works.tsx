@@ -1,3 +1,5 @@
+import { Reveal, Stagger, StaggerItem } from '@/components/marketing/motion'
+
 const STEPS = [
   {
     title: 'Upload what you already have',
@@ -18,36 +20,36 @@ const STEPS = [
 
 export function HowItWorks() {
   return (
-    <section id="how-it-works" className="border-b">
-      <div className="mx-auto w-full max-w-6xl px-4 py-16 sm:px-6 lg:py-20">
-        <div className="max-w-2xl">
-          <h2 className="text-3xl font-semibold tracking-tight text-balance sm:text-4xl">
+    <section id="how-it-works" className="border-b bg-muted/30">
+      <div className="mx-auto w-full max-w-6xl px-4 py-24 sm:px-6 lg:py-32">
+        <Reveal className="max-w-3xl">
+          <h2 className="text-4xl font-semibold tracking-tight text-balance sm:text-5xl">
             Live in an afternoon, not a project
           </h2>
-          <p className="mt-4 text-lg text-muted-foreground text-pretty">
+          <p className="mt-6 text-lg text-muted-foreground text-pretty sm:text-xl">
             There is no content to write and no developer to book.
           </p>
-        </div>
+        </Reveal>
 
-        <ol className="mt-12 grid gap-10 sm:grid-cols-3">
+        <Stagger className="mt-16 grid gap-12 sm:grid-cols-3" delay={0.15}>
           {STEPS.map((step, index) => (
-            <li key={step.title}>
-              <span className="flex size-9 items-center justify-center rounded-full border border-primary/30 bg-primary/10 text-sm font-semibold text-primary">
+            <StaggerItem key={step.title}>
+              <span className="flex size-11 items-center justify-center rounded-full border border-primary/30 bg-primary/10 text-base font-semibold text-primary">
                 {index + 1}
               </span>
 
-              <h3 className="mt-4 font-semibold">{step.title}</h3>
+              <h3 className="mt-5 text-lg font-semibold">{step.title}</h3>
 
-              <p className="mt-2 text-sm leading-relaxed text-muted-foreground text-pretty">
+              <p className="mt-3 leading-relaxed text-muted-foreground text-pretty">
                 {step.body}
               </p>
 
-              <p className="mt-3 border-l-2 border-border pl-3 text-sm leading-relaxed text-muted-foreground/80 text-pretty">
+              <p className="mt-4 border-l-2 border-primary/40 pl-4 text-sm leading-relaxed text-muted-foreground/80 text-pretty">
                 {step.detail}
               </p>
-            </li>
+            </StaggerItem>
           ))}
-        </ol>
+        </Stagger>
       </div>
     </section>
   )
