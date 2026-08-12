@@ -6,7 +6,9 @@ import {
   formatLimit,
   formatPrice,
   PLAN_TAGLINES,
+  PLAN_TAGLINES_RU,
   planHighlights,
+  pluralizeRu,
 } from './plan-copy'
 import { isPlanId, PLAN_IDS, PLAN_LIST, PLANS, type Plan } from './plans'
 
@@ -48,6 +50,72 @@ describe('PLAN_TAGLINES', () => {
 
   it('says something different about each plan', () => {
     expect(new Set(Object.values(PLAN_TAGLINES)).size).toBe(PLAN_IDS.length)
+  })
+})
+
+describe('pluralizeRu', () => {
+  const bots: [string, string, string] = ['бот', 'бота', 'ботов']
+
+  it.each([
+    [1, '1 бот'],
+    [2, '2 бота'],
+    [4, '4 бота'],
+    [5, '5 ботов'],
+    [10, '10 ботов'],
+  ])('handles the basic digit rules: %i', (count, expected) => {
+    expect(pluralizeRu(count, bots)).toBe(expected)
+  })
+
+  it.each([
+    [11, '11 ботов'],
+    [12, '12 ботов'],
+    [14, '14 ботов'],
+  ])('keeps the teens on the many form: %i', (count, expected) => {
+    // 11–14 break the last-digit rule — «11 бот» is the classic machine
+    // translation give-away this helper exists to prevent.
+    expect(pluralizeRu(count, bots)).toBe(expected)
+  })
+
+  it.each([
+    [21, '21 бот'],
+    [22, '22 бота'],
+    [25, '25 ботов'],
+    [111, '111 ботов'],
+    [121, '121 бот'],
+  ])('applies last-digit rules past twenty: %i', (count, expected) => {
+    expect(pluralizeRu(count, bots)).toBe(expected)
+  })
+
+  it('groups thousands the Russian way', () => {
+    expect(pluralizeRu(5000, ['ответ', 'ответа', 'ответов'])).toBe(
+      `${(5000).toLocaleString('ru-RU')} ответов`,
+    )
+  })
+})
+
+describe('localized formatting', () => {
+  it('spells out a zero price in Russian', () => {
+    expect(formatPrice(0, 'ru')).toBe('Бесплатно')
+  })
+
+  it('keeps the dollar sign for Russian prices', () => {
+    expect(formatPrice(2900, 'ru')).toBe('$29')
+  })
+
+  it('spells out an uncapped limit in Russian', () => {
+    expect(formatLimit(null, 'ru')).toBe('Без ограничений')
+  })
+})
+
+describe('PLAN_TAGLINES_RU', () => {
+  it('covers every plan', () => {
+    for (const id of PLAN_IDS) {
+      expect(PLAN_TAGLINES_RU[id].length).toBeGreaterThan(0)
+    }
+  })
+
+  it('says something different about each plan', () => {
+    expect(new Set(Object.values(PLAN_TAGLINES_RU)).size).toBe(PLAN_IDS.length)
   })
 })
 
@@ -170,6 +238,73 @@ describe('planHighlights', () => {
     // product rather than the price comparison.
     for (const plan of PLAN_LIST) {
       expect(planHighlights(plan).join(' ').toLowerCase()).not.toContain('domain')
+    }
+  })
+})
+
+describe('planHighlights in Russian', () => {
+  it('produces the same number of bullets as the English version', () => {
+    // The two locales are the same pricing card; a bullet existing in one
+    // language but not the other means the two pages promise different plans.
+    for (const plan of PLAN_LIST) {
+      expect(planHighlights(plan, 'ru').length).toBe(planHighlights(plan).length)
+    }
+  })
+
+  it.each(PLAN_IDS)('states the real bot allowance for %s', (id) => {
+    const plan = PLANS[id]
+
+    expect(
+      planHighlights(plan, 'ru').some((bullet) => bullet.includes(String(plan.limits.bots))),
+    ).toBe(true)
+  })
+
+  it('declines the bot count correctly', () => {
+    expect(planHighlights(PLANS.free, 'ru')).toContain('1 бот')
+    expect(planHighlights(PLANS.pro, 'ru').some((bullet) => bullet.startsWith('3 бота'))).toBe(
+      true,
+    )
+  })
+
+  it('tracks a changed limit instead of hardcoding it', () => {
+    const inflated: Plan = {
+      ...PLANS.pro,
+      limits: { ...PLANS.pro.limits, answersPerMonth: 4242 },
+    }
+
+    expect(
+      planHighlights(inflated, 'ru').some((bullet) =>
+        bullet.includes((4242).toLocaleString('ru-RU')),
+      ),
+    ).toBe(true)
+  })
+
+  it('never leaks a null into any bullet', () => {
+    for (const plan of PLAN_LIST) {
+      for (const bullet of planHighlights(plan, 'ru')) {
+        expect(bullet).not.toContain('null')
+        expect(bullet).not.toContain('undefined')
+        expect(bullet).not.toContain('NaN')
+      }
+    }
+  })
+
+  it('contains no leftover English', () => {
+    // A single untranslated bullet on the Russian pricing card reads worse
+    // than no Russian page at all.
+    for (const plan of PLAN_LIST) {
+      for (const bullet of planHighlights(plan, 'ru')) {
+        expect(bullet).not.toMatch(/\b(bot|document|answer|page|lead|per|month)s?\b/i)
+      }
+    }
+  })
+
+  it('mentions the badge only on plans that carry it', () => {
+    for (const plan of PLAN_LIST) {
+      const mentionsBadge = planHighlights(plan, 'ru').some((bullet) =>
+        bullet.includes('бейдж'),
+      )
+      expect(mentionsBadge).toBe(plan.features.watermark)
     }
   })
 })
