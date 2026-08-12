@@ -43,4 +43,16 @@ jobs:
       # opt-in; the RAG eval runs against a live model, by hand.
       - run: npm test
 
+      # The build only imports modules while collecting page data — it never
+      # calls Supabase or OpenAI. But `lib/env*.ts` validates these variables
+      # eagerly at import, which is a feature everywhere real: a Vercel deploy
+      # with a missing secret fails at build instead of 500ing at runtime.
+      # Placeholders keep that guarantee out of CI's way without weakening it,
+      # and they are obviously fake so a leak into any real config is loud.
       - run: npm run build
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: https://ci-placeholder.supabase.co
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ci-placeholder
+          NEXT_PUBLIC_APP_URL: https://ci-placeholder.invalid
+          SUPABASE_SERVICE_ROLE_KEY: ci-placeholder
+          OPENAI_API_KEY: ci-placeholder
