@@ -64,7 +64,7 @@ Payment
 
 Work is paid in three stages: 30 percent on signing, 40 percent at the halfway
 inspection, and the remaining 30 percent on handover. We do not ask for the
-final payment until you have walked the site with the foreman and signed off.
+final payment until you have walked the site with the site manager and signed off.
 
 Pets and occupied flats
 

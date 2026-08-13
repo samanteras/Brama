@@ -1,4 +1,4 @@
--- Foreman: initial schema.
+-- Brama: initial schema.
 --
 -- Multi-tenant by owner. Every table below hangs off `profiles`, either
 -- directly or through `bots`, which is what makes the row level security
