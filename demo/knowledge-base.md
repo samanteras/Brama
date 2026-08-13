@@ -35,7 +35,7 @@ starts at 4,200 EUR including waterproofing.
 - Site survey and a written estimate before any work begins
 - Protection of entrance doors, windows and lifts
 - Daily cleaning and removal of construction waste
-- A foreman assigned to your project as the single point of contact
+- A site manager assigned to your project as the single point of contact
 - Photo reports at the end of each stage
 
 ## What the price does not include
@@ -79,8 +79,8 @@ Work is paid in three stages:
 - 40 percent at the halfway inspection
 - 30 percent on handover
 
-The final payment is due only after you have walked the site with the foreman
-and signed the handover document. We accept bank transfer and card.
+The final payment is due only after you have walked the site with the site
+manager and signed the handover document. We accept bank transfer and card.
 
 ## Warranty
 

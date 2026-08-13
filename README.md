@@ -4,9 +4,8 @@
 and terms you already have, and get a chatbot that answers customers around the
 clock — and takes their phone number when it cannot answer, instead of guessing.
 
-- **App:** https://foreman-nu-ten.vercel.app *(URL predates the rename; moves
-  with the Vercel project)*
-- **The widget running on a customer's site:** https://foreman-demo.vercel.app
+- **App:** https://brama-nine.vercel.app
+- **The widget running on a customer's site:** https://brama-demo.vercel.app
 
 ---
 
