@@ -3,6 +3,7 @@
 import { redirect } from 'next/navigation'
 import { z } from 'zod'
 
+import { appUrl } from '@/lib/env'
 import { callerIp, checkRateLimit } from '@/lib/security/rate-limit'
 import { safeRedirectPath } from '@/lib/security/redirect'
 import { createClient } from '@/lib/supabase/server'
@@ -72,8 +73,8 @@ export async function signIn(_previous: AuthState, formData: FormData): Promise<
 export async function signUp(_previous: AuthState, formData: FormData): Promise<AuthState> {
   // Checked before anything else: every new account carries a free allowance of
   // model calls, so registering in bulk is spending somebody else's money in
-  // bulk. Email confirmation is deliberately off for a smooth demo, which makes
-  // this the thing standing in its place.
+  // bulk. Email confirmation gates the account itself, but each attempt still
+  // sends an email, so this also keeps us from being turned into a spam cannon.
   const ip = await callerIp()
   const limit = await checkRateLimit(`signup:${ip}`, SIGN_UP_MAX, SIGN_UP_WINDOW_SECONDS)
 
@@ -91,7 +92,15 @@ export async function signUp(_previous: AuthState, formData: FormData): Promise<
   }
 
   const supabase = await createClient()
-  const { data, error } = await supabase.auth.signUp(parsed.data)
+  const { data, error } = await supabase.auth.signUp({
+    ...parsed.data,
+    options: {
+      // The confirmation email links back to whichever deployment the user
+      // signed up on — production for real users, localhost in development.
+      // Both are on the Supabase redirect allow-list.
+      emailRedirectTo: `${appUrl()}/auth/confirm`,
+    },
+  })
 
   if (error) {
     return { error: error.message }
