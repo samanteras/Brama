@@ -218,6 +218,11 @@ function ProgressNote({ stage }: { stage: Exclude<Stage, { name: 'idle' }> }) {
       ? Math.round((stage.indexed / stage.total) * 100)
       : null
 
+  return <IngestProgress label={label} percent={percent} />
+}
+
+/** Shared between the uploader and the site importer, so progress looks the same. */
+export function IngestProgress({ label, percent }: { label: string; percent: number | null }) {
   return (
     <div className="space-y-2 rounded-lg border bg-muted/40 p-4">
       <p className="flex items-center gap-2 text-sm font-medium">

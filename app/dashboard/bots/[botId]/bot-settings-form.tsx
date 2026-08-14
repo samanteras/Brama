@@ -85,7 +85,10 @@ shop.yourcompany.com`}
 
       {state.saved ? (
         <Alert>
-          <AlertDescription>Saved.</AlertDescription>
+          <AlertDescription>
+            Saved. To teach the bot what is on your site, use “Import from your site” on the
+            Knowledge tab.
+          </AlertDescription>
         </Alert>
       ) : null}
 

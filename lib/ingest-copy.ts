@@ -11,7 +11,13 @@
 
 import type { ParseFailureCode } from './ingest/parse'
 
-type FailureCode = ParseFailureCode | 'duplicate-document' | 'chunk-write-failed' | 'unknown'
+type FailureCode =
+  | ParseFailureCode
+  | 'duplicate-document'
+  | 'chunk-write-failed'
+  | 'site-unreachable'
+  | 'site-unchanged'
+  | 'unknown'
 
 const MESSAGES: Record<FailureCode, string> = {
   'scanned-pdf':
@@ -23,6 +29,9 @@ const MESSAGES: Record<FailureCode, string> = {
   'duplicate-document':
     'This document is already in the knowledge base. Delete the old copy first if you meant to replace it.',
   'chunk-write-failed': 'Something went wrong while saving the text. Try uploading it again.',
+  'site-unreachable':
+    'No readable pages were found on this site. Check that it is online and try again.',
+  'site-unchanged': 'The site has not changed since the last import, so nothing was replaced.',
   unknown: 'Something went wrong. Try uploading it again.',
 }
 

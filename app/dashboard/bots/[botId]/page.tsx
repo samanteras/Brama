@@ -5,6 +5,7 @@ import { AlertTriangle, CheckCircle2, FileText } from 'lucide-react'
 import { deleteDocument } from '../../actions'
 import { DocumentUploader } from './document-uploader'
 import { ResumeIndexingButton } from './resume-indexing-button'
+import { SiteImportButton } from './site-import-button'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { ingestFailureMessage } from '@/lib/ingest-copy'
@@ -21,7 +22,7 @@ export default async function BotKnowledgePage(props: PageProps<'/dashboard/bots
   const supabase = await createClient()
 
   const [{ data: bot }, { data: documents }, { data: profile }] = await Promise.all([
-    supabase.from('bots').select('id').eq('id', botId).maybeSingle(),
+    supabase.from('bots').select('id, allowed_domains').eq('id', botId).maybeSingle(),
     supabase
       .from('documents')
       .select('id, filename, source_type, status, error_code, page_count, total_chunks, indexed_chunks, created_at')
@@ -36,6 +37,17 @@ export default async function BotKnowledgePage(props: PageProps<'/dashboard/bots
   const documentCount = documents?.length ?? 0
   const canAddMore = isWithinLimit(documentCount, plan.limits.documentsPerBot)
 
+  // Wildcards have no concrete host to fetch, and localhost is the developer's
+  // machine, not a site.
+  const importableDomains = bot.allowed_domains.filter(
+    (domain) => !domain.startsWith('*.') && domain !== 'localhost',
+  )
+
+  // At the document cap, a re-import still works — it replaces the previous
+  // one — so the button stays as long as a website import already exists.
+  const hasSiteImport =
+    documents?.some((document) => document.source_type === 'website') ?? false
+
   return (
     <div className="space-y-8">
       <Card className="p-6">
@@ -46,14 +58,20 @@ export default async function BotKnowledgePage(props: PageProps<'/dashboard/bots
           </p>
         </div>
 
-        {canAddMore ? (
-          <DocumentUploader botId={botId} />
-        ) : (
-          <p className="text-sm text-muted-foreground">
-            The {plan.name} plan allows {formatLimit(plan.limits.documentsPerBot)} documents per
-            bot. Remove one, or upgrade to add more.
-          </p>
-        )}
+        <div className="space-y-6">
+          {canAddMore ? (
+            <DocumentUploader botId={botId} />
+          ) : (
+            <p className="text-sm text-muted-foreground">
+              The {plan.name} plan allows {formatLimit(plan.limits.documentsPerBot)} documents per
+              bot. Remove one, or upgrade to add more.
+            </p>
+          )}
+
+          {canAddMore || hasSiteImport ? (
+            <SiteImportButton botId={botId} domains={importableDomains} />
+          ) : null}
+        </div>
       </Card>
 
       {documentCount === 0 ? (

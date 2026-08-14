@@ -1,9 +1,8 @@
 import { NextResponse, type NextRequest } from 'next/server'
 import { z } from 'zod'
 
-import { chunkText } from '@/lib/ingest/chunk'
-import { contentHash } from '@/lib/ingest/hash'
 import { parsePdf, parsePlainText, type ParseResult } from '@/lib/ingest/parse'
+import { saveDocument } from '@/lib/ingest/save-document'
 import { getPlan, isWithinLimit, toPlanId } from '@/lib/plans'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { createClient } from '@/lib/supabase/server'
@@ -123,63 +122,33 @@ export async function POST(request: NextRequest) {
     )
   }
 
-  const hash = contentHash(result.document.text)
-  const chunks = chunkText(result.document.text)
-
-  if (chunks.length === 0) {
-    return NextResponse.json({ error: 'empty-document' }, { status: 422 })
-  }
-
   const admin = createAdminClient()
 
-  const { data: document, error: insertError } = await admin
-    .from('documents')
-    .insert({
-      bot_id: body.botId,
-      filename: body.filename,
-      source_type: body.sourceType,
-      content_hash: hash,
-      status: 'processing',
-      page_count: result.document.pageCount,
-      total_chunks: chunks.length,
-      indexed_chunks: 0,
-      storage_path: 'storagePath' in body ? body.storagePath : null,
-    })
-    .select('id')
-    .single()
+  const saved = await saveDocument(admin, {
+    botId: body.botId,
+    filename: body.filename,
+    sourceType: body.sourceType,
+    text: result.document.text,
+    pageCount: result.document.pageCount,
+    storagePath: 'storagePath' in body ? body.storagePath : null,
+  })
 
-  if (insertError || !document) {
-    // The unique constraint on (bot_id, content_hash) is what makes duplicate
-    // detection reliable, rather than a check that could race.
-    if (insertError?.code === '23505') {
-      return NextResponse.json({ error: 'duplicate-document' }, { status: 409 })
+  if (!saved.ok) {
+    switch (saved.error) {
+      case 'empty-document':
+        return NextResponse.json({ error: 'empty-document' }, { status: 422 })
+      case 'duplicate-document':
+        return NextResponse.json({ error: 'duplicate-document' }, { status: 409 })
+      case 'chunk-write-failed':
+        return NextResponse.json({ error: 'Could not store the document text.' }, { status: 500 })
+      default:
+        return NextResponse.json({ error: 'Could not save the document.' }, { status: 500 })
     }
-
-    return NextResponse.json({ error: 'Could not save the document.' }, { status: 500 })
-  }
-
-  const { error: chunkError } = await admin.from('chunks').insert(
-    chunks.map((chunk) => ({
-      document_id: document.id,
-      bot_id: body.botId,
-      chunk_index: chunk.index,
-      content: chunk.content,
-      token_count: chunk.estimatedTokens,
-    })),
-  )
-
-  if (chunkError) {
-    await admin
-      .from('documents')
-      .update({ status: 'failed', error_code: 'chunk-write-failed' })
-      .eq('id', document.id)
-
-    return NextResponse.json({ error: 'Could not store the document text.' }, { status: 500 })
   }
 
   return NextResponse.json({
-    documentId: document.id,
-    totalChunks: chunks.length,
+    documentId: saved.documentId,
+    totalChunks: saved.totalChunks,
     pageCount: result.document.pageCount,
   })
 }
