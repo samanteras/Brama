@@ -44,7 +44,7 @@ export function EmbeddedChat({
         <button
           type="button"
           onClick={close}
-          aria-label="Close chat"
+          aria-label="Закрыть чат"
           className="rounded p-1 transition-opacity hover:opacity-80"
         >
           <X className="size-5" />

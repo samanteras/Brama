@@ -16,11 +16,11 @@ export function BotTabs({ botId }: { botId: string }) {
   const base = `/dashboard/bots/${botId}`
 
   const tabs = [
-    { href: base, label: 'Knowledge' },
-    { href: `${base}/playground`, label: 'Playground' },
-    { href: `${base}/leads`, label: 'Leads' },
-    { href: `${base}/gaps`, label: 'Gaps' },
-    { href: `${base}/settings`, label: 'Settings' },
+    { href: base, label: 'База знаний' },
+    { href: `${base}/playground`, label: 'Песочница' },
+    { href: `${base}/leads`, label: 'Заявки' },
+    { href: `${base}/gaps`, label: 'Пробелы' },
+    { href: `${base}/settings`, label: 'Настройки' },
   ]
 
   return (

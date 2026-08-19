@@ -50,13 +50,13 @@ export async function POST(request: NextRequest) {
   } = await supabase.auth.getUser()
 
   if (!user) {
-    return NextResponse.json({ error: 'Not signed in.' }, { status: 401 })
+    return NextResponse.json({ error: 'Вы не вошли в аккаунт.' }, { status: 401 })
   }
 
   const parsedBody = bodySchema.safeParse(await request.json().catch(() => null))
 
   if (!parsedBody.success) {
-    return NextResponse.json({ error: 'Malformed request.' }, { status: 400 })
+    return NextResponse.json({ error: 'Некорректный запрос.' }, { status: 400 })
   }
 
   const body = parsedBody.data
@@ -70,7 +70,7 @@ export async function POST(request: NextRequest) {
     .maybeSingle()
 
   if (!bot) {
-    return NextResponse.json({ error: 'Bot not found.' }, { status: 404 })
+    return NextResponse.json({ error: 'Бот не найден.' }, { status: 404 })
   }
 
   const [{ data: profile }, { count: documentCount }] = await Promise.all([
@@ -86,7 +86,7 @@ export async function POST(request: NextRequest) {
   if (!isWithinLimit(documentCount ?? 0, plan.limits.documentsPerBot)) {
     return NextResponse.json(
       {
-        error: `The ${plan.name} plan allows ${plan.limits.documentsPerBot} documents per bot. Remove one or upgrade.`,
+        error: `Тариф ${plan.name} позволяет ${plan.limits.documentsPerBot} документов на бота. Удалите один или перейдите на тариф выше.`,
       },
       { status: 403 },
     )
@@ -102,7 +102,7 @@ export async function POST(request: NextRequest) {
       .download(body.storagePath)
 
     if (downloadError || !file) {
-      return NextResponse.json({ error: 'Could not read the uploaded file.' }, { status: 400 })
+      return NextResponse.json({ error: 'Не получилось прочитать загруженный файл.' }, { status: 400 })
     }
 
     const bytes = new Uint8Array(await file.arrayBuffer())
@@ -140,9 +140,9 @@ export async function POST(request: NextRequest) {
       case 'duplicate-document':
         return NextResponse.json({ error: 'duplicate-document' }, { status: 409 })
       case 'chunk-write-failed':
-        return NextResponse.json({ error: 'Could not store the document text.' }, { status: 500 })
+        return NextResponse.json({ error: 'Не получилось сохранить текст документа.' }, { status: 500 })
       default:
-        return NextResponse.json({ error: 'Could not save the document.' }, { status: 500 })
+        return NextResponse.json({ error: 'Не получилось сохранить документ.' }, { status: 500 })
     }
   }
 

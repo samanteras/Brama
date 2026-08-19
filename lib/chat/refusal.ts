@@ -87,4 +87,4 @@ export async function repliesWithoutAnswering(reply: string): Promise<boolean> {
  * it could not answer, so all that is missing is the invitation, and a second
  * generated sentence would cost another call to re-say what was just said.
  */
-export const NET_FOLLOW_UP = ' Leave your phone number and someone will get back to you.'
+export const NET_FOLLOW_UP = ' Оставьте номер телефона, и с вами свяжутся.'

@@ -26,7 +26,7 @@
 
   var origin = new URL(script.src, window.location.href).origin
   var accent = script.getAttribute('data-brama-color') || '#1f2937'
-  var label = script.getAttribute('data-brama-label') || 'Questions? Ask us'
+  var label = script.getAttribute('data-brama-label') || 'Есть вопросы? Спросите'
 
   // Guards against the snippet being pasted twice, which would otherwise stack
   // two buttons on top of each other.

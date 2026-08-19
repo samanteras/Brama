@@ -132,7 +132,7 @@ export function ChatWindow({
         onEvent: handle,
       })
     } catch {
-      setError('Connection lost. Please try again.')
+      setError('Связь прервалась. Попробуйте ещё раз.')
     } finally {
       setBusy(false)
     }
@@ -151,7 +151,7 @@ export function ChatWindow({
 
         {!started && greeting.trim() === '' ? (
           <p className="py-8 text-center text-sm text-muted-foreground">
-            Ask {botName} a question.
+            Задайте вопрос — {botName} ответит.
           </p>
         ) : null}
 
@@ -176,8 +176,8 @@ export function ChatWindow({
         {leadSaved ? (
           <p className="rounded-lg bg-muted px-4 py-3 text-sm text-muted-foreground">
             {leadEndpoint === null
-              ? 'On your website this contact would now appear under Leads, with the conversation attached.'
-              : 'Thank you — someone will be in touch.'}
+              ? 'На вашем сайте этот контакт сейчас появился бы в «Заявках» вместе с перепиской.'
+              : 'Спасибо! С вами свяжутся.'}
           </p>
         ) : null}
 
@@ -197,13 +197,13 @@ export function ChatWindow({
           <Input
             value={draft}
             onChange={(event) => setDraft(event.target.value)}
-            placeholder="Ask about prices, timelines, what is included…"
+            placeholder="Спросите про цены, сроки, что входит в стоимость…"
             disabled={busy}
-            aria-label="Your question"
+            aria-label="Ваш вопрос"
           />
           <Button type="submit" size="icon" disabled={busy || draft.trim() === ''}>
             <Send />
-            <span className="sr-only">Send</span>
+            <span className="sr-only">Отправить</span>
           </Button>
         </div>
 
@@ -247,7 +247,7 @@ function Bubble({
 
 function TypingDots() {
   return (
-    <span className="flex gap-1 py-1" aria-label="Typing">
+    <span className="flex gap-1 py-1" aria-label="Печатает">
       {[0, 1, 2].map((index) => (
         <span
           key={index}

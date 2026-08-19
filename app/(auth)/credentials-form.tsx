@@ -12,6 +12,12 @@ import { Label } from '@/components/ui/label'
 
 type CredentialsFormProps = {
   action: (previous: AuthState, formData: FormData) => Promise<AuthState>
+  /**
+   * Drives the password field's autocomplete hint. An explicit prop rather
+   * than something inferred from the button label: the label is copy and gets
+   * reworded, and a reword must not silently break password managers.
+   */
+  intent: 'sign-in' | 'sign-up'
   submitLabel: string
   /** Where to go after a successful sign-in, carried through the form. */
   next?: string
@@ -28,6 +34,7 @@ type CredentialsFormProps = {
  */
 export function CredentialsForm({
   action,
+  intent,
   submitLabel,
   next,
   passwordHint,
@@ -40,24 +47,24 @@ export function CredentialsForm({
       {next ? <input type="hidden" name="next" value={next} /> : null}
 
       <div className="space-y-2">
-        <Label htmlFor="email">Email</Label>
+        <Label htmlFor="email">Почта</Label>
         <Input
           id="email"
           name="email"
           type="email"
           autoComplete="email"
           required
-          placeholder="you@company.com"
+          placeholder="vy@kompania.ru"
         />
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="password">Password</Label>
+        <Label htmlFor="password">Пароль</Label>
         <Input
           id="password"
           name="password"
           type="password"
-          autoComplete={submitLabel === 'Create account' ? 'new-password' : 'current-password'}
+          autoComplete={intent === 'sign-up' ? 'new-password' : 'current-password'}
           required
         />
         {passwordHint ? <p className="text-sm text-muted-foreground">{passwordHint}</p> : null}
@@ -87,7 +94,7 @@ function SubmitButton({ label }: { label: string }) {
 
   return (
     <Button type="submit" className="w-full" disabled={pending}>
-      {pending ? 'Just a moment…' : label}
+      {pending ? 'Секунду…' : label}
     </Button>
   )
 }

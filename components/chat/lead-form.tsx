@@ -66,7 +66,7 @@ export function LeadForm({
 
       onSaved()
     } catch {
-      setError('Could not send that. Please try again.')
+      setError('Не отправилось. Попробуйте ещё раз.')
     } finally {
       setSaving(false)
     }
@@ -78,16 +78,16 @@ export function LeadForm({
         <Input
           value={contact}
           onChange={(event) => setContact(event.target.value)}
-          placeholder="Phone or email"
-          aria-label="Phone or email"
+          placeholder="Телефон или почта"
+          aria-label="Телефон или почта"
           required
           autoFocus
         />
         <Input
           value={name}
           onChange={(event) => setName(event.target.value)}
-          placeholder="Your name (optional)"
-          aria-label="Your name"
+          placeholder="Ваше имя (необязательно)"
+          aria-label="Ваше имя"
         />
       </div>
 
@@ -97,7 +97,7 @@ export function LeadForm({
         style={{ backgroundColor: accentColor }}
         disabled={saving || contact.trim() === ''}
       >
-        {saving ? 'Sending…' : 'Send'}
+        {saving ? 'Отправляем…' : 'Отправить'}
       </Button>
 
       {error ? <p className="mt-2 text-xs text-destructive">{error}</p> : null}

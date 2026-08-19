@@ -20,7 +20,7 @@ export async function POST() {
   } = await supabase.auth.getUser()
 
   if (!user) {
-    return NextResponse.json({ error: 'Not signed in.' }, { status: 401 })
+    return NextResponse.json({ error: 'Вы не вошли в аккаунт.' }, { status: 401 })
   }
 
   const { data: profile } = await createAdminClient()
@@ -30,7 +30,7 @@ export async function POST() {
     .maybeSingle()
 
   if (!profile?.stripe_customer_id) {
-    return NextResponse.json({ error: 'No billing account yet.' }, { status: 400 })
+    return NextResponse.json({ error: 'Платёжного аккаунта ещё нет.' }, { status: 400 })
   }
 
   const session = await stripe().billingPortal.sessions.create({

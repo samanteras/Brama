@@ -48,7 +48,7 @@ export async function sendMessage({
     onEvent({
       type: 'error',
       message:
-        typeof payload?.error === 'string' ? payload.error : 'The assistant is unavailable.',
+        typeof payload?.error === 'string' ? payload.error : 'Ассистент сейчас недоступен.',
     })
     return
   }

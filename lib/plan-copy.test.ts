@@ -13,27 +13,35 @@ import {
 import { isPlanId, PLAN_IDS, PLAN_LIST, PLANS, type Plan } from './plans'
 
 describe('formatPrice', () => {
-  it('spells out a zero price', () => {
-    expect(formatPrice(0)).toBe('Free')
+  it('defaults to Russian, the dashboard language', () => {
+    expect(formatPrice(0)).toBe('Бесплатно')
+  })
+
+  it('spells out a zero price in English', () => {
+    expect(formatPrice(0, 'en')).toBe('Free')
   })
 
   it('renders whole dollars without decimals', () => {
-    expect(formatPrice(2900)).toBe('$29')
-    expect(formatPrice(9900)).toBe('$99')
+    expect(formatPrice(2900, 'en')).toBe('$29')
+    expect(formatPrice(9900, 'en')).toBe('$99')
   })
 
   it('groups thousands', () => {
-    expect(formatPrice(120_000)).toBe('$1,200')
+    expect(formatPrice(120_000, 'en')).toBe('$1,200')
   })
 })
 
 describe('formatLimit', () => {
-  it('spells out an uncapped limit', () => {
-    expect(formatLimit(null)).toBe('Unlimited')
+  it('defaults to Russian, the dashboard language', () => {
+    expect(formatLimit(null)).toBe('Без ограничений')
+  })
+
+  it('spells out an uncapped limit in English', () => {
+    expect(formatLimit(null, 'en')).toBe('Unlimited')
   })
 
   it('groups thousands', () => {
-    expect(formatLimit(5000)).toBe('5,000')
+    expect(formatLimit(5000, 'en')).toBe('5,000')
   })
 
   it('renders a small number plainly', () => {
@@ -131,17 +139,17 @@ describe('FEATURED_PLAN_ID', () => {
 })
 
 describe('botAllowanceMessage', () => {
-  it('says "one bot" rather than "1 bots" for a single-bot plan', () => {
-    expect(botAllowanceMessage(PLANS.free)).toBe('The Free plan includes one bot.')
+  it('says «один бот» rather than «1 ботов» for a single-bot plan', () => {
+    expect(botAllowanceMessage(PLANS.free)).toBe('В тариф Free входит один бот.')
   })
 
-  it('pluralizes for a multi-bot plan', () => {
-    expect(botAllowanceMessage(PLANS.pro)).toBe('The Pro plan includes 3 bots.')
+  it('declines the count for a multi-bot plan', () => {
+    expect(botAllowanceMessage(PLANS.pro)).toBe('В тариф Pro входит 3 бота.')
   })
 
   it('tracks the real limit rather than hardcoding it', () => {
     const inflated: Plan = { ...PLANS.pro, limits: { ...PLANS.pro.limits, bots: 12 } }
-    expect(botAllowanceMessage(inflated)).toContain('12 bots')
+    expect(botAllowanceMessage(inflated)).toContain('12 ботов')
   })
 
   it('names every plan correctly', () => {
@@ -154,13 +162,13 @@ describe('botAllowanceMessage', () => {
 describe('planHighlights', () => {
   it('produces bullets for every plan', () => {
     for (const plan of PLAN_LIST) {
-      expect(planHighlights(plan).length).toBeGreaterThan(0)
+      expect(planHighlights(plan, 'en').length).toBeGreaterThan(0)
     }
   })
 
   it('never emits an empty bullet', () => {
     for (const plan of PLAN_LIST) {
-      for (const bullet of planHighlights(plan)) {
+      for (const bullet of planHighlights(plan, 'en')) {
         expect(bullet.trim()).not.toBe('')
       }
     }
@@ -170,15 +178,15 @@ describe('planHighlights', () => {
     const plan = PLANS[id]
     const expected = plan.limits.answersPerMonth.toLocaleString('en-US')
 
-    expect(planHighlights(plan).some((bullet) => bullet.includes(expected))).toBe(true)
+    expect(planHighlights(plan, 'en').some((bullet) => bullet.includes(expected))).toBe(true)
   })
 
   it.each(PLAN_IDS)('states the real bot allowance for %s', (id) => {
     const plan = PLANS[id]
 
-    expect(planHighlights(plan).some((bullet) => bullet.includes(String(plan.limits.bots)))).toBe(
-      true,
-    )
+    expect(
+      planHighlights(plan, 'en').some((bullet) => bullet.includes(String(plan.limits.bots))),
+    ).toBe(true)
   })
 
   it('tracks a changed limit instead of hardcoding it', () => {
@@ -189,19 +197,19 @@ describe('planHighlights', () => {
       limits: { ...PLANS.pro.limits, answersPerMonth: 4242 },
     }
 
-    expect(planHighlights(inflated).some((bullet) => bullet.includes('4,242'))).toBe(true)
+    expect(planHighlights(inflated, 'en').some((bullet) => bullet.includes('4,242'))).toBe(true)
   })
 
   it('singularizes a count of one', () => {
-    expect(planHighlights(PLANS.free)).toContain('1 bot')
+    expect(planHighlights(PLANS.free, 'en')).toContain('1 bot')
   })
 
   it('pluralizes a count above one', () => {
-    expect(planHighlights(PLANS.pro).some((bullet) => bullet.startsWith('3 bots'))).toBe(true)
+    expect(planHighlights(PLANS.pro, 'en').some((bullet) => bullet.startsWith('3 bots'))).toBe(true)
   })
 
   it('spells out unlimited documents rather than printing null', () => {
-    const bullets = planHighlights(PLANS.business)
+    const bullets = planHighlights(PLANS.business, 'en')
 
     expect(bullets).toContain('Unlimited documents')
     expect(bullets.some((bullet) => bullet.includes('null'))).toBe(false)
@@ -209,7 +217,7 @@ describe('planHighlights', () => {
 
   it('never leaks a null into any bullet', () => {
     for (const plan of PLAN_LIST) {
-      for (const bullet of planHighlights(plan)) {
+      for (const bullet of planHighlights(plan, 'en')) {
         expect(bullet).not.toContain('null')
         expect(bullet).not.toContain('undefined')
         expect(bullet).not.toContain('NaN')
@@ -218,8 +226,8 @@ describe('planHighlights', () => {
   })
 
   it('promises full lead access only where the plan grants it', () => {
-    const proBullets = planHighlights(PLANS.pro).join(' ')
-    const freeBullets = planHighlights(PLANS.free).join(' ')
+    const proBullets = planHighlights(PLANS.pro, 'en').join(' ')
+    const freeBullets = planHighlights(PLANS.free, 'en').join(' ')
 
     expect(proBullets).toContain('Every lead')
     expect(freeBullets).not.toContain('Every lead')
@@ -228,7 +236,7 @@ describe('planHighlights', () => {
 
   it('mentions the badge only on plans that carry it', () => {
     for (const plan of PLAN_LIST) {
-      const mentionsBadge = planHighlights(plan).some((bullet) => bullet.includes('badge'))
+      const mentionsBadge = planHighlights(plan, 'en').some((bullet) => bullet.includes('badge'))
       expect(mentionsBadge).toBe(plan.features.watermark)
     }
   })
@@ -237,7 +245,7 @@ describe('planHighlights', () => {
     // Every plan has it, so it differentiates nothing and belongs in the
     // product rather than the price comparison.
     for (const plan of PLAN_LIST) {
-      expect(planHighlights(plan).join(' ').toLowerCase()).not.toContain('domain')
+      expect(planHighlights(plan, 'en').join(' ').toLowerCase()).not.toContain('domain')
     }
   })
 })
@@ -247,7 +255,7 @@ describe('planHighlights in Russian', () => {
     // The two locales are the same pricing card; a bullet existing in one
     // language but not the other means the two pages promise different plans.
     for (const plan of PLAN_LIST) {
-      expect(planHighlights(plan, 'ru').length).toBe(planHighlights(plan).length)
+      expect(planHighlights(plan, 'ru').length).toBe(planHighlights(plan, 'en').length)
     }
   })
 

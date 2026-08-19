@@ -6,7 +6,7 @@ import { Card } from '@/components/ui/card'
 import { createClient } from '@/lib/supabase/server'
 
 export const metadata: Metadata = {
-  title: 'Playground',
+  title: 'Песочница',
 }
 
 export default async function PlaygroundPage(
@@ -48,41 +48,41 @@ export default async function PlaygroundPage(
 
       <div className="space-y-4">
         <div>
-          <h2 className="font-semibold">Ask it what your customers ask</h2>
+          <h2 className="font-semibold">Спросите то, что спрашивают ваши клиенты</h2>
           <p className="mt-1 text-muted-foreground text-pretty">
-            This is exactly what a visitor sees, answering from exactly the same documents.
+            Это ровно то, что видит посетитель, — и ответы из ровно тех же документов.
           </p>
         </div>
 
         {readyDocuments === 0 ? (
           <Card className="p-5">
             <p className="text-sm text-muted-foreground text-pretty">
-              No documents are indexed yet, so the bot will say it does not know — which is correct,
-              but not useful. Add something under Knowledge first.
+              Документы ещё не проиндексированы, поэтому бот будет говорить, что не знает, — это
+              правильно, но бесполезно. Сначала добавьте что-нибудь в «Базу знаний».
             </p>
           </Card>
         ) : (
           <Card className="p-5">
-            <p className="text-sm font-medium">Worth trying</p>
+            <p className="text-sm font-medium">Что стоит попробовать</p>
             <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
-              <li>A question your price list answers — check it quotes the real number.</li>
+              <li>Вопрос, на который отвечает ваш прайс, — проверьте, что бот называет настоящую цифру.</li>
               <li>
-                A question it cannot answer, like a start date. It should decline and ask for a
-                phone number rather than invent one.
+                Вопрос, на который ответа нет, например дату начала работ. Бот должен честно
+                отказаться и спросить телефон, а не выдумывать.
               </li>
               <li>
-                Something you get asked weekly. If the answer is wrong, the fix is a paragraph in
-                your documents, not different wording here.
+                То, что у вас спрашивают каждую неделю. Если ответ неверный, лечится это абзацем в
+                документах, а не другой формулировкой вопроса.
               </li>
             </ul>
           </Card>
         )}
 
         <Card className="p-5">
-          <p className="text-sm font-medium">Answers you see here are counted</p>
+          <p className="text-sm font-medium">Ответы здесь тоже считаются</p>
           <p className="mt-2 text-sm text-muted-foreground text-pretty">
-            Testing uses the same monthly allowance as your visitors, because each answer costs the
-            same to produce. Leads captured here are not saved.
+            Тестирование тратит ту же месячную квоту, что и посетители: каждый ответ стоит
+            одинаково. Заявки из песочницы при этом не сохраняются.
           </p>
         </Card>
       </div>

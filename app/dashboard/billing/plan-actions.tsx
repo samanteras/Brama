@@ -38,12 +38,12 @@ export function UpgradeButton({
       const payload = await response.json().catch(() => null)
 
       if (!response.ok || !payload?.url) {
-        throw new Error(payload?.error ?? 'Could not start checkout.')
+        throw new Error(payload?.error ?? 'Не получилось начать оплату.')
       }
 
       window.location.href = payload.url
     } catch (thrown) {
-      setError(thrown instanceof Error ? thrown.message : 'Could not start checkout.')
+      setError(thrown instanceof Error ? thrown.message : 'Не получилось начать оплату.')
       setBusy(false)
     }
   }
@@ -56,7 +56,7 @@ export function UpgradeButton({
         onClick={() => void start()}
         disabled={busy || disabled}
       >
-        {busy ? 'Opening Stripe…' : label}
+        {busy ? 'Открываем Stripe…' : label}
       </Button>
 
       {error ? <p className="text-sm text-destructive">{error}</p> : null}
@@ -77,12 +77,12 @@ export function ManageBillingButton() {
       const payload = await response.json().catch(() => null)
 
       if (!response.ok || !payload?.url) {
-        throw new Error(payload?.error ?? 'Could not open the billing portal.')
+        throw new Error(payload?.error ?? 'Не получилось открыть портал оплаты.')
       }
 
       window.location.href = payload.url
     } catch (thrown) {
-      setError(thrown instanceof Error ? thrown.message : 'Could not open the billing portal.')
+      setError(thrown instanceof Error ? thrown.message : 'Не получилось открыть портал оплаты.')
       setBusy(false)
     }
   }
@@ -90,7 +90,7 @@ export function ManageBillingButton() {
   return (
     <div className="space-y-2">
       <Button variant="outline" onClick={() => void open()} disabled={busy}>
-        {busy ? 'Opening…' : 'Manage billing'}
+        {busy ? 'Открываем…' : 'Управлять подпиской'}
       </Button>
 
       {error ? <p className="text-sm text-destructive">{error}</p> : null}

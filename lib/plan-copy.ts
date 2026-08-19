@@ -12,19 +12,20 @@ import { APP_NAME } from './brand'
 import type { Limit, Plan, PlanId } from './plans'
 
 /**
- * The landing page exists in English and Russian; the dashboard is English
- * only, so every function defaults to 'en' and no dashboard call site changes.
+ * The landing page exists in English and Russian; the dashboard is Russian
+ * only, so every function defaults to 'ru' and dashboard call sites pass no
+ * locale. The English forms exist for the English landing alone.
  */
 export type CopyLocale = 'en' | 'ru'
 
 /** Formats a whole-dollar price. All plans are priced in whole dollars. */
-export function formatPrice(cents: number, locale: CopyLocale = 'en'): string {
+export function formatPrice(cents: number, locale: CopyLocale = 'ru'): string {
   if (cents === 0) return locale === 'ru' ? 'Бесплатно' : 'Free'
   return `$${(cents / 100).toLocaleString(NUMBER_LOCALE[locale], { maximumFractionDigits: 0 })}`
 }
 
 /** Renders a limit, spelling out the uncapped case. */
-export function formatLimit(limit: Limit, locale: CopyLocale = 'en'): string {
+export function formatLimit(limit: Limit, locale: CopyLocale = 'ru'): string {
   if (limit === null) return locale === 'ru' ? 'Без ограничений' : 'Unlimited'
   return limit.toLocaleString(NUMBER_LOCALE[locale])
 }
@@ -78,8 +79,8 @@ export const FEATURED_PLAN_ID: PlanId = 'pro'
  */
 export function botAllowanceMessage(plan: Plan): string {
   return plan.limits.bots === 1
-    ? `The ${plan.name} plan includes one bot.`
-    : `The ${plan.name} plan includes ${plan.limits.bots} bots.`
+    ? `В тариф ${plan.name} входит один бот.`
+    : `В тариф ${plan.name} входит ${pluralizeRu(plan.limits.bots, ['бот', 'бота', 'ботов'])}.`
 }
 
 /**
@@ -88,7 +89,7 @@ export function botAllowanceMessage(plan: Plan): string {
  * Order matters: capacity first, because that is what a buyer compares, then
  * the qualitative differences that justify moving up a tier.
  */
-export function planHighlights(plan: Plan, locale: CopyLocale = 'en'): string[] {
+export function planHighlights(plan: Plan, locale: CopyLocale = 'ru'): string[] {
   if (locale === 'ru') return planHighlightsRu(plan)
 
   const { limits, features } = plan

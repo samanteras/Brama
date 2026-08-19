@@ -9,12 +9,12 @@ import { SiteImportButton } from './site-import-button'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { ingestFailureMessage } from '@/lib/ingest-copy'
-import { formatLimit } from '@/lib/plan-copy'
+import { formatLimit, pluralizeRu } from '@/lib/plan-copy'
 import { getPlan, isWithinLimit, toPlanId } from '@/lib/plans'
 import { createClient } from '@/lib/supabase/server'
 
 export const metadata: Metadata = {
-  title: 'Knowledge',
+  title: 'База знаний',
 }
 
 export default async function BotKnowledgePage(props: PageProps<'/dashboard/bots/[botId]'>) {
@@ -52,9 +52,9 @@ export default async function BotKnowledgePage(props: PageProps<'/dashboard/bots
     <div className="space-y-8">
       <Card className="p-6">
         <div className="mb-4 flex flex-wrap items-baseline justify-between gap-2">
-          <h2 className="font-semibold">Add to the knowledge base</h2>
+          <h2 className="font-semibold">Пополнить базу знаний</h2>
           <p className="text-sm text-muted-foreground">
-            {documentCount} of {formatLimit(plan.limits.documentsPerBot)} documents
+            {documentCount} из {formatLimit(plan.limits.documentsPerBot)} документов
           </p>
         </div>
 
@@ -63,8 +63,8 @@ export default async function BotKnowledgePage(props: PageProps<'/dashboard/bots
             <DocumentUploader botId={botId} />
           ) : (
             <p className="text-sm text-muted-foreground">
-              The {plan.name} plan allows {formatLimit(plan.limits.documentsPerBot)} documents per
-              bot. Remove one, or upgrade to add more.
+              Тариф {plan.name} позволяет {formatLimit(plan.limits.documentsPerBot)} документов на
+              бота. Удалите один или перейдите на тариф выше.
             </p>
           )}
 
@@ -76,10 +76,10 @@ export default async function BotKnowledgePage(props: PageProps<'/dashboard/bots
 
       {documentCount === 0 ? (
         <Card className="items-center p-12 text-center">
-          <h2 className="text-lg font-semibold">Nothing to answer from yet</h2>
+          <h2 className="text-lg font-semibold">Боту пока не из чего отвечать</h2>
           <p className="mt-2 max-w-md text-muted-foreground text-pretty">
-            Until you add a document, the bot will say it does not know — which is the correct
-            behaviour, but not a useful one.
+            Пока вы не добавите документ, бот будет говорить, что не знает ответа — поведение
+            правильное, но пользы от него мало.
           </p>
         </Card>
       ) : (
@@ -100,8 +100,10 @@ export default async function BotKnowledgePage(props: PageProps<'/dashboard/bots
                         indexed={document.indexed_chunks}
                         total={document.total_chunks}
                       />
-                      {document.page_count ? <span>{document.page_count} pages</span> : null}
-                      <span>{document.total_chunks} passages</span>
+                      {document.page_count ? (
+                        <span>{pluralizeRu(document.page_count, ['страница', 'страницы', 'страниц'])}</span>
+                      ) : null}
+                      <span>{pluralizeRu(document.total_chunks, ['фрагмент', 'фрагмента', 'фрагментов'])}</span>
                     </div>
 
                     {document.status === 'failed' ? (
@@ -124,7 +126,7 @@ export default async function BotKnowledgePage(props: PageProps<'/dashboard/bots
                       <input type="hidden" name="documentId" value={document.id} />
                       <input type="hidden" name="botId" value={botId} />
                       <Button type="submit" variant="ghost" size="sm">
-                        Remove
+                        Удалить
                       </Button>
                     </form>
                   </div>
@@ -151,7 +153,7 @@ function DocumentStatus({
     return (
       <span className="flex items-center gap-1.5 text-foreground">
         <CheckCircle2 className="size-4 text-primary" aria-hidden />
-        Ready
+        Готов
       </span>
     )
   }
@@ -160,7 +162,7 @@ function DocumentStatus({
     return (
       <span className="flex items-center gap-1.5 text-destructive">
         <AlertTriangle className="size-4" aria-hidden />
-        Failed
+        Ошибка
       </span>
     )
   }
@@ -169,7 +171,7 @@ function DocumentStatus({
   // at "12 of 210" tells the owner something actionable.
   return (
     <span>
-      Indexing {indexed.toLocaleString('en-US')} of {total.toLocaleString('en-US')}
+      Индексация: {indexed.toLocaleString('ru-RU')} из {total.toLocaleString('ru-RU')}
     </span>
   )
 }

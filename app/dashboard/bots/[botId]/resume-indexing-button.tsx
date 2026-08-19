@@ -37,7 +37,7 @@ export function ResumeIndexingButton({
       await runIndexing(documentId, { onProgress: setProgress })
       router.refresh()
     } catch (thrown) {
-      setError(thrown instanceof Error ? thrown.message : 'Could not finish indexing.')
+      setError(thrown instanceof Error ? thrown.message : 'Не получилось доиндексировать.')
     } finally {
       setRunning(false)
     }
@@ -48,8 +48,8 @@ export function ResumeIndexingButton({
       <Button size="sm" variant="outline" onClick={() => void resume()} disabled={running}>
         {running ? <Loader2 className="animate-spin" /> : <RotateCw />}
         {running
-          ? `${progress.indexed.toLocaleString('en-US')} of ${progress.total.toLocaleString('en-US')}`
-          : 'Continue indexing'}
+          ? `${progress.indexed.toLocaleString('ru-RU')} из ${progress.total.toLocaleString('ru-RU')}`
+          : 'Продолжить индексацию'}
       </Button>
 
       {error ? <p className="text-xs text-destructive">{error}</p> : null}

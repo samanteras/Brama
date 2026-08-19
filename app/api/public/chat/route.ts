@@ -57,7 +57,7 @@ export async function POST(request: NextRequest) {
   const parsed = bodySchema.safeParse(await request.json().catch(() => null))
 
   if (!parsed.success) {
-    return NextResponse.json({ error: 'Malformed request.' }, { status: 400, headers })
+    return NextResponse.json({ error: 'Некорректный запрос.' }, { status: 400, headers })
   }
 
   const admin = createAdminClient()
@@ -69,7 +69,7 @@ export async function POST(request: NextRequest) {
     .maybeSingle()
 
   if (!bot || !bot.is_active) {
-    return NextResponse.json({ error: 'This assistant is unavailable.' }, { status: 404, headers })
+    return NextResponse.json({ error: 'Ассистент сейчас недоступен.' }, { status: 404, headers })
   }
 
   const verdict = checkOrigin(
@@ -81,7 +81,7 @@ export async function POST(request: NextRequest) {
     // Deliberately vague to the caller: naming the allowed domains would tell
     // whoever copied the snippet exactly what to spoof.
     return NextResponse.json(
-      { error: 'This assistant is not available on this site.' },
+      { error: 'Ассистент недоступен на этом сайте.' },
       { status: 403, headers },
     )
   }
@@ -99,7 +99,7 @@ export async function POST(request: NextRequest) {
 
   if (limit?.[0] && !limit[0].allowed) {
     return NextResponse.json(
-      { error: 'Too many messages. Please wait a moment.' },
+      { error: 'Слишком много сообщений. Подождите немного.' },
       { status: 429, headers },
     )
   }

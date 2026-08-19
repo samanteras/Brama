@@ -5,7 +5,7 @@ import { Card } from '@/components/ui/card'
 import { createClient } from '@/lib/supabase/server'
 
 export const metadata: Metadata = {
-  title: 'Gaps',
+  title: 'Пробелы',
 }
 
 /**
@@ -31,18 +31,18 @@ export default async function GapsPage(props: PageProps<'/dashboard/bots/[botId]
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="font-semibold">What people asked that it could not answer</h2>
+        <h2 className="font-semibold">Что спрашивали, а бот не смог ответить</h2>
         <p className="mt-1 max-w-2xl text-sm text-muted-foreground text-pretty">
-          Each of these is a paragraph missing from your documents. Add it, and the same question
-          becomes an answer instead of a callback.
+          Каждая строка здесь — абзац, которого не хватает в ваших документах. Добавьте его — и
+          тот же вопрос в следующий раз станет ответом, а не просьбой перезвонить.
         </p>
       </div>
 
       {questions.length === 0 ? (
         <Card className="items-center p-12 text-center">
-          <h3 className="text-lg font-semibold">Nothing unanswered</h3>
+          <h3 className="text-lg font-semibold">Без пробелов</h3>
           <p className="mt-2 max-w-md text-muted-foreground text-pretty">
-            Either your documents cover what people are asking, or nobody has asked yet.
+            Либо документы покрывают всё, что спрашивают, либо пока никто не спрашивал.
           </p>
         </Card>
       ) : (
@@ -52,7 +52,7 @@ export default async function GapsPage(props: PageProps<'/dashboard/bots/[botId]
               <Card className="gap-0 p-5">
                 <p className="text-pretty">&ldquo;{gap.question}&rdquo;</p>
                 <p className="mt-2 text-sm text-muted-foreground">
-                  {new Date(gap.asked_at).toLocaleString('en-GB', {
+                  {new Date(gap.asked_at).toLocaleString('ru-RU', {
                     day: 'numeric',
                     month: 'short',
                     hour: '2-digit',

@@ -21,18 +21,18 @@ type FailureCode =
 
 const MESSAGES: Record<FailureCode, string> = {
   'scanned-pdf':
-    'This PDF has no text in it — it looks like a scan or photos of pages. Export it as a text PDF, or paste the text in directly.',
+    'В этом PDF нет текста — похоже, это скан или фотографии страниц. Экспортируйте его как текстовый PDF или вставьте текст напрямую.',
   'unreadable-pdf':
-    'This file could not be opened. If it is password-protected, remove the password and try again.',
-  'empty-document': 'There was no text to read in this document.',
-  'too-many-pages': 'This document is longer than your plan allows. Split it, or upgrade.',
+    'Файл не удалось открыть. Если он защищён паролем, снимите пароль и попробуйте ещё раз.',
+  'empty-document': 'В этом документе не нашлось текста.',
+  'too-many-pages': 'Документ длиннее, чем позволяет ваш тариф. Разделите его или перейдите на тариф выше.',
   'duplicate-document':
-    'This document is already in the knowledge base. Delete the old copy first if you meant to replace it.',
-  'chunk-write-failed': 'Something went wrong while saving the text. Try uploading it again.',
+    'Этот документ уже есть в базе знаний. Если хотите заменить его — сначала удалите старую копию.',
+  'chunk-write-failed': 'Не получилось сохранить текст. Попробуйте загрузить ещё раз.',
   'site-unreachable':
-    'No readable pages were found on this site. Check that it is online and try again.',
-  'site-unchanged': 'The site has not changed since the last import, so nothing was replaced.',
-  unknown: 'Something went wrong. Try uploading it again.',
+    'На сайте не нашлось читаемых страниц. Проверьте, что он открывается, и попробуйте ещё раз.',
+  'site-unchanged': 'Сайт не изменился с прошлого импорта, поэтому ничего не заменяли.',
+  unknown: 'Что-то пошло не так. Попробуйте загрузить ещё раз.',
 }
 
 export function ingestFailureMessage(code: string | null | undefined): string {
@@ -47,5 +47,5 @@ export function ingestFailureMessage(code: string | null | undefined): string {
 export function pageLimitMessage(pageCount?: number, maxPages?: number): string {
   if (pageCount === undefined || maxPages === undefined) return MESSAGES['too-many-pages']
 
-  return `This document is ${pageCount.toLocaleString('en-US')} pages, and your plan allows ${maxPages.toLocaleString('en-US')}. Split it, or upgrade.`
+  return `В документе ${pageCount.toLocaleString('ru-RU')} страниц, а тариф позволяет ${maxPages.toLocaleString('ru-RU')}. Разделите его или перейдите на тариф выше.`
 }

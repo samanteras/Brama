@@ -220,16 +220,18 @@ describe('trimHistory', () => {
 
 describe('QUOTA_EXHAUSTED_REPLY', () => {
   it('still offers to take the visitor details', () => {
-    expect(QUOTA_EXHAUSTED_REPLY).toMatch(/phone number/i)
+    expect(QUOTA_EXHAUSTED_REPLY).toMatch(/телефон/i)
   })
 
-  it.each(['plan', 'quota', 'limit', 'billing', 'upgrade', 'subscription', 'paid'])(
-    'never mentions %s to the visitor',
-    (word) => {
-      // The visitor is our customer's customer. Telling them their builder has
-      // not paid for a subscription damages the relationship this product
-      // exists to protect.
-      expect(QUOTA_EXHAUSTED_REPLY.toLowerCase()).not.toContain(word)
-    },
-  )
+  it.each([
+    // Both languages checked: the reply is Russian today, but a leaked English
+    // word would be exactly the kind of edit this test exists to catch.
+    'plan', 'quota', 'limit', 'billing', 'upgrade', 'subscription', 'paid',
+    'тариф', 'квота', 'лимит', 'оплат', 'подписк',
+  ])('never mentions %s to the visitor', (word) => {
+    // The visitor is our customer's customer. Telling them their builder has
+    // not paid for a subscription damages the relationship this product
+    // exists to protect.
+    expect(QUOTA_EXHAUSTED_REPLY.toLowerCase()).not.toContain(word)
+  })
 })

@@ -41,19 +41,19 @@ export async function POST(request: NextRequest) {
   } = await supabase.auth.getUser()
 
   if (!user) {
-    return NextResponse.json({ error: 'Not signed in.' }, { status: 401 })
+    return NextResponse.json({ error: 'Вы не вошли в аккаунт.' }, { status: 401 })
   }
 
   const parsedBody = bodySchema.safeParse(await request.json().catch(() => null))
 
   if (!parsedBody.success) {
-    return NextResponse.json({ error: 'Malformed request.' }, { status: 400 })
+    return NextResponse.json({ error: 'Некорректный запрос.' }, { status: 400 })
   }
 
   const domain = normalizeDomain(parsedBody.data.domain)
 
   if (domain === null || domain.startsWith('*.')) {
-    return NextResponse.json({ error: 'Malformed request.' }, { status: 400 })
+    return NextResponse.json({ error: 'Некорректный запрос.' }, { status: 400 })
   }
 
   // Reading the bot through the user's own client is the authorization check:
@@ -65,12 +65,12 @@ export async function POST(request: NextRequest) {
     .maybeSingle()
 
   if (!bot) {
-    return NextResponse.json({ error: 'Bot not found.' }, { status: 404 })
+    return NextResponse.json({ error: 'Бот не найден.' }, { status: 404 })
   }
 
   if (!bot.allowed_domains.includes(domain)) {
     return NextResponse.json(
-      { error: 'Add this domain to the bot’s allowed domains first.' },
+      { error: 'Сначала добавьте этот домен в разрешённые домены бота.' },
       { status: 403 },
     )
   }
@@ -101,7 +101,7 @@ export async function POST(request: NextRequest) {
   ) {
     return NextResponse.json(
       {
-        error: `The ${plan.name} plan allows ${plan.limits.documentsPerBot} documents per bot. Remove one or upgrade.`,
+        error: `Тариф ${plan.name} позволяет ${plan.limits.documentsPerBot} документов на бота. Удалите один или перейдите на тариф выше.`,
       },
       { status: 403 },
     )

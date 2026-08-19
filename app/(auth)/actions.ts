@@ -32,13 +32,13 @@ export type AuthState = {
 }
 
 const credentialsSchema = z.object({
-  email: z.email({ error: 'Enter a valid email address.' }),
+  email: z.email({ error: 'Введите настоящий адрес почты.' }),
   password: z
     .string()
-    .min(8, { error: 'Use at least 8 characters.' })
+    .min(8, { error: 'Пароль должен быть не короче 8 символов.' })
     // Supabase rejects anything longer, and a truncated password would fail to
     // sign in later with no obvious reason why.
-    .max(72, { error: 'Passwords are limited to 72 characters.' }),
+    .max(72, { error: 'Пароль не может быть длиннее 72 символов.' }),
 })
 
 export async function signIn(_previous: AuthState, formData: FormData): Promise<AuthState> {
@@ -46,7 +46,7 @@ export async function signIn(_previous: AuthState, formData: FormData): Promise<
   const limit = await checkRateLimit(`signin:${ip}`, SIGN_IN_MAX, SIGN_IN_WINDOW_SECONDS)
 
   if (!limit.allowed) {
-    return { error: 'Too many attempts. Please wait a few minutes and try again.' }
+    return { error: 'Слишком много попыток. Подождите несколько минут и попробуйте снова.' }
   }
 
   const parsed = credentialsSchema.safeParse({
@@ -64,7 +64,7 @@ export async function signIn(_previous: AuthState, formData: FormData): Promise<
   if (error) {
     // Deliberately not distinguishing "no such account" from "wrong password":
     // that difference tells an attacker which addresses are registered.
-    return { error: 'Those details did not match an account.' }
+    return { error: 'Не нашлось аккаунта с такой почтой и паролем.' }
   }
 
   redirect(safeRedirectPath(formData.get('next')))
@@ -79,7 +79,7 @@ export async function signUp(_previous: AuthState, formData: FormData): Promise<
   const limit = await checkRateLimit(`signup:${ip}`, SIGN_UP_MAX, SIGN_UP_WINDOW_SECONDS)
 
   if (!limit.allowed) {
-    return { error: 'Too many accounts created from here. Please try again later.' }
+    return { error: 'Отсюда создано слишком много аккаунтов. Попробуйте позже.' }
   }
 
   const parsed = credentialsSchema.safeParse({
@@ -103,14 +103,22 @@ export async function signUp(_previous: AuthState, formData: FormData): Promise<
   })
 
   if (error) {
-    return { error: error.message }
+    // Supabase reports in English; the two failures a real person can act on
+    // get proper wording, the rest a safe generic.
+    if (error.message.toLowerCase().includes('invalid')) {
+      return { error: 'Эта почта выглядит недоставляемой. Проверьте адрес.' }
+    }
+    if (error.message.toLowerCase().includes('registered')) {
+      return { error: 'Такой аккаунт уже есть — попробуйте войти.' }
+    }
+    return { error: 'Не получилось создать аккаунт. Попробуйте ещё раз.' }
   }
 
   // With email confirmation switched on, Supabase creates the user but no
   // session. Redirecting would bounce them straight back to sign-in with no
   // explanation, so say what happened instead.
   if (!data.session) {
-    return { notice: 'Check your inbox to confirm your address, then sign in.' }
+    return { notice: 'Проверьте почту и подтвердите адрес по ссылке из письма, затем войдите.' }
   }
 
   redirect('/dashboard')

@@ -27,13 +27,13 @@ export async function POST(request: NextRequest) {
   } = await supabase.auth.getUser()
 
   if (!user) {
-    return NextResponse.json({ error: 'Not signed in.' }, { status: 401 })
+    return NextResponse.json({ error: 'Вы не вошли в аккаунт.' }, { status: 401 })
   }
 
   const parsedBody = bodySchema.safeParse(await request.json().catch(() => null))
 
   if (!parsedBody.success) {
-    return NextResponse.json({ error: 'Malformed request.' }, { status: 400 })
+    return NextResponse.json({ error: 'Некорректный запрос.' }, { status: 400 })
   }
 
   // Authorization: read the document through the user's own client, where row
@@ -47,7 +47,7 @@ export async function POST(request: NextRequest) {
     .maybeSingle()
 
   if (!document) {
-    return NextResponse.json({ error: 'Document not found.' }, { status: 404 })
+    return NextResponse.json({ error: 'Документ не найден.' }, { status: 404 })
   }
 
   const admin = createAdminClient()
@@ -61,7 +61,7 @@ export async function POST(request: NextRequest) {
     .limit(EMBEDDING_BATCH_SIZE)
 
   if (pendingError) {
-    return NextResponse.json({ error: 'Could not read the document.' }, { status: 500 })
+    return NextResponse.json({ error: 'Не получилось прочитать документ.' }, { status: 500 })
   }
 
   if (pending.length === 0) {
@@ -99,7 +99,7 @@ export async function POST(request: NextRequest) {
 
   const failed = writes.find((write) => write.error)
   if (failed) {
-    return NextResponse.json({ error: 'Could not store embeddings.', retryable: true }, { status: 500 })
+    return NextResponse.json({ error: 'Не получилось сохранить индекс.', retryable: true }, { status: 500 })
   }
 
   const { count: remaining } = await admin

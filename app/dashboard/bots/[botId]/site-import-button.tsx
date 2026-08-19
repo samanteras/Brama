@@ -9,6 +9,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
 import { runIndexing } from '@/lib/client/indexing'
 import { ingestFailureMessage } from '@/lib/ingest-copy'
+import { pluralizeRu } from '@/lib/plan-copy'
 
 type Stage = { name: 'idle' } | { name: 'crawling' } | { name: 'indexing'; indexed: number; total: number }
 
@@ -27,7 +28,17 @@ export function SiteImportButton({ botId, domains }: { botId: string; domains: s
   const [error, setError] = useState<string | null>(null)
   const [done, setDone] = useState<string | null>(null)
 
-  if (domains.length === 0) return null
+  // Explained rather than hidden: a bot whose only domain is localhost is a
+  // perfectly normal first step, and a button that silently never appears
+  // reads as a missing feature, not a waiting one.
+  if (domains.length === 0) {
+    return (
+      <p className="text-sm text-muted-foreground text-pretty">
+        Кнопка «Импортировать с сайта» появится, когда в настройках бота будет указан настоящий
+        домен — localhost импортировать нечего.
+      </p>
+    )
+  }
 
   const busy = stage.name !== 'idle'
 
@@ -61,12 +72,12 @@ export function SiteImportButton({ botId, domains }: { botId: string; domains: s
       })
 
       setDone(
-        `Imported ${payload.pagesCrawled} ${payload.pagesCrawled === 1 ? 'page' : 'pages'} from ${domain}.` +
-          (payload.replaced ? ' The previous import was replaced.' : ''),
+        `Импортировано: ${pluralizeRu(payload.pagesCrawled, ['страница', 'страницы', 'страниц'])} с ${domain}.` +
+          (payload.replaced ? ' Прошлый импорт заменён.' : ''),
       )
       router.refresh()
     } catch (thrown) {
-      setError(thrown instanceof Error ? thrown.message : 'Something went wrong.')
+      setError(thrown instanceof Error ? thrown.message : 'Что-то пошло не так.')
     } finally {
       setStage({ name: 'idle' })
     }
@@ -77,7 +88,7 @@ export function SiteImportButton({ botId, domains }: { botId: string; domains: s
       <div className="flex flex-wrap items-center gap-3">
         <Button variant="outline" onClick={() => void handleImport()} disabled={busy}>
           <Globe />
-          Import from your site
+          Импортировать с сайта
         </Button>
 
         {domains.length > 1 ? (
@@ -85,7 +96,7 @@ export function SiteImportButton({ botId, domains }: { botId: string; domains: s
             value={domain}
             onChange={(event) => setDomain(event.target.value)}
             disabled={busy}
-            aria-label="Site to import"
+            aria-label="Какой сайт импортировать"
             className="h-9 rounded-md border border-input bg-transparent px-3 text-sm shadow-xs"
           >
             {domains.map((option) => (
@@ -100,12 +111,12 @@ export function SiteImportButton({ botId, domains }: { botId: string; domains: s
       </div>
 
       {stage.name === 'crawling' ? (
-        <IngestProgress label={`Reading ${domain}…`} percent={null} />
+        <IngestProgress label={`Читаем ${domain}…`} percent={null} />
       ) : null}
 
       {stage.name === 'indexing' ? (
         <IngestProgress
-          label={`Indexing ${stage.indexed.toLocaleString('en-US')} of ${stage.total.toLocaleString('en-US')} passages…`}
+          label={`Индексация: ${stage.indexed.toLocaleString('ru-RU')} из ${stage.total.toLocaleString('ru-RU')} фрагментов…`}
           percent={stage.total > 0 ? Math.round((stage.indexed / stage.total) * 100) : null}
         />
       ) : null}
