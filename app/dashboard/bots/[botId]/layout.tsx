@@ -24,7 +24,7 @@ export default async function BotLayout(props: LayoutProps<'/dashboard/bots/[bot
           className="inline-flex items-center gap-1 text-sm text-muted-foreground transition-colors hover:text-foreground"
         >
           <ChevronLeft className="size-4" />
-          All bots
+          Все боты
         </Link>
 
         <h1 className="mt-3 text-2xl font-semibold tracking-tight">{bot.name}</h1>

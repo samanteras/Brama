@@ -28,13 +28,13 @@ export async function POST(request: NextRequest) {
   } = await supabase.auth.getUser()
 
   if (!user) {
-    return NextResponse.json({ error: 'Not signed in.' }, { status: 401 })
+    return NextResponse.json({ error: 'Вы не вошли в аккаунт.' }, { status: 401 })
   }
 
   const parsed = bodySchema.safeParse(await request.json().catch(() => null))
 
   if (!parsed.success) {
-    return NextResponse.json({ error: 'Malformed request.' }, { status: 400 })
+    return NextResponse.json({ error: 'Некорректный запрос.' }, { status: 400 })
   }
 
   // Reading through the user's own client is the authorization check: row level
@@ -46,7 +46,7 @@ export async function POST(request: NextRequest) {
     .maybeSingle()
 
   if (!bot) {
-    return NextResponse.json({ error: 'Bot not found.' }, { status: 404 })
+    return NextResponse.json({ error: 'Бот не найден.' }, { status: 404 })
   }
 
   return serveChat({

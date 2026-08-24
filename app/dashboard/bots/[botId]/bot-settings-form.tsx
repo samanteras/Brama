@@ -26,28 +26,28 @@ export function BotSettingsForm({ bot }: { bot: Bot }) {
       <input type="hidden" name="botId" value={bot.id} />
 
       <div className="space-y-2">
-        <Label htmlFor="name">Name</Label>
+        <Label htmlFor="name">Имя</Label>
         <Input id="name" name="name" defaultValue={bot.name} required maxLength={60} />
-        <p className="text-sm text-muted-foreground">Shown at the top of the chat window.</p>
+        <p className="text-sm text-muted-foreground">Показывается в шапке окна чата.</p>
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="greeting">First message</Label>
+        <Label htmlFor="greeting">Первое сообщение</Label>
         <Textarea
           id="greeting"
           name="greeting"
           defaultValue={bot.greeting}
           maxLength={300}
           rows={3}
-          placeholder="Hi — ask me anything about our prices, timelines or terms."
+          placeholder="Здравствуйте! Спросите про цены, сроки или условия."
         />
         <p className="text-sm text-muted-foreground">
-          What visitors see before they type. Leave empty to open with a blank chat.
+          Что посетитель видит до того, как напишет. Оставьте пустым — чат откроется чистым.
         </p>
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="accentColor">Accent colour</Label>
+        <Label htmlFor="accentColor">Фирменный цвет</Label>
         <Input
           id="accentColor"
           name="accentColor"
@@ -56,24 +56,24 @@ export function BotSettingsForm({ bot }: { bot: Bot }) {
           className="h-10 w-16 p-1"
         />
         <p className="text-sm text-muted-foreground">
-          Used for the chat button and the visitor&apos;s own messages.
+          Используется для кнопки чата и сообщений посетителя.
         </p>
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="allowedDomains">Allowed domains</Label>
+        <Label htmlFor="allowedDomains">Разрешённые домены</Label>
         <Textarea
           id="allowedDomains"
           name="allowedDomains"
           defaultValue={bot.allowed_domains.join('\n')}
           rows={3}
-          placeholder={`yourcompany.com
-shop.yourcompany.com`}
+          placeholder={`vashakompania.ru
+shop.vashakompania.ru`}
           required
         />
         <p className="text-sm text-muted-foreground">
-          One per line. The widget refuses to run anywhere else, so at least one is required. Your{' '}
-          <code className="text-xs">www</code> subdomain is always included.
+          По одному на строку. Где-либо ещё виджет работать откажется, поэтому нужен хотя бы один.
+          Поддомен <code className="text-xs">www</code> учитывается автоматически.
         </p>
       </div>
 
@@ -85,7 +85,10 @@ shop.yourcompany.com`}
 
       {state.saved ? (
         <Alert>
-          <AlertDescription>Saved.</AlertDescription>
+          <AlertDescription>
+            Сохранено. Чтобы бот знал, что написано на сайте, нажмите «Импортировать с сайта» на
+            вкладке «База знаний».
+          </AlertDescription>
         </Alert>
       ) : null}
 
@@ -99,7 +102,7 @@ function SaveButton() {
 
   return (
     <Button type="submit" disabled={pending}>
-      {pending ? 'Saving…' : 'Save changes'}
+      {pending ? 'Сохраняем…' : 'Сохранить'}
     </Button>
   )
 }

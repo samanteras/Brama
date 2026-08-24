@@ -4,12 +4,12 @@ import { FileText, MessageSquare } from 'lucide-react'
 
 import { CreateBotDialog } from './create-bot-dialog'
 import { Card } from '@/components/ui/card'
-import { botAllowanceMessage, formatLimit } from '@/lib/plan-copy'
+import { botAllowanceMessage, formatLimit, pluralizeRu } from '@/lib/plan-copy'
 import { getPlan, isWithinLimit, remainingOf, toPlanId } from '@/lib/plans'
 import { createClient } from '@/lib/supabase/server'
 
 export const metadata: Metadata = {
-  title: 'Your bots',
+  title: 'Ваши боты',
 }
 
 /** Calendar month key matching the `usage.period` column. */
@@ -41,9 +41,9 @@ export default async function DashboardPage() {
     <div className="space-y-8">
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-semibold tracking-tight">Your bots</h1>
+          <h1 className="text-2xl font-semibold tracking-tight">Ваши боты</h1>
           <p className="mt-1 text-muted-foreground">
-            Upload what you already have, then put the widget on your site.
+            Загрузите то, что у вас уже есть, и поставьте виджет на сайт.
           </p>
         </div>
 
@@ -54,7 +54,7 @@ export default async function DashboardPage() {
                 with no visible reason reads as a broken one. */}
             {!canCreate ? (
               <p className="text-sm text-muted-foreground">
-                {limitMessage} Delete one to make room.
+                {limitMessage} Удалите одного, чтобы освободить место.
               </p>
             ) : null}
           </div>
@@ -82,11 +82,11 @@ export default async function DashboardPage() {
                   <div className="mt-3 flex gap-5 text-sm text-muted-foreground">
                     <span className="flex items-center gap-1.5">
                       <FileText className="size-4" aria-hidden />
-                      {bot.documents?.[0]?.count ?? 0} documents
+                      {pluralizeRu(bot.documents?.[0]?.count ?? 0, ['документ', 'документа', 'документов'])}
                     </span>
                     <span className="flex items-center gap-1.5">
                       <MessageSquare className="size-4" aria-hidden />
-                      {bot.conversations?.[0]?.count ?? 0} conversations
+                      {pluralizeRu(bot.conversations?.[0]?.count ?? 0, ['диалог', 'диалога', 'диалогов'])}
                     </span>
                   </div>
                 </Card>
@@ -119,26 +119,26 @@ function UsageSummary({
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div className="flex flex-wrap gap-8">
           <div>
-            <p className="text-sm text-muted-foreground">Plan</p>
+            <p className="text-sm text-muted-foreground">Тариф</p>
             <p className="mt-0.5 font-semibold">{planName}</p>
           </div>
           <div>
-            <p className="text-sm text-muted-foreground">Bots</p>
+            <p className="text-sm text-muted-foreground">Боты</p>
             <p className="mt-0.5 font-semibold">
-              {botCount} of {formatLimit(botLimit)}
+              {botCount} из {formatLimit(botLimit)}
             </p>
           </div>
           <div>
-            <p className="text-sm text-muted-foreground">Answers this month</p>
+            <p className="text-sm text-muted-foreground">Ответы в этом месяце</p>
             <p className="mt-0.5 font-semibold">
-              {answersUsed.toLocaleString('en-US')} of {formatLimit(answersLimit)}
+              {answersUsed.toLocaleString('ru-RU')} из {formatLimit(answersLimit)}
             </p>
           </div>
         </div>
 
         {answersLeft === 0 ? (
           <p className="text-sm font-medium text-destructive">
-            Out of answers — visitors can still leave their details.
+            Ответы закончились — посетители всё ещё могут оставить контакты.
           </p>
         ) : null}
       </div>
@@ -149,10 +149,10 @@ function UsageSummary({
 function EmptyState({ canCreate, limitMessage }: { canCreate: boolean; limitMessage: string }) {
   return (
     <Card className="items-center gap-0 p-12 text-center">
-      <h2 className="text-lg font-semibold">Create your first bot</h2>
+      <h2 className="text-lg font-semibold">Создайте первого бота</h2>
       <p className="mt-2 max-w-md text-muted-foreground text-pretty">
-        Give it your price list and terms, then paste one line into your site. It takes about ten
-        minutes.
+        Дайте ему свой прайс и условия, затем вставьте одну строку на сайт. Всё занимает около
+        десяти минут.
       </p>
       <div className="mt-6">
         <CreateBotDialog canCreate={canCreate} limitMessage={limitMessage} />

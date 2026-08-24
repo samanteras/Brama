@@ -34,7 +34,7 @@ export function CreateBotDialog({ canCreate, limitMessage, variant = 'default' }
     return (
       <Button variant="outline" disabled title={limitMessage}>
         <Plus />
-        New bot
+        Новый бот
       </Button>
     )
   }
@@ -44,40 +44,42 @@ export function CreateBotDialog({ canCreate, limitMessage, variant = 'default' }
       <DialogTrigger asChild>
         <Button variant={variant}>
           <Plus />
-          New bot
+          Новый бот
         </Button>
       </DialogTrigger>
 
-      <DialogContent>
+      {/* The dialog mounts in a portal on <body>, outside the dashboard's
+          `dark` wrapper — without its own `dark` it would pop up white. */}
+      <DialogContent className="dark text-foreground">
         <form action={formAction}>
           <DialogHeader>
-            <DialogTitle>Name your bot</DialogTitle>
+            <DialogTitle>Назовите бота</DialogTitle>
             <DialogDescription>
-              Usually your company name — visitors see it at the top of the chat.
+              Обычно это название компании — посетители видят его в шапке чата.
             </DialogDescription>
           </DialogHeader>
 
           <div className="space-y-5 py-6">
             <div className="space-y-2">
-              <Label htmlFor="name">Name</Label>
+              <Label htmlFor="name">Имя</Label>
               <Input
                 id="name"
                 name="name"
                 required
                 maxLength={60}
-                placeholder="Skyline Renovations"
+                placeholder="СтройПрофи"
                 autoFocus
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="domain">Your website</Label>
-              <Input id="domain" name="domain" required placeholder="yourcompany.com" />
+              <Label htmlFor="domain">Ваш сайт</Label>
+              <Input id="domain" name="domain" required placeholder="vashakompania.ru" />
               {/* Asked for up front because the widget will not run anywhere
                   else. Leaving it for later means installing the snippet and
                   seeing nothing happen, with no clue why. */}
               <p className="text-sm text-muted-foreground">
-                The widget only works on this domain. You can add more later.
+                Виджет работает только на этом домене. Другие можно добавить позже.
               </p>
             </div>
           </div>
@@ -90,7 +92,7 @@ export function CreateBotDialog({ canCreate, limitMessage, variant = 'default' }
 
           <DialogFooter>
             <Button type="button" variant="ghost" onClick={() => setOpen(false)}>
-              Cancel
+              Отмена
             </Button>
             <SubmitButton />
           </DialogFooter>
@@ -105,7 +107,7 @@ function SubmitButton() {
 
   return (
     <Button type="submit" disabled={pending}>
-      {pending ? 'Creating…' : 'Create bot'}
+      {pending ? 'Создаём…' : 'Создать бота'}
     </Button>
   )
 }

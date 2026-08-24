@@ -18,18 +18,18 @@ export type BotFormState = {
 const nameSchema = z
   .string()
   .trim()
-  .min(1, { error: 'Give the bot a name.' })
-  .max(60, { error: 'Keep the name under 60 characters.' })
+  .min(1, { error: 'Дайте боту имя.' })
+  .max(60, { error: 'Имя должно быть короче 60 символов.' })
 
 const greetingSchema = z
   .string()
   .trim()
-  .max(300, { error: 'Keep the greeting under 300 characters.' })
+  .max(300, { error: 'Приветствие должно быть короче 300 символов.' })
 
 const accentColorSchema = z
   .string()
   .trim()
-  .regex(/^#[0-9a-fA-F]{6}$/, { error: 'Pick a colour in #rrggbb form.' })
+  .regex(/^#[0-9a-fA-F]{6}$/, { error: 'Выберите цвет в формате #rrggbb.' })
 
 async function requireUser() {
   const supabase = await createClient()
@@ -54,7 +54,7 @@ export async function createBot(_previous: BotFormState, formData: FormData): Pr
 
   if (domain === null) {
     return {
-      error: 'Enter the domain your website runs on, for example yourcompany.com.',
+      error: 'Укажите домен, на котором работает ваш сайт, например vashakompania.ru.',
     }
   }
 
@@ -77,7 +77,7 @@ export async function createBot(_previous: BotFormState, formData: FormData): Pr
     // Offers the action available right now first. Pointing only at an upgrade
     // is unhelpful to someone who simply wants to replace a bot they no longer
     // need.
-    return { error: `${botAllowanceMessage(plan)} Delete one to make room, or upgrade.` }
+    return { error: `${botAllowanceMessage(plan)} Удалите одного, чтобы освободить место, или перейдите на тариф выше.` }
   }
 
   const { data, error } = await supabase
@@ -87,7 +87,7 @@ export async function createBot(_previous: BotFormState, formData: FormData): Pr
     .single()
 
   if (error || !data) {
-    return { error: 'Could not create the bot. Try again.' }
+    return { error: 'Не получилось создать бота. Попробуйте ещё раз.' }
   }
 
   revalidatePath('/dashboard')
@@ -113,7 +113,7 @@ function parseDomains(raw: FormDataEntryValue | null): { domains: string[] } | {
     const normalized = normalizeDomain(line)
 
     if (normalized === null) {
-      return { error: `"${line}" is not a domain we can match. Use a form like example.com.` }
+      return { error: `«${line}» не похоже на домен. Используйте форму вида example.com.` }
     }
 
     if (!domains.includes(normalized)) domains.push(normalized)
@@ -124,7 +124,7 @@ function parseDomains(raw: FormDataEntryValue | null): { domains: string[] } | {
 
 export async function updateBot(_previous: BotFormState, formData: FormData): Promise<BotFormState> {
   const botId = String(formData.get('botId') ?? '')
-  if (botId === '') return { error: 'Missing bot.' }
+  if (botId === '') return { error: 'Бот не найден.' }
 
   const name = nameSchema.safeParse(formData.get('name'))
   if (!name.success) return { error: name.error.issues[0].message }
@@ -143,7 +143,7 @@ export async function updateBot(_previous: BotFormState, formData: FormData): Pr
   // do without saying so.
   if (domains.domains.length === 0) {
     return {
-      error: 'Keep at least one domain. Without one the widget cannot run anywhere.',
+      error: 'Оставьте хотя бы один домен. Без него виджету негде работать.',
     }
   }
 
@@ -161,7 +161,7 @@ export async function updateBot(_previous: BotFormState, formData: FormData): Pr
     })
     .eq('id', botId)
 
-  if (error) return { error: 'Could not save your changes. Try again.' }
+  if (error) return { error: 'Не получилось сохранить изменения. Попробуйте ещё раз.' }
 
   revalidatePath(`/dashboard/bots/${botId}`)
   revalidatePath('/dashboard')

@@ -30,7 +30,7 @@ export async function runIndexing(
   let stalledRounds = 0
 
   for (;;) {
-    if (signal?.aborted) throw new Error('Indexing was cancelled.')
+    if (signal?.aborted) throw new Error('Индексация отменена.')
 
     const response = await fetch('/api/ingest/batch', {
       method: 'POST',
@@ -42,7 +42,7 @@ export async function runIndexing(
     const payload = await response.json().catch(() => null)
 
     if (!response.ok) {
-      throw new Error(typeof payload?.error === 'string' ? payload.error : 'Indexing failed.')
+      throw new Error(typeof payload?.error === 'string' ? payload.error : 'Индексация не удалась.')
     }
 
     const progress: IndexingProgress = { indexed: payload.indexed, total: payload.total }
@@ -53,7 +53,7 @@ export async function runIndexing(
     if (progress.indexed === lastIndexed) {
       stalledRounds += 1
       if (stalledRounds >= MAX_STALLED_ROUNDS) {
-        throw new Error('Indexing stopped making progress. Try again.')
+        throw new Error('Индексация перестала продвигаться. Попробуйте ещё раз.')
       }
     } else {
       stalledRounds = 0

@@ -11,7 +11,7 @@ import { createClient } from '@/lib/supabase/server'
 import { buildEmbedSnippet } from '@/lib/widget-contract'
 
 export const metadata: Metadata = {
-  title: 'Bot settings',
+  title: 'Настройки бота',
 }
 
 export default async function BotSettingsPage(
@@ -33,26 +33,26 @@ export default async function BotSettingsPage(
   return (
     <div className="grid gap-8 xl:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] xl:items-start">
       <Card className="min-w-0 p-6">
-        <h2 className="mb-6 font-semibold">Settings</h2>
+        <h2 className="mb-6 font-semibold">Настройки</h2>
         <BotSettingsForm bot={bot} />
       </Card>
 
       <div className="min-w-0 space-y-8">
         <Card className="p-6">
-          <h2 className="mb-4 font-semibold">Add it to your site</h2>
+          <h2 className="mb-4 font-semibold">Поставьте на свой сайт</h2>
           <InstallGuide snippet={snippet} />
         </Card>
 
         <Card className="p-6">
-          <h2 className="font-semibold">Delete this bot</h2>
+          <h2 className="font-semibold">Удалить бота</h2>
           <p className="mt-1 mb-4 text-sm text-muted-foreground text-pretty">
-            Removes its documents, conversations and leads. This cannot be undone.
+            Удалит его документы, диалоги и заявки. Отменить будет нельзя.
           </p>
 
           <form action={deleteBot}>
             <input type="hidden" name="botId" value={bot.id} />
             <Button type="submit" variant="outline" size="sm">
-              Delete bot
+              Удалить бота
             </Button>
           </form>
         </Card>

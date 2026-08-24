@@ -33,7 +33,7 @@ export function LeadCard({ lead, botId }: { lead: Lead; botId: string }) {
     <Card className="gap-0 p-5">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
-          <p className="font-semibold">{lead.name?.trim() || 'No name given'}</p>
+          <p className="font-semibold">{lead.name?.trim() || 'Имя не указано'}</p>
 
           <p className="mt-1 flex items-center gap-2 text-sm">
             {lead.phone ? (
@@ -55,7 +55,7 @@ export function LeadCard({ lead, botId }: { lead: Lead; botId: string }) {
         </div>
 
         <p className="text-sm text-muted-foreground">
-          {new Date(lead.created_at).toLocaleString('en-GB', {
+          {new Date(lead.created_at).toLocaleString('ru-RU', {
             day: 'numeric',
             month: 'short',
             hour: '2-digit',
@@ -67,17 +67,17 @@ export function LeadCard({ lead, botId }: { lead: Lead; botId: string }) {
       {context.summary ? (
         <dl className="mt-4 space-y-2 text-sm">
           <div className="flex gap-3">
-            <dt className="w-28 shrink-0 text-muted-foreground">Wants</dt>
+            <dt className="w-28 shrink-0 text-muted-foreground">Хочет</dt>
             <dd>{context.summary}</dd>
           </div>
 
           {context.unanswered_question ? (
             <div className="flex gap-3">
-              <dt className="w-28 shrink-0 text-muted-foreground">Stalled on</dt>
+              <dt className="w-28 shrink-0 text-muted-foreground">Застрял на</dt>
               <dd className="font-medium">
-                &ldquo;{context.unanswered_question}&rdquo;
+                «{context.unanswered_question}»
                 <span className="ml-2 font-normal text-muted-foreground">
-                  — not in your documents
+                  — этого нет в ваших документах
                 </span>
               </dd>
             </div>
@@ -89,7 +89,7 @@ export function LeadCard({ lead, botId }: { lead: Lead; botId: string }) {
         <details className="group mt-4">
           <summary className="flex cursor-pointer list-none items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground">
             <MessageSquare className="size-4" aria-hidden />
-            Full conversation
+            Вся переписка
           </summary>
 
           <div className="mt-3">

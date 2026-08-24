@@ -37,7 +37,7 @@ export async function Transcript({
     .order('created_at', { ascending: true })
 
   if (!messages || messages.length === 0) {
-    return <p className="text-sm text-muted-foreground">No messages recorded.</p>
+    return <p className="text-sm text-muted-foreground">Сообщений не записано.</p>
   }
 
   return (

@@ -135,4 +135,4 @@ export function trimHistory(
  * costs answers, never leads.
  */
 export const QUOTA_EXHAUSTED_REPLY =
-  "I can't answer right now, but I don't want to leave you waiting — leave your phone number and someone will get back to you."
+  'Сейчас не могу ответить, но не хочу заставлять вас ждать — оставьте номер телефона, и с вами свяжутся.'

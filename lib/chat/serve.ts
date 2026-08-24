@@ -133,7 +133,7 @@ export function serveChat(input: ServeChatInput): Response {
         }
 
         console.error('[chat] failed', error)
-        send({ type: 'error', message: 'Something went wrong. Please try again.' })
+        send({ type: 'error', message: 'Что-то пошло не так. Попробуйте ещё раз.' })
       } finally {
         controller.close()
       }
@@ -190,7 +190,7 @@ async function finishExhausted(
   send({ type: 'token', value: QUOTA_EXHAUSTED_REPLY })
   send({
     type: 'lead-request',
-    lead: { reason: 'asked_for_contact', summary: 'Asked a question while the bot was unavailable.' },
+    lead: { reason: 'asked_for_contact', summary: 'Задал вопрос, пока бот был недоступен.' },
   })
 
   await createAdminClient().from('messages').insert({

@@ -53,7 +53,7 @@ export async function POST(request: NextRequest) {
   const parsed = bodySchema.safeParse(await request.json().catch(() => null))
 
   if (!parsed.success) {
-    return NextResponse.json({ error: 'Malformed request.' }, { status: 400, headers })
+    return NextResponse.json({ error: 'Некорректный запрос.' }, { status: 400, headers })
   }
 
   const admin = createAdminClient()
@@ -65,11 +65,11 @@ export async function POST(request: NextRequest) {
     .maybeSingle()
 
   if (!bot || !bot.is_active) {
-    return NextResponse.json({ error: 'Unavailable.' }, { status: 404, headers })
+    return NextResponse.json({ error: 'Недоступно.' }, { status: 404, headers })
   }
 
   if (!checkOrigin(effectiveOrigin(origin, parsed.data.hostSite, appUrl()), bot.allowed_domains).allowed) {
-    return NextResponse.json({ error: 'Unavailable on this site.' }, { status: 403, headers })
+    return NextResponse.json({ error: 'Недоступно на этом сайте.' }, { status: 403, headers })
   }
 
   const ip =
@@ -84,7 +84,7 @@ export async function POST(request: NextRequest) {
   })
 
   if (limit?.[0] && !limit[0].allowed) {
-    return NextResponse.json({ error: 'Too many attempts.' }, { status: 429, headers })
+    return NextResponse.json({ error: 'Слишком много попыток.' }, { status: 429, headers })
   }
 
   // The conversation must belong to this bot, or a caller could attach their
@@ -118,7 +118,7 @@ export async function POST(request: NextRequest) {
   })
 
   if (error) {
-    return NextResponse.json({ error: 'Could not save that.' }, { status: 500, headers })
+    return NextResponse.json({ error: 'Не получилось сохранить.' }, { status: 500, headers })
   }
 
   return NextResponse.json({ saved: true }, { headers })

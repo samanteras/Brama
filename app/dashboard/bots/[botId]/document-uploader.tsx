@@ -101,7 +101,7 @@ export function DocumentUploader({ botId }: { botId: string }) {
         // Surfaced rather than replaced with a guess. "Check its size" sent me
         // looking at the wrong thing entirely when the real problem was a
         // rejected content type.
-        throw new Error(`Could not upload the file: ${uploadError.message}`)
+        throw new Error(`Не получилось загрузить файл: ${uploadError.message}`)
       }
 
       setStage({ name: 'reading' })
@@ -117,7 +117,7 @@ export function DocumentUploader({ botId }: { botId: string }) {
 
       router.refresh()
     } catch (thrown) {
-      setError(thrown instanceof Error ? thrown.message : 'Something went wrong.')
+      setError(thrown instanceof Error ? thrown.message : 'Что-то пошло не так.')
     } finally {
       setStage({ name: 'idle' })
       if (fileInput.current) fileInput.current.value = ''
@@ -133,7 +133,7 @@ export function DocumentUploader({ botId }: { botId: string }) {
       const { documentId, totalChunks } = await createDocument({
         botId,
         sourceType: 'paste',
-        filename: 'Pasted text',
+        filename: 'Вставленный текст',
         text: pastedText,
       })
 
@@ -143,7 +143,7 @@ export function DocumentUploader({ botId }: { botId: string }) {
       setPasteOpen(false)
       router.refresh()
     } catch (thrown) {
-      setError(thrown instanceof Error ? thrown.message : 'Something went wrong.')
+      setError(thrown instanceof Error ? thrown.message : 'Что-то пошло не так.')
     } finally {
       setStage({ name: 'idle' })
     }
@@ -165,16 +165,16 @@ export function DocumentUploader({ botId }: { botId: string }) {
 
         <Button onClick={() => fileInput.current?.click()} disabled={busy}>
           {busy ? <Loader2 className="animate-spin" /> : <FileUp />}
-          Upload a document
+          Загрузить документ
         </Button>
 
         <Button variant="outline" onClick={() => setPasteOpen((open) => !open)} disabled={busy}>
-          Paste text instead
+          Или вставить текст
         </Button>
       </div>
 
       <p className="text-sm text-muted-foreground">
-        PDF, plain text or Markdown. Your price list, terms, stages of work, warranty.
+        PDF, обычный текст или Markdown. Ваш прайс, условия, этапы работ, гарантия.
       </p>
 
       {pasteOpen ? (
@@ -185,11 +185,11 @@ export function DocumentUploader({ botId }: { botId: string }) {
             rows={8}
             disabled={busy}
             placeholder={
-              'Turnkey renovation from 520 EUR per m2.\n\nIncludes demolition and waste removal. Materials are billed separately at cost.'
+              'Ремонт под ключ от 45 000 ₽ за м².\n\nВ цену входят демонтаж и вывоз мусора. Материалы оплачиваются отдельно по себестоимости.'
             }
           />
           <Button onClick={() => void handlePaste()} disabled={busy || pastedText.trim() === ''}>
-            Add this text
+            Добавить текст
           </Button>
         </div>
       ) : null}
@@ -208,16 +208,21 @@ export function DocumentUploader({ botId }: { botId: string }) {
 function ProgressNote({ stage }: { stage: Exclude<Stage, { name: 'idle' }> }) {
   const label =
     stage.name === 'uploading'
-      ? 'Uploading…'
+      ? 'Загружаем…'
       : stage.name === 'reading'
-        ? 'Reading the document…'
-        : `Indexing ${stage.indexed.toLocaleString('en-US')} of ${stage.total.toLocaleString('en-US')} passages…`
+        ? 'Читаем документ…'
+        : `Индексация: ${stage.indexed.toLocaleString('ru-RU')} из ${stage.total.toLocaleString('ru-RU')} фрагментов…`
 
   const percent =
     stage.name === 'indexing' && stage.total > 0
       ? Math.round((stage.indexed / stage.total) * 100)
       : null
 
+  return <IngestProgress label={label} percent={percent} />
+}
+
+/** Shared between the uploader and the site importer, so progress looks the same. */
+export function IngestProgress({ label, percent }: { label: string; percent: number | null }) {
   return (
     <div className="space-y-2 rounded-lg border bg-muted/40 p-4">
       <p className="flex items-center gap-2 text-sm font-medium">
@@ -232,7 +237,7 @@ function ProgressNote({ stage }: { stage: Exclude<Stage, { name: 'idle' }> }) {
       ) : null}
 
       <p className="text-xs text-muted-foreground">
-        Keep this tab open. If it closes, you can pick up where it stopped.
+        Не закрывайте вкладку. Если закроется — можно продолжить с того же места.
       </p>
     </div>
   )

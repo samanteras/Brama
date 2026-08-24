@@ -17,7 +17,7 @@ import { createClient } from '@/lib/supabase/server'
  */
 
 const bodySchema = z.object({
-  planId: z.string().refine(isPlanId, { error: 'Unknown plan.' }),
+  planId: z.string().refine(isPlanId, { error: 'Неизвестный тариф.' }),
 })
 
 export async function POST(request: NextRequest) {
@@ -28,13 +28,13 @@ export async function POST(request: NextRequest) {
   } = await supabase.auth.getUser()
 
   if (!user) {
-    return NextResponse.json({ error: 'Not signed in.' }, { status: 401 })
+    return NextResponse.json({ error: 'Вы не вошли в аккаунт.' }, { status: 401 })
   }
 
   const parsed = bodySchema.safeParse(await request.json().catch(() => null))
 
   if (!parsed.success) {
-    return NextResponse.json({ error: 'Unknown plan.' }, { status: 400 })
+    return NextResponse.json({ error: 'Неизвестный тариф.' }, { status: 400 })
   }
 
   const planId = parsed.data.planId
@@ -46,7 +46,7 @@ export async function POST(request: NextRequest) {
     // A missing price id would otherwise send the user to a broken Stripe page,
     // which is far harder to diagnose than a loud failure here.
     console.error('[stripe] price id missing', error)
-    return NextResponse.json({ error: 'Billing is not configured.' }, { status: 503 })
+    return NextResponse.json({ error: 'Оплата не настроена.' }, { status: 503 })
   }
 
   const admin = createAdminClient()
@@ -85,7 +85,7 @@ export async function POST(request: NextRequest) {
   })
 
   if (!session.url) {
-    return NextResponse.json({ error: 'Could not start checkout.' }, { status: 502 })
+    return NextResponse.json({ error: 'Не получилось начать оплату.' }, { status: 502 })
   }
 
   return NextResponse.json({ url: session.url })

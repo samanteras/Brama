@@ -5,13 +5,13 @@ import { ManageBillingButton, UpgradeButton } from './plan-actions'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Badge } from '@/components/ui/badge'
 import { Card } from '@/components/ui/card'
-import { formatPrice, PLAN_TAGLINES, planHighlights } from '@/lib/plan-copy'
+import { formatPrice, PLAN_TAGLINES_RU, planHighlights } from '@/lib/plan-copy'
 import { getPlan, PLAN_LIST, toPlanId } from '@/lib/plans'
 import { isBillingConfigured } from '@/lib/stripe/client'
 import { createClient } from '@/lib/supabase/server'
 
 export const metadata: Metadata = {
-  title: 'Billing',
+  title: 'Оплата',
 }
 
 export default async function BillingPage(props: PageProps<'/dashboard/billing'>) {
@@ -29,11 +29,11 @@ export default async function BillingPage(props: PageProps<'/dashboard/billing'>
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-2xl font-semibold tracking-tight">Billing</h1>
+        <h1 className="text-2xl font-semibold tracking-tight">Оплата</h1>
         <p className="mt-1 text-muted-foreground">
-          You are on the {currentPlan.name} plan.
+          Ваш тариф — {currentPlan.name}.
           {profile?.current_period_end
-            ? ` Renews ${new Date(profile.current_period_end).toLocaleDateString('en-GB', {
+            ? ` Продлится ${new Date(profile.current_period_end).toLocaleDateString('ru-RU', {
                 day: 'numeric',
                 month: 'long',
                 year: 'numeric',
@@ -45,23 +45,23 @@ export default async function BillingPage(props: PageProps<'/dashboard/billing'>
       {checkout === 'success' ? (
         <Alert>
           <AlertDescription>
-            Payment received. Your plan updates as soon as Stripe confirms it — usually within a few
-            seconds. Refresh if it still shows the old one.
+            Оплата прошла. Тариф обновится, как только Stripe подтвердит платёж — обычно за
+            несколько секунд. Если всё ещё виден старый, обновите страницу.
           </AlertDescription>
         </Alert>
       ) : null}
 
       {checkout === 'cancelled' ? (
         <Alert>
-          <AlertDescription>Checkout cancelled. Nothing was charged.</AlertDescription>
+          <AlertDescription>Оплата отменена. Деньги не списаны.</AlertDescription>
         </Alert>
       ) : null}
 
       {!billingReady ? (
         <Alert variant="destructive">
           <AlertDescription>
-            Stripe is not configured on this deployment, so upgrading is unavailable. Plans and
-            limits below are still enforced.
+            На этом развёртывании не настроен Stripe, поэтому смена тарифа недоступна. Тарифы и
+            лимиты ниже при этом действуют.
           </AlertDescription>
         </Alert>
       ) : null}
@@ -75,11 +75,11 @@ export default async function BillingPage(props: PageProps<'/dashboard/billing'>
             <Card key={plan.id} className={isCurrent ? 'border-primary p-6' : 'p-6'}>
               <div className="flex items-center gap-3">
                 <h2 className="text-lg font-semibold">{plan.name}</h2>
-                {isCurrent ? <Badge>Current</Badge> : null}
+                {isCurrent ? <Badge>Текущий</Badge> : null}
               </div>
 
               <p className="mt-2 min-h-10 text-sm text-muted-foreground text-pretty">
-                {PLAN_TAGLINES[plan.id]}
+                {PLAN_TAGLINES_RU[plan.id]}
               </p>
 
               <p className="mt-5 flex items-baseline gap-1.5">
@@ -87,7 +87,7 @@ export default async function BillingPage(props: PageProps<'/dashboard/billing'>
                   {formatPrice(plan.monthlyPriceCents)}
                 </span>
                 {plan.monthlyPriceCents > 0 ? (
-                  <span className="text-sm text-muted-foreground">/month</span>
+                  <span className="text-sm text-muted-foreground">/месяц</span>
                 ) : null}
               </p>
 
@@ -102,15 +102,15 @@ export default async function BillingPage(props: PageProps<'/dashboard/billing'>
 
               <div className="mt-6">
                 {isCurrent ? (
-                  <p className="text-center text-sm text-muted-foreground">Your current plan</p>
+                  <p className="text-center text-sm text-muted-foreground">Ваш текущий тариф</p>
                 ) : isFree ? (
                   <p className="text-center text-sm text-muted-foreground">
-                    Downgrade from the billing portal
+                    Понизить тариф можно в портале оплаты
                   </p>
                 ) : (
                   <UpgradeButton
                     planId={plan.id}
-                    label={`Switch to ${plan.name}`}
+                    label={`Перейти на ${plan.name}`}
                     variant={plan.monthlyPriceCents > currentPlan.monthlyPriceCents ? 'default' : 'outline'}
                     disabled={!billingReady}
                   />
@@ -123,18 +123,18 @@ export default async function BillingPage(props: PageProps<'/dashboard/billing'>
 
       {profile?.stripe_customer_id ? (
         <Card className="p-6">
-          <h2 className="font-semibold">Payment details and invoices</h2>
+          <h2 className="font-semibold">Платёжные данные и счета</h2>
           <p className="mt-1 mb-4 text-sm text-muted-foreground text-pretty">
-            Card, invoices and cancellation are handled by Stripe. We never see or store your card
-            details.
+            Карта, счета и отмена подписки — на стороне Stripe. Мы не видим и не храним данные
+            вашей карты.
           </p>
           <ManageBillingButton />
         </Card>
       ) : null}
 
       <p className="text-sm text-muted-foreground">
-        Test mode: use card <code className="text-xs">4242 4242 4242 4242</code> with any future
-        expiry and any CVC.
+        Тестовый режим: карта <code className="text-xs">4242 4242 4242 4242</code>, любой срок в
+        будущем и любой CVC.
       </p>
     </div>
   )

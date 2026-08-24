@@ -34,7 +34,7 @@ export function EmbedSnippet({ snippet }: { snippet: string }) {
 
       <Button type="button" variant="outline" size="sm" onClick={copy}>
         {copied ? <Check /> : <Copy />}
-        {copied ? 'Copied' : 'Copy snippet'}
+        {copied ? 'Скопировано' : 'Скопировать сниппет'}
       </Button>
     </div>
   )

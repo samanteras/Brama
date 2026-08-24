@@ -18,9 +18,19 @@ export default async function DashboardLayout({ children }: { children: React.Re
   // otherwise turn into a data leak rather than a broken redirect.
   if (!user) redirect('/sign-in')
 
+  // `dark` on the wrapper puts the whole dashboard on the landing's dark
+  // stage — one product, one light. The bar itself is the landing header's
+  // translucent bar, verbatim.
   return (
-    <div className="flex min-h-svh flex-col">
-      <header className="border-b">
+    <div className="dark relative flex min-h-svh flex-col bg-background text-foreground">
+      {/* The landing hero's key light, dimmed to working brightness. Kept in
+          its own overflow-hidden box so the sticky header's ancestor stays
+          overflow-free. */}
+      <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-96 overflow-hidden">
+        <div className="absolute -top-72 left-1/2 h-[480px] w-[900px] -translate-x-1/2 rounded-full bg-primary/10 blur-[160px]" />
+      </div>
+
+      <header className="sticky top-0 z-40 border-b border-white/10 bg-background/70 backdrop-blur-xl">
         <div className="mx-auto flex h-16 w-full max-w-6xl items-center gap-6 px-4 sm:px-6">
           <Link href="/dashboard" className="flex items-center gap-2">
             <Logo className="size-6 text-primary" />
@@ -29,10 +39,10 @@ export default async function DashboardLayout({ children }: { children: React.Re
 
           <nav className="hidden items-center gap-5 text-sm text-muted-foreground sm:flex">
             <Link href="/dashboard" className="transition-colors hover:text-foreground">
-              Bots
+              Боты
             </Link>
             <Link href="/dashboard/billing" className="transition-colors hover:text-foreground">
-              Billing
+              Оплата
             </Link>
           </nav>
 
@@ -40,7 +50,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
             <span className="hidden text-sm text-muted-foreground sm:inline">{user.email}</span>
             <form action={signOut}>
               <Button type="submit" variant="ghost" size="sm">
-                Sign out
+                Выйти
               </Button>
             </form>
           </div>
