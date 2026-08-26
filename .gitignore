@@ -57,6 +57,9 @@ eval-report.txt
 # Recording script for the demo video. Working notes for the person holding the
 # camera, not part of what is being submitted.
 demo/demo-script.md
-.vercel
 
-.vercel
+# QA working docs: test tickets and bug write-ups, not product code.
+testing/
+
+# Playwright MCP run artifacts (snapshots, screenshots, console/network dumps).
+.playwright-mcp/

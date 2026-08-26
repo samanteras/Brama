@@ -3,6 +3,7 @@ import { z } from 'zod'
 
 import { parsePdf, parsePlainText, type ParseResult } from '@/lib/ingest/parse'
 import { saveDocument } from '@/lib/ingest/save-document'
+import { pluralizeRu } from '@/lib/plan-copy'
 import { getPlan, isWithinLimit, toPlanId } from '@/lib/plans'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { createClient } from '@/lib/supabase/server'
@@ -86,7 +87,7 @@ export async function POST(request: NextRequest) {
   if (!isWithinLimit(documentCount ?? 0, plan.limits.documentsPerBot)) {
     return NextResponse.json(
       {
-        error: `Тариф ${plan.name} позволяет ${plan.limits.documentsPerBot} документов на бота. Удалите один или перейдите на тариф выше.`,
+        error: `Тариф ${plan.name} позволяет ${pluralizeRu(plan.limits.documentsPerBot ?? 0, ['документ', 'документа', 'документов'])} на бота. Удалите один или перейдите на тариф выше.`,
       },
       { status: 403 },
     )
