@@ -9,7 +9,7 @@ import { SiteImportButton } from './site-import-button'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { ingestFailureMessage } from '@/lib/ingest-copy'
-import { formatLimit, pluralizeRu } from '@/lib/plan-copy'
+import { pluralizeRu } from '@/lib/plan-copy'
 import { getPlan, isWithinLimit, toPlanId } from '@/lib/plans'
 import { createClient } from '@/lib/supabase/server'
 
@@ -54,7 +54,9 @@ export default async function BotKnowledgePage(props: PageProps<'/dashboard/bots
         <div className="mb-4 flex flex-wrap items-baseline justify-between gap-2">
           <h2 className="font-semibold">Пополнить базу знаний</h2>
           <p className="text-sm text-muted-foreground">
-            {documentCount} из {formatLimit(plan.limits.documentsPerBot)} документов
+            {plan.limits.documentsPerBot === null
+              ? pluralizeRu(documentCount, ['документ', 'документа', 'документов'])
+              : `${documentCount} из ${plan.limits.documentsPerBot} документов`}
           </p>
         </div>
 
@@ -63,8 +65,9 @@ export default async function BotKnowledgePage(props: PageProps<'/dashboard/bots
             <DocumentUploader botId={botId} />
           ) : (
             <p className="text-sm text-muted-foreground">
-              Тариф {plan.name} позволяет {formatLimit(plan.limits.documentsPerBot)} документов на
-              бота. Удалите один или перейдите на тариф выше.
+              Тариф {plan.name} позволяет{' '}
+              {pluralizeRu(plan.limits.documentsPerBot ?? 0, ['документ', 'документа', 'документов'])}{' '}
+              на бота. Удалите один или перейдите на тариф выше.
             </p>
           )}
 

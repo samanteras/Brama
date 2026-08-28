@@ -5,6 +5,7 @@ import { crawlSite, pagesToDocumentText } from '@/lib/ingest/crawl'
 import { contentHash } from '@/lib/ingest/hash'
 import { CHARS_PER_TEXT_PAGE, parsePlainText } from '@/lib/ingest/parse'
 import { saveDocument } from '@/lib/ingest/save-document'
+import { pluralizeRu } from '@/lib/plan-copy'
 import { getPlan, isWithinLimit, toPlanId } from '@/lib/plans'
 import { normalizeDomain } from '@/lib/security/origin'
 import { createAdminClient } from '@/lib/supabase/admin'
@@ -101,7 +102,7 @@ export async function POST(request: NextRequest) {
   ) {
     return NextResponse.json(
       {
-        error: `Тариф ${plan.name} позволяет ${plan.limits.documentsPerBot} документов на бота. Удалите один или перейдите на тариф выше.`,
+        error: `Тариф ${plan.name} позволяет ${pluralizeRu(plan.limits.documentsPerBot ?? 0, ['документ', 'документа', 'документов'])} на бота. Удалите один или перейдите на тариф выше.`,
       },
       { status: 403 },
     )
