@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation'
 import { signOut } from '../(auth)/actions'
 import { Logo } from '@/components/marketing/logo'
 import { Button } from '@/components/ui/button'
+import { isAdmin } from '@/lib/admin/is-admin'
 import { APP_NAME } from '@/lib/brand'
 import { createClient } from '@/lib/supabase/server'
 
@@ -44,6 +45,11 @@ export default async function DashboardLayout({ children }: { children: React.Re
             <Link href="/dashboard/billing" className="transition-colors hover:text-foreground">
               Оплата
             </Link>
+            {isAdmin(user.email) ? (
+              <Link href="/admin" className="transition-colors hover:text-foreground">
+                Админка
+              </Link>
+            ) : null}
           </nav>
 
           <div className="ml-auto flex items-center gap-4">

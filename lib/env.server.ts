@@ -20,10 +20,16 @@ const serverSchema = z.object({
   // Reranking stays behind a seam and is only enabled if the eval run shows it
   // helps, so its absence is normal rather than an error.
   COHERE_API_KEY: z.string().optional(),
+
+  // Comma-separated allow-list of operator emails that may open /admin. Absent
+  // means nobody is an admin, which is the safe default for a deployment that
+  // has not configured it yet.
+  ADMIN_EMAILS: z.string().optional(),
 })
 
 export const serverEnv = serverSchema.parse({
   SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY,
   OPENAI_API_KEY: process.env.OPENAI_API_KEY,
   COHERE_API_KEY: process.env.COHERE_API_KEY,
+  ADMIN_EMAILS: process.env.ADMIN_EMAILS,
 })
